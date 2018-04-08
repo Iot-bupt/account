@@ -1,6 +1,8 @@
 package cn.edu.bupt.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -10,18 +12,19 @@ import javax.persistence.Id;
 public class Tenant {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
     private String address;
     private String phone;
     private String title;
     private String additional_info;
     private String email;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

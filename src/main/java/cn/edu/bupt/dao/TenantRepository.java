@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * Created by CZX on 2018/4/8.
  */
-public interface TenantRepository extends CrudRepository<Tenant, String> {
+public interface TenantRepository extends CrudRepository<Tenant, Long> {
 
 }

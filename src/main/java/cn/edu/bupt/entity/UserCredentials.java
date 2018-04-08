@@ -1,8 +1,6 @@
 package cn.edu.bupt.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by CZX on 2018/4/8.
@@ -11,23 +9,24 @@ import javax.persistence.Table;
 @Table(name = "user_credentials")
 public class UserCredentials {
     @Id
-    private String id;
-    private String user_id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
+    private Integer user_id;
     private String password;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getUser_id() {
+    public Integer getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(Integer user_id) {
         this.user_id = user_id;
     }
 

@@ -1,50 +1,46 @@
 package cn.edu.bupt.entity;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-import javax.persistence.IdClass;
 import java.io.Serializable;
 
 /**
  * Created by CZX on 2018/4/8.
  */
-@Entity @IdClass(UserId.class)
+@Entity
 public class User implements Serializable {
 
     @Id
-    private String id;
-    @Id
-    private String tenant_id;
-    @Id
-    private String customer_id;
-    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
+    private Integer tenant_id;
+    private Integer customer_id;
     private String authority;
     private String name;
     private String additional_info;
     private String email;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getTenant_id() {
+    public Integer getTenant_id() {
         return tenant_id;
     }
 
-    public void setTenant_id(String tenant_id) {
+    public void setTenant_id(Integer tenant_id) {
         this.tenant_id = tenant_id;
     }
 
-    public String getCustomer_id() {
+    public Integer getCustomer_id() {
         return customer_id;
     }
 
-    public void setCustomer_id(String customer_id) {
+    public void setCustomer_id(Integer customer_id) {
         this.customer_id = customer_id;
     }
 

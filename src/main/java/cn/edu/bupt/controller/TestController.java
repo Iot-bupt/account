@@ -33,7 +33,7 @@ public class TestController {
     @GetMapping(path="/addTenant") // Map ONLY GET Requests
     public String addNewTenant () {
         Tenant tenant = new Tenant();
-        tenant.setId("TID");
+        //tenant.setId("TID");
         tenant.setTitle("Ttitle");
         return tenantRepository.save(tenant).toString();
     }
@@ -41,8 +41,8 @@ public class TestController {
     @GetMapping(path="/addCustomer") // Map ONLY GET Requests
     public String addNewCustomer () {
         Customer customer = new Customer();
-        customer.setId("CID");
-        customer.setTenant_id("TID");
+        //customer.setId(1);
+        customer.setTenant_id(1);
         customer.setTitle("Ctitle");
         return customerRepository.save(customer).toString();
     }
@@ -50,9 +50,9 @@ public class TestController {
     @GetMapping(path="/addUser") // Map ONLY GET Requests
     public String addNewUser () {
         User user = new User();
-        user.setId("UID");
-        user.setCustomer_id("CID");
-        user.setTenant_id("TID");
+        user.setId(1);
+        user.setCustomer_id(1);
+        user.setTenant_id(1);
         user.setAuthority("SYS_ADMIN");
         user.setName("User Name");
         return userRepository.save(user).toString();
@@ -61,8 +61,8 @@ public class TestController {
     @GetMapping(path="/addUserCre") // Map ONLY GET Requests
     public String addNewUserCre () {
         UserCredentials userCredentials = new UserCredentials();
-        userCredentials.setId("UCID");
-        userCredentials.setUser_id("UID");
+        userCredentials.setId(1);
+        userCredentials.setUser_id(1);
         userCredentials.setPassword("password");
         return userCredentialsRepository.save(userCredentials).toString();
     }
