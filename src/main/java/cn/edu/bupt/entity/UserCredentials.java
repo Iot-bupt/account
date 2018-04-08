@@ -11,7 +11,10 @@ public class UserCredentials {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
-    private Integer user_id;
+
+    @ManyToOne
+    @JoinColumn(name="user_id",referencedColumnName = "id")
+    private User user;
     private String password;
 
     public Integer getId() {
@@ -22,12 +25,12 @@ public class UserCredentials {
         this.id = id;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getPassword() {
@@ -41,8 +44,8 @@ public class UserCredentials {
     @Override
     public String toString() {
         return "UserCredentials{" +
-                "id='" + id + '\'' +
-                ", user_id='" + user_id + '\'' +
+                "id=" + id +
+                ", user=" + user +
                 ", password='" + password + '\'' +
                 '}';
     }

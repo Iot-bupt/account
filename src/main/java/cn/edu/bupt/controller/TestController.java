@@ -42,7 +42,7 @@ public class TestController {
     public String addNewCustomer () {
         Customer customer = new Customer();
         //customer.setId(1);
-        customer.setTenant_id(1);
+        customer.setTenant(tenantRepository.findById(1).get());
         customer.setTitle("Ctitle");
         return customerRepository.save(customer).toString();
     }
@@ -50,9 +50,9 @@ public class TestController {
     @GetMapping(path="/addUser") // Map ONLY GET Requests
     public String addNewUser () {
         User user = new User();
-        user.setId(1);
-        user.setCustomer_id(1);
-        user.setTenant_id(1);
+//        user.setId(1);
+        user.setCustomer(customerRepository.findById(1).get());
+        user.setTenant(tenantRepository.findById(1).get());
         user.setAuthority("SYS_ADMIN");
         user.setName("User Name");
         return userRepository.save(user).toString();
@@ -61,8 +61,8 @@ public class TestController {
     @GetMapping(path="/addUserCre") // Map ONLY GET Requests
     public String addNewUserCre () {
         UserCredentials userCredentials = new UserCredentials();
-        userCredentials.setId(1);
-        userCredentials.setUser_id(1);
+//        userCredentials.setId(1);
+        userCredentials.setUser(userRepository.findById(1).get());
         userCredentials.setPassword("password");
         return userCredentialsRepository.save(userCredentials).toString();
     }

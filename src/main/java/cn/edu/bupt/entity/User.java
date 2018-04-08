@@ -13,8 +13,14 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
-    private Integer tenant_id;
-    private Integer customer_id;
+
+    @ManyToOne
+    @JoinColumn(name="tenant_id",referencedColumnName = "id")
+    private Tenant tenant;
+
+    @ManyToOne
+    @JoinColumn(name="customer_id",referencedColumnName = "id")
+    private Customer customer;
     private String authority;
     private String name;
     private String additional_info;
@@ -28,20 +34,20 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public Integer getTenant_id() {
-        return tenant_id;
+    public Tenant getTenant() {
+        return tenant;
     }
 
-    public void setTenant_id(Integer tenant_id) {
-        this.tenant_id = tenant_id;
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 
-    public Integer getCustomer_id() {
-        return customer_id;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomer_id(Integer customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public String getAuthority() {
@@ -79,9 +85,9 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
-                ", tenant_id='" + tenant_id + '\'' +
-                ", customer_id='" + customer_id + '\'' +
+                "id=" + id +
+                ", tenant=" + tenant +
+                ", customer=" + customer +
                 ", authority='" + authority + '\'' +
                 ", name='" + name + '\'' +
                 ", additional_info='" + additional_info + '\'' +

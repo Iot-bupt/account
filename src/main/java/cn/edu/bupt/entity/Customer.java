@@ -12,9 +12,9 @@ public class Customer implements Serializable{
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-//    @ManyToOne
-//    @JoinColumn(name="tenant_id",referencedColumnName = "id")
-    private Integer tenant_id;
+    @ManyToOne
+    @JoinColumn(name="tenant_id",referencedColumnName = "id")
+    private Tenant tenant;
     private String address;
     private String phone;
     private String title;
@@ -29,12 +29,12 @@ public class Customer implements Serializable{
         this.id = id;
     }
 
-    public Integer getTenant_id() {
-        return tenant_id;
+    public Tenant getTenant() {
+        return tenant;
     }
 
-    public void setTenant_id(Integer tenant_id) {
-        this.tenant_id = tenant_id;
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 
     public String getAddress() {
@@ -81,7 +81,7 @@ public class Customer implements Serializable{
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", tenant_id=" + tenant_id +
+                ", tenant=" + tenant +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", title='" + title + '\'' +
