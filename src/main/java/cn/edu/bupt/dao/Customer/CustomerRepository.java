@@ -11,5 +11,5 @@ import java.util.List;
  * Created by CZX on 2018/4/8.
  */
 public interface CustomerRepository extends JpaRepository<Customer, Integer>,JpaSpecificationExecutor<Customer> {
-    List<Customer> findCustomersByTenant(Tenant tenant);
+    void deleteAllByTenant(Tenant tenant);
 }

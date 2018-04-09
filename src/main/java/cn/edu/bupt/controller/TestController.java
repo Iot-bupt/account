@@ -1,8 +1,10 @@
 package cn.edu.bupt.controller;
 
 import cn.edu.bupt.dao.Customer.CustomerRepository;
+import cn.edu.bupt.dao.Customer.CustomerService;
 import cn.edu.bupt.dao.Tenant.TenantRepository;
-import cn.edu.bupt.dao.User.UserCredentialsRepository;
+import cn.edu.bupt.dao.User.UserService;
+import cn.edu.bupt.dao.UserCredentials.UserCredentialsRepository;
 import cn.edu.bupt.dao.User.UserRepository;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.Tenant;
@@ -10,6 +12,8 @@ import cn.edu.bupt.entity.User;
 import cn.edu.bupt.entity.UserCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by CZX on 2018/4/8.
@@ -30,6 +34,12 @@ public class TestController {
     @Autowired
     private UserCredentialsRepository userCredentialsRepository;
 
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private UserService userService;
+
     @GetMapping(path="/addTenant") // Map ONLY GET Requests
     public String addNewTenant () {
         Tenant tenant = new Tenant();
@@ -46,8 +56,18 @@ public class TestController {
     }
 
     @GetMapping(path="/findCustomers") // Map ONLY GET Requests
-    public String findCustomers () {
-        return customerRepository.findCustomersByTenant(tenantRepository.findById(1).get()).toString();
+    public List<Customer> findCustomers () {
+        return customerService.findCustomersByTenantId(0,2,1).getContent();
+    }
+
+    @GetMapping(path="/findUsersByC") // Map ONLY GET Requests
+    public List<User> findUsersByC () {
+        return userService.findCustomerUsers(0,2,1).getContent();
+    }
+
+    @GetMapping(path="/findTAdmin") // Map ONLY GET Requests
+    public List<User> findTenantAdmin () {
+        return userService.findTenantAdmins(0,2,1).getContent();
     }
 
     @GetMapping(path="/addUser") // Map ONLY GET Requests
