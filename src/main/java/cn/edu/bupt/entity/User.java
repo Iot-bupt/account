@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by CZX on 2018/4/8.
  */
 @Entity
-public class User implements Serializable {
+public class User{
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

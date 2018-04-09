@@ -1,9 +1,9 @@
 package cn.edu.bupt.controller;
 
-import cn.edu.bupt.dao.CustomerRepository;
-import cn.edu.bupt.dao.TenantRepository;
-import cn.edu.bupt.dao.UserCredentialsRepository;
-import cn.edu.bupt.dao.UserRepository;
+import cn.edu.bupt.dao.Customer.CustomerRepository;
+import cn.edu.bupt.dao.Tenant.TenantRepository;
+import cn.edu.bupt.dao.User.UserCredentialsRepository;
+import cn.edu.bupt.dao.User.UserRepository;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.Tenant;
 import cn.edu.bupt.entity.User;
@@ -33,7 +33,6 @@ public class TestController {
     @GetMapping(path="/addTenant") // Map ONLY GET Requests
     public String addNewTenant () {
         Tenant tenant = new Tenant();
-        //tenant.setId("TID");
         tenant.setTitle("Ttitle");
         return tenantRepository.save(tenant).toString();
     }
@@ -41,16 +40,19 @@ public class TestController {
     @GetMapping(path="/addCustomer") // Map ONLY GET Requests
     public String addNewCustomer () {
         Customer customer = new Customer();
-        //customer.setId(1);
         customer.setTenant(tenantRepository.findById(1).get());
         customer.setTitle("Ctitle");
         return customerRepository.save(customer).toString();
     }
 
+    @GetMapping(path="/findCustomers") // Map ONLY GET Requests
+    public String findCustomers () {
+        return customerRepository.findCustomersByTenant(tenantRepository.findById(1).get()).toString();
+    }
+
     @GetMapping(path="/addUser") // Map ONLY GET Requests
     public String addNewUser () {
         User user = new User();
-//        user.setId(1);
         user.setCustomer(customerRepository.findById(1).get());
         user.setTenant(tenantRepository.findById(1).get());
         user.setAuthority("SYS_ADMIN");
@@ -61,7 +63,6 @@ public class TestController {
     @GetMapping(path="/addUserCre") // Map ONLY GET Requests
     public String addNewUserCre () {
         UserCredentials userCredentials = new UserCredentials();
-//        userCredentials.setId(1);
         userCredentials.setUser(userRepository.findById(1).get());
         userCredentials.setPassword("password");
         return userCredentialsRepository.save(userCredentials).toString();
