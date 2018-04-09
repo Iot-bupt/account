@@ -20,7 +20,7 @@ public class Customer implements Serializable{
     private String title;
     private String additional_info;
     private String email;
-//
+
     public Integer getId() {
         return id;
     }
