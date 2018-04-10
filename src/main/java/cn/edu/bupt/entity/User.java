@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by CZX on 2018/4/8.
  */
 @Entity
-public class User{
+public class User extends IdBased{
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

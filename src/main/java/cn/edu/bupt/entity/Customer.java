@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by CZX on 2018/4/8.
  */
 @Entity
-public class Customer{
+public class Customer extends IdBased{
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

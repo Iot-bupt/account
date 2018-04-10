@@ -11,5 +11,5 @@ public interface UserCredentialsService {
 
     UserCredentials saveUserCredentials(UserCredentials userCredentials);
 
-    void deleteUserCredentialsByUser(Integer userId);
+    void deleteUserCredentialsByUserId(Integer userId);
 }

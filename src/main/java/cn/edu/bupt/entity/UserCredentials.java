@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "user_credentials")
-public class UserCredentials {
+public class UserCredentials extends IdBased{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;

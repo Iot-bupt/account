@@ -9,7 +9,7 @@ import javax.persistence.Id;
  * Created by CZX on 2018/4/8.
  */
 @Entity
-public class Tenant {
+public class Tenant extends IdBased{
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

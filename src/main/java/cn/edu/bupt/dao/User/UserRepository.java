@@ -17,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, Integer>,JpaSpecific
 
     void deleteAllByCustomer(Customer customer);
 
+    void deleteAllByTenantAndAuthority(Tenant tenant, String authority);
+
 }
