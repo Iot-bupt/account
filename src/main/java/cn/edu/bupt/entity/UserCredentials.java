@@ -12,7 +12,7 @@ public class UserCredentials extends IdBased{
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="user_id",referencedColumnName = "id")
     private User user;
     private String password;
