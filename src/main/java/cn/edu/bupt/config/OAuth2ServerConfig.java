@@ -7,6 +7,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -47,8 +48,8 @@ public class OAuth2ServerConfig {
                     .anonymous()
                     .and()
                     .authorizeRequests()
-//                    .antMatchers("/product/**").access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
-                    .antMatchers("/test/add*").authenticated();//配置order访问控制，必须认证过后才可以访问
+                    .antMatchers("/test/findTAdmin").authenticated()//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
+                    .antMatchers("/test/**").permitAll();//配置order访问控制，必须认证过后才可以访问
             // @formatter:on
         }
     }
@@ -62,6 +63,8 @@ public class OAuth2ServerConfig {
         AuthenticationManager authenticationManager;
         @Autowired
         RedisConnectionFactory redisConnectionFactory;
+        @Autowired
+        private BCryptPasswordEncoder passwordEncoder;
 
 
         @Override
@@ -72,13 +75,13 @@ public class OAuth2ServerConfig {
                     .authorizedGrantTypes("client_credentials", "refresh_token")
                     .scopes("select")
                     .authorities("client")
-                    .secret("123456")
+                    .secret(passwordEncoder.encode("123456"))
                     .and().withClient("client_2")
                     .resourceIds(DEMO_RESOURCE_ID)
                     .authorizedGrantTypes("password", "refresh_token")
                     .scopes("select")
                     .authorities("client")
-                    .secret("123456");
+                    .secret(passwordEncoder.encode("123456"));
         }
 
         @Override

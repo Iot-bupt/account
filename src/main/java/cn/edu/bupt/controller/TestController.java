@@ -11,6 +11,7 @@ import cn.edu.bupt.entity.Tenant;
 import cn.edu.bupt.entity.User;
 import cn.edu.bupt.entity.UserCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,9 @@ public class TestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping(path="/addTenant") // Map ONLY GET Requests
     public String addNewTenant () {
@@ -77,7 +81,11 @@ public class TestController {
         user.setTenant(tenantRepository.findById(1).get());
         user.setAuthority("SYS_ADMIN");
         user.setName("User Name");
-        return userRepository.save(user).toString();
+        user.setEmail("test@test.com");
+        User savedUser = userRepository.save(user);
+        String encodedPassword = passwordEncoder.encode("password");
+        userCredentialsRepository.save(new UserCredentials(savedUser,encodedPassword));
+        return savedUser.toString();
     }
 
     @GetMapping(path="/addUserCre") // Map ONLY GET Requests

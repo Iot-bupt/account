@@ -17,6 +17,14 @@ public class UserCredentials extends IdBased{
     private User user;
     private String password;
 
+    public UserCredentials() {
+    }
+
+    public UserCredentials(User user, String password) {
+        this.user = user;
+        this.password = password;
+    }
+
     public Integer getId() {
         return id;
     }

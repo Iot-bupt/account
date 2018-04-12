@@ -26,6 +26,18 @@ public class User extends IdBased{
     private String additional_info;
     private String email;
 
+    public User() {
+    }
+
+    public User(User user) {
+        this.tenant = user.getTenant();
+        this.customer = user.getCustomer();
+        this.authority = user.getAuthority();
+        this.name = user.getName();
+        this.additional_info = user.getAdditional_info();
+        this.email = user.getEmail();
+    }
+
     public Integer getId() {
         return id;
     }
