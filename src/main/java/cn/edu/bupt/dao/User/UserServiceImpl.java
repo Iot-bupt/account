@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService{
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 Predicate predicate1 = criteriaBuilder.equal(root.get("tenant").as(Tenant.class),tenant_id);
-                Predicate predicate2 = criteriaBuilder.equal(root.get("authority").as(String.class), Authority.SYS_ADMIN);
+                Predicate predicate2 = criteriaBuilder.equal(root.get("authority").as(Authority.class), Authority.SYS_ADMIN);
                 criteriaQuery.where(criteriaBuilder.and(predicate1,predicate2));
                 return criteriaQuery.getRestriction();
             }

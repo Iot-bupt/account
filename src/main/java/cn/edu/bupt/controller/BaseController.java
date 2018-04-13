@@ -11,6 +11,7 @@ import cn.edu.bupt.exception.IOTErrorCode;
 import cn.edu.bupt.exception.IOTException;
 import cn.edu.bupt.exception.IncorrectParameterException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -124,6 +125,18 @@ public abstract class BaseController {
             return reference.get();
         } else {
             throw new IOTException("Requested item wasn't found!", IOTErrorCode.ITEM_NOT_FOUND);
+        }
+    }
+
+    void checkParameter(String name, String param) throws IOTException {
+        if (StringUtils.isEmpty(param)) {
+            throw new IOTException("Parameter '" + name + "' can't be empty!", IOTErrorCode.BAD_REQUEST_PARAMS);
+        }
+    }
+
+    void checkParameter(String name, Integer param) throws IOTException {
+        if (param==null) {
+            throw new IOTException("Parameter '" + name + "' can't be empty!", IOTErrorCode.BAD_REQUEST_PARAMS);
         }
     }
 }

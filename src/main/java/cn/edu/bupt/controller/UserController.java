@@ -13,8 +13,11 @@ import cn.edu.bupt.exception.IOTException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by CZX on 2018/4/13.
@@ -58,6 +61,7 @@ public class UserController extends BaseController{
 
 //    POST请求Headers中Content-Type为application/json，Body为raw形式的Json。
 //    eg.{"id":"1", "tenant_id":"1","customer_id":"2","authority":"Customer_user","name":"User1 Name", "additional_info":"", "email":"12test@qq.com"}
+//    eg.{"id":"", "tenant_id":"1","customer_id":"2","authority":"Customer_user","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     @ResponseBody
     public String saveUser(@RequestBody String userInfo) throws IOTException {
@@ -78,6 +82,20 @@ public class UserController extends BaseController{
                 userCredentialsService.saveUserCredentials(userCredentials);
             }
             return savedUser.toString();
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+    }
+
+    @RequestMapping(value = "/tenant/{tenantId}/users", params = { "limit","page" }, method = RequestMethod.GET)
+    @ResponseBody
+    public String getTenantAdmins(
+            @PathVariable("tenantId") Integer tenantId,
+            @RequestParam int limit,
+            @RequestParam int page) throws IOTException {
+        checkParameter("tenantId", tenantId);
+        try {
+            return checkNotNull(userService.findTenantAdmins(page,limit,tenantId).getContent().toString());
         } catch (Exception e) {
             throw handleException(e);
         }
