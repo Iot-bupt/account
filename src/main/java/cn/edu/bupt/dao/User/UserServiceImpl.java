@@ -123,19 +123,19 @@ public class UserServiceImpl implements UserService{
                     Integer customerId = user.getCustomer().getId();
                     switch (authority) {
                         case SYS_ADMIN:
-                            if (!(tenantId==null) || !(customerId==null)){
+                            if (!(tenantId==1) || !(customerId==1)){
                                 throw new DataValidationException("System administrator can't be assigned neither to tenant nor to customer!");
                             }
                             break;
                         case TENANT_ADMIN:
-                            if (tenantId==null) {
+                            if (tenantId==1) {
                                 throw new DataValidationException("Tenant administrator should be assigned to tenant!");
-                            } else if (!(customerId==null)) {
+                            } else if (!(customerId==1)) {
                                 throw new DataValidationException("Tenant administrator can't be assigned to customer!");
                             }
                             break;
                         case CUSTOMER_USER:
-                            if (tenantId==null || customerId==null) {
+                            if (tenantId==1 || customerId==1) {
                                 throw new DataValidationException("Customer user should be assigned to customer!");
                             }
                             break;
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService{
                         throw new DataValidationException("User with email '" + user.getEmail() + "' "
                                 + " already present in database!");
                     }
-                    if (!(customerId==null)) {
+                    if (!(customerId==1)) {
                         Customer customer = customerRepository.findById(user.getCustomer().getId()).get();
                         if (!(customer.getTenant().getId()==tenantId)) {
                             throw new DataValidationException("User can't be assigned to customer from different tenant!");

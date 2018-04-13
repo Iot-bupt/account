@@ -51,10 +51,14 @@ public class UserCredentials extends IdBased{
 
     @Override
     public String toString() {
-        return "UserCredentials{" +
-                "id=" + id +
-                ", user=" + user +
-                ", password='" + password + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"id\":")
+                .append(id);
+        sb.append(",\"user\":")
+                .append(user);
+        sb.append(",\"password\":\"")
+                .append(password).append('\"');
+        sb.append('}');
+        return sb.toString();
     }
 }

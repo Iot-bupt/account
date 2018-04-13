@@ -97,14 +97,22 @@ public class User extends IdBased{
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", tenant=" + tenant +
-                ", customer=" + customer +
-                ", authority=" + authority +
-                ", name='" + name + '\'' +
-                ", additional_info='" + additional_info + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"id\":")
+                .append(id);
+        sb.append(",\"tenant_id\":")
+                .append(tenant.getId());
+        sb.append(",\"customer_id\":")
+                .append(customer.getId());
+        sb.append(",\"authority\":")
+                .append(authority);
+        sb.append(",\"name\":\"")
+                .append(name).append('\"');
+        sb.append(",\"additional_info\":\"")
+                .append(additional_info).append('\"');
+        sb.append(",\"email\":\"")
+                .append(email).append('\"');
+        sb.append('}');
+        return sb.toString();
     }
 }

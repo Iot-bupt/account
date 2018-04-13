@@ -70,13 +70,20 @@ public class Tenant extends IdBased{
 
     @Override
     public String toString() {
-        return "Tenant{" +
-                "id='" + id + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", title='" + title + '\'' +
-                ", additional_info='" + additional_info + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"id\":")
+                .append(id);
+        sb.append(",\"address\":\"")
+                .append(address).append('\"');
+        sb.append(",\"phone\":\"")
+                .append(phone).append('\"');
+        sb.append(",\"title\":\"")
+                .append(title).append('\"');
+        sb.append(",\"additional_info\":\"")
+                .append(additional_info).append('\"');
+        sb.append(",\"email\":\"")
+                .append(email).append('\"');
+        sb.append('}');
+        return sb.toString();
     }
 }
