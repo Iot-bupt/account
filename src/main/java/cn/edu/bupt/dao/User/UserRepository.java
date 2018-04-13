@@ -1,5 +1,6 @@
 package cn.edu.bupt.dao.User;
 
+import cn.edu.bupt.entity.Authority;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.Tenant;
 import cn.edu.bupt.entity.User;
@@ -17,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, Integer>,JpaSpecific
 
     void deleteAllByCustomer(Customer customer);
 
-    void deleteAllByTenantAndAuthority(Tenant tenant, String authority);
+    void deleteAllByTenantAndAuthority(Tenant tenant, Authority authority);
 
 }

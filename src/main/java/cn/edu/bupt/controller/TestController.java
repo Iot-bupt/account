@@ -6,10 +6,7 @@ import cn.edu.bupt.dao.Tenant.TenantRepository;
 import cn.edu.bupt.dao.User.UserService;
 import cn.edu.bupt.dao.UserCredentials.UserCredentialsRepository;
 import cn.edu.bupt.dao.User.UserRepository;
-import cn.edu.bupt.entity.Customer;
-import cn.edu.bupt.entity.Tenant;
-import cn.edu.bupt.entity.User;
-import cn.edu.bupt.entity.UserCredentials;
+import cn.edu.bupt.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -78,10 +75,10 @@ public class TestController {
     public String addNewUser () {
         User user = new User();
         user.setCustomer(customerRepository.findById(1).get());
-        user.setTenant(tenantRepository.findById(1).get());
-        user.setAuthority("SYS_ADMIN");
+        user.setTenant(tenantRepository.findById(2).get());
+        user.setAuthority(Authority.SYS_ADMIN);
         user.setName("User Name");
-        user.setEmail("test@test.com");
+        user.setEmail("test7@test.com");
         User savedUser = userRepository.save(user);
         String encodedPassword = passwordEncoder.encode("password");
         userCredentialsRepository.save(new UserCredentials(savedUser,encodedPassword));

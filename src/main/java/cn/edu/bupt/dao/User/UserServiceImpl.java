@@ -5,6 +5,7 @@ import cn.edu.bupt.dao.DataValidationException;
 import cn.edu.bupt.dao.DataValidator;
 import cn.edu.bupt.dao.Tenant.TenantRepository;
 import cn.edu.bupt.dao.UserCredentials.UserCredentialsService;
+import cn.edu.bupt.entity.Authority;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.Tenant;
 import cn.edu.bupt.entity.User;
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService{
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 Predicate predicate1 = criteriaBuilder.equal(root.get("tenant").as(Tenant.class),tenant_id);
-                Predicate predicate2 = criteriaBuilder.equal(root.get("authority").as(String.class),"SYS_ADMIN");
+                Predicate predicate2 = criteriaBuilder.equal(root.get("authority").as(String.class), Authority.SYS_ADMIN);
                 criteriaQuery.where(criteriaBuilder.and(predicate1,predicate2));
                 return criteriaQuery.getRestriction();
             }
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteTenantAdmins(Integer tenantId){
-        userRepository.deleteAllByTenantAndAuthority(tenantRepository.findById(tenantId).get(),"TENANT_ADMIN");
+        userRepository.deleteAllByTenantAndAuthority(tenantRepository.findById(tenantId).get(),Authority.TENANT_ADMIN);
     }
 
     private DataValidator<User> userValidator =
@@ -112,7 +113,7 @@ public class UserServiceImpl implements UserService{
                         throw new DataValidationException("User email should be specified!");
                     }
                     validateEmail(user.getEmail());
-                    String authority = user.getAuthority();
+                    Authority authority = user.getAuthority();
                     if (authority == null) {
                         throw new DataValidationException("User authority isn't defined!");
                     }
@@ -121,19 +122,19 @@ public class UserServiceImpl implements UserService{
                     Integer tenantId = user.getTenant().getId();
                     Integer customerId = user.getCustomer().getId();
                     switch (authority) {
-                        case "SYS_ADMIN":
+                        case SYS_ADMIN:
                             if (!(tenantId==null) || !(customerId==null)){
                                 throw new DataValidationException("System administrator can't be assigned neither to tenant nor to customer!");
                             }
                             break;
-                        case "TENANT_ADMIN":
+                        case TENANT_ADMIN:
                             if (tenantId==null) {
                                 throw new DataValidationException("Tenant administrator should be assigned to tenant!");
                             } else if (!(customerId==null)) {
                                 throw new DataValidationException("Tenant administrator can't be assigned to customer!");
                             }
                             break;
-                        case "CUSTOMER_USER":
+                        case CUSTOMER_USER:
                             if (tenantId==null || customerId==null) {
                                 throw new DataValidationException("Customer user should be assigned to customer!");
                             }

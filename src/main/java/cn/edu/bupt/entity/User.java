@@ -2,8 +2,6 @@ package cn.edu.bupt.entity;
 
 import javax.persistence.*;
 
-import java.io.Serializable;
-
 /**
  * Created by CZX on 2018/4/8.
  */
@@ -21,7 +19,10 @@ public class User extends IdBased{
     @ManyToOne
     @JoinColumn(name="customer_id",referencedColumnName = "id")
     private Customer customer;
-    private String authority;
+
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
     private String name;
     private String additional_info;
     private String email;
@@ -62,11 +63,11 @@ public class User extends IdBased{
         this.customer = customer;
     }
 
-    public String getAuthority() {
+    public Authority getAuthority() {
         return authority;
     }
 
-    public void setAuthority(String authority) {
+    public void setAuthority(Authority authority) {
         this.authority = authority;
     }
 
@@ -100,7 +101,7 @@ public class User extends IdBased{
                 "id=" + id +
                 ", tenant=" + tenant +
                 ", customer=" + customer +
-                ", authority='" + authority + '\'' +
+                ", authority=" + authority +
                 ", name='" + name + '\'' +
                 ", additional_info='" + additional_info + '\'' +
                 ", email='" + email + '\'' +

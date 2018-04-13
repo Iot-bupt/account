@@ -1,7 +1,6 @@
 package cn.edu.bupt.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 /**
  * Created by CZX on 2018/4/8.
  */
