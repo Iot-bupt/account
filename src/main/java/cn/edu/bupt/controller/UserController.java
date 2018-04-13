@@ -47,6 +47,8 @@ public class UserController extends BaseController{
         }
     }
 
+//    POST请求Headers中Content-Type为application/json，Body为raw形式的Json。
+//    eg.{"id":"1", "tenant_id":"1","customer_id":"2","authority":"Customer_user","name":"User1 Name", "additional_info":"", "email":"12test@qq.com"}
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     @ResponseBody
     public String saveUser(@RequestBody String userInfo) throws IOTException {

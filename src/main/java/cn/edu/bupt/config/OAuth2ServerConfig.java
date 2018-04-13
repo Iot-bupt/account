@@ -3,7 +3,6 @@ package cn.edu.bupt.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,11 +15,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
-/**
- * Created by xujingfeng on 2017/8/7.
- */
 @Configuration
 public class OAuth2ServerConfig {
 
@@ -62,8 +58,6 @@ public class OAuth2ServerConfig {
         @Autowired
         AuthenticationManager authenticationManager;
         @Autowired
-        RedisConnectionFactory redisConnectionFactory;
-        @Autowired
         private BCryptPasswordEncoder passwordEncoder;
 
 
@@ -87,6 +81,7 @@ public class OAuth2ServerConfig {
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
+                    .tokenStore(new InMemoryTokenStore())
                     .authenticationManager(authenticationManager);
         }
 
