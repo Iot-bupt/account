@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * Created by CZX on 2018/4/9.
  */
@@ -21,7 +23,7 @@ public class UserCredentialsServiceImpl implements UserCredentialsService{
     UserRepository userRepository;
 
     @Override
-    public UserCredentials findUserCredentialsByUserId(Integer userId){
+    public Optional<UserCredentials> findUserCredentialsByUserId(Integer userId){
         return userCredentialsRepository.findUserCredentialsByUser(userRepository.findById(userId).get());
     }
 

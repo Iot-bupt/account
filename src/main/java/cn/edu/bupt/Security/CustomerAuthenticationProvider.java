@@ -44,7 +44,7 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
             throw new UsernameNotFoundException("User not found: " + username);
         }
 
-        UserCredentials userCredentials = userCredentialsService.findUserCredentialsByUserId(user.getId());
+        UserCredentials userCredentials = userCredentialsService.findUserCredentialsByUserId(user.getId()).get();
         if (userCredentials == null) {
             throw new UsernameNotFoundException("User credentials not found");
         }
