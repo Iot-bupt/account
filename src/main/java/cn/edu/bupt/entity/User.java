@@ -31,6 +31,7 @@ public class User extends IdBased{
     }
 
     public User(User user) {
+        this.id = user.getId();
         this.tenant = user.getTenant();
         this.customer = user.getCustomer();
         this.authority = user.getAuthority();
