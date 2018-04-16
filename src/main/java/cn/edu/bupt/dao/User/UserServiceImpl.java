@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user){
-        //userValidator.validate(user);
+        userValidator.validate(user);
         return userRepository.save(user);
     }
 

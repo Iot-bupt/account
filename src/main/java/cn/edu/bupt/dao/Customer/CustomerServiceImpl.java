@@ -59,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer saveCustomer(Customer customer){
-        //customerValidator.validate(customer);
+        customerValidator.validate(customer);
         return customerRepository.save(customer);
     }
 
