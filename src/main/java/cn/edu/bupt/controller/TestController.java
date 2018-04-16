@@ -8,7 +8,9 @@ import cn.edu.bupt.dao.UserCredentials.UserCredentialsRepository;
 import cn.edu.bupt.dao.User.UserRepository;
 import cn.edu.bupt.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -91,5 +93,12 @@ public class TestController {
         userCredentials.setUser(userRepository.findById(1).get());
         userCredentials.setPassword("password");
         return userCredentialsRepository.save(userCredentials).toString();
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @Transactional
+    public void deleteUser () {
+        userService.deleteUser(25);
     }
 }
