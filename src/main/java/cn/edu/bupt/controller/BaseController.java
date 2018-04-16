@@ -10,7 +10,6 @@ import cn.edu.bupt.entity.User;
 import cn.edu.bupt.exception.IOTErrorCode;
 import cn.edu.bupt.exception.IOTException;
 import cn.edu.bupt.exception.IncorrectParameterException;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

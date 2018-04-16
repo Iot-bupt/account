@@ -35,7 +35,7 @@ public class TenantServiceImpl implements TenantService{
 
     @Override
     public Tenant saveTenant(Tenant tenant){
-        tenantValidator.validate(tenant);
+        //tenantValidator.validate(tenant);
         return tenantRepository.save(tenant);
     }
 
