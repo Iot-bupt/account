@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,11 +93,10 @@ public class TenantController extends BaseController{
     //    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/tenants", params = {  "limit" }, method = RequestMethod.GET)
     @ResponseBody
-    public String getTenants(@RequestParam int limit,
-                               @RequestParam int page,
-                               @RequestParam int size) throws IOTException {
+    public String getTenants(@RequestParam int page,
+                             @RequestParam int size) throws IOTException {
         try {
-            Integer tenantId = getCurrentUser().getTenant().getId();
+           // Integer tenantId = getCurrentUser().getTenant().getId();
             return checkNotNull(tenantService.findTenants(page,size)).getContent().toString();
         } catch (Exception e) {
             throw handleException(e);
