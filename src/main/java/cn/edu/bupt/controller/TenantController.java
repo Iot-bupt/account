@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by zyf on 2018/4/17.
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/account")
 
 public class TenantController extends BaseController{
 

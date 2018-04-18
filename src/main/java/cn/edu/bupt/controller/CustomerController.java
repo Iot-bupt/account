@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by zyf on 2018/4/11.
  */
 @RestController
-@RequestMapping(path= "/api/v1")
+@RequestMapping(path= "/api/v1/account")
 public class CustomerController extends BaseController{
 
     @Autowired

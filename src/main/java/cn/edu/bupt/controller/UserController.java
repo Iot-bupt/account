@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by CZX on 2018/4/13.
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/account")
 public class UserController extends BaseController{
 
     @Autowired
@@ -156,10 +156,10 @@ public class UserController extends BaseController{
     }
 
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenant", params = { "tenantId","users","limit","page"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/tenant/users", params = { "tenantId","limit","page"}, method = RequestMethod.GET)
     @ResponseBody
     public String getTenantAdmins(
-            @RequestParam("tenantId") Integer tenantId,
+            @RequestParam Integer tenantId,
             @RequestParam int limit,
             @RequestParam int page) throws IOTException {
         checkParameter("tenantId", tenantId);
@@ -171,10 +171,10 @@ public class UserController extends BaseController{
     }
 
 //    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer", params = { "customerId","users","limit","page" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/users", params = { "customerId","limit","page" }, method = RequestMethod.GET)
     @ResponseBody
     public String getCustomerUsers(
-            @RequestParam("customerId") Integer customerId,
+            @RequestParam Integer customerId,
             @RequestParam int limit,
             @RequestParam int page) throws IOTException {
         checkParameter("customerId", customerId);
