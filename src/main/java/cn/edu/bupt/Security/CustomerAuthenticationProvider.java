@@ -24,10 +24,10 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
     private final UserCredentialsService userCredentialsService;
 
     @Autowired
-    public CustomerAuthenticationProvider(final UserService userService, final UserCredentialsService userCredentialsService,final BCryptPasswordEncoder encoder) {
+    public CustomerAuthenticationProvider(final UserService userService, final UserCredentialsService userCredentialsService) {
         this.userService = userService;
         this.userCredentialsService = userCredentialsService;
-        this.encoder = encoder;
+        this.encoder = new BCryptPasswordEncoder();
     }
 
     @Override

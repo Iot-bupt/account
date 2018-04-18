@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    CustomerAuthenticationProvider customerAuthenticationProvider;
+    private CustomerAuthenticationProvider customerAuthenticationProvider;
 
     @Bean
     protected BCryptPasswordEncoder passwordEncoder() {
