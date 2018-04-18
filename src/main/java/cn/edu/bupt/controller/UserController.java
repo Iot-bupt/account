@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by CZX on 2018/4/13.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class UserController extends BaseController{
 
     @Autowired
@@ -47,9 +47,9 @@ public class UserController extends BaseController{
     public static final String YOU_MUST_SPECIFY_THE_PASSWORD = "You must specify the password for new users!";
     public static final String USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "User ID should be specified when updating!";
 
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET)
     @ResponseBody
-    public String getUserById(@PathVariable(USER_ID) Integer userId) throws IOTException{
+    public String getUserById(@RequestParam Integer userId) throws IOTException{
         try {
             SecurityUser authUser = getCurrentUser();
             if (authUser.getAuthority() == Authority.CUSTOMER_USER && !authUser.getId().equals(userId)) {
@@ -143,9 +143,9 @@ public class UserController extends BaseController{
 
     //@PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
     @Transactional
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteUser(@PathVariable(USER_ID) Integer userId) throws IOTException {
+    public void deleteUser(@RequestParam Integer userId) throws IOTException {
         checkParameter(USER_ID, userId);
         try {
             checkUserId(userId);
@@ -156,10 +156,10 @@ public class UserController extends BaseController{
     }
 
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenant/{tenantId}/users", params = { "limit","page" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/tenant", params = { "tenantId","users","limit","page"}, method = RequestMethod.GET)
     @ResponseBody
     public String getTenantAdmins(
-            @PathVariable("tenantId") Integer tenantId,
+            @RequestParam("tenantId") Integer tenantId,
             @RequestParam int limit,
             @RequestParam int page) throws IOTException {
         checkParameter("tenantId", tenantId);
@@ -171,10 +171,10 @@ public class UserController extends BaseController{
     }
 
 //    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/{customerId}/users", params = { "limit","page" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/customer", params = { "customerId","users","limit","page" }, method = RequestMethod.GET)
     @ResponseBody
     public String getCustomerUsers(
-            @PathVariable("customerId") Integer customerId,
+            @RequestParam("customerId") Integer customerId,
             @RequestParam int limit,
             @RequestParam int page) throws IOTException {
         checkParameter("customerId", customerId);

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by zyf on 2018/4/17.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 
 public class TenantController extends BaseController{
 
@@ -27,9 +27,9 @@ public class TenantController extends BaseController{
     public static final String TENANT_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "Tenant ID should be specified when updating!";
 
   //  @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant/{tenantId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/tenant",params = {"tenantId"}, method = RequestMethod.GET)
     @ResponseBody
-    public String getTenantById(@PathVariable(TENANT_ID) Integer  tenantId) throws IOTException {
+    public String getTenantById(@RequestParam Integer  tenantId) throws IOTException {
         checkParameter("tenantId", tenantId);
         try {
             checkTenantId(tenantId);
@@ -73,9 +73,9 @@ public class TenantController extends BaseController{
 
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
     @Transactional
-    @RequestMapping(value = "/tenant/{tenantId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/tenant",params = {"tenantId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteTenant(@PathVariable(TENANT_ID) Integer tenantId) throws IOTException {
+    public void deleteTenant(@RequestParam Integer tenantId) throws IOTException {
         checkParameter(TENANT_ID, tenantId);
         try {
             tenantService.deleteTenant(tenantId);

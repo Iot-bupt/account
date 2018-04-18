@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by zyf on 2018/4/11.
  */
 @RestController
-@RequestMapping(path= "/api")
+@RequestMapping(path= "/api/v1")
 public class CustomerController extends BaseController{
 
     @Autowired
@@ -26,9 +26,9 @@ public class CustomerController extends BaseController{
     public static final String CUSTOMER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "Customer ID should be specified when updating!";
 
 //    @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
-    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer",params = {"customerId"}, method = RequestMethod.GET)
     @ResponseBody
-    public String getCustomerById(@PathVariable(CUSTOMER_ID) Integer customerId) throws IOTException {
+    public String getCustomerById(@RequestParam Integer customerId) throws IOTException {
         checkParameter(CUSTOMER_ID, customerId);
         try {
             return checkCustomerId(customerId).toString();
@@ -78,9 +78,9 @@ public class CustomerController extends BaseController{
 
 //    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
     @Transactional
-    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/customer",params = {"customerId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteCustomer(@PathVariable(CUSTOMER_ID) Integer customerId) throws IOTException {
+    public void deleteCustomer(@RequestParam Integer customerId) throws IOTException {
         checkParameter(CUSTOMER_ID, customerId);
         try {
             checkCustomerId(customerId);

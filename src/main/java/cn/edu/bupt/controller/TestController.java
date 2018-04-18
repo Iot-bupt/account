@@ -19,7 +19,7 @@ import java.util.List;
  * Created by CZX on 2018/4/8.
  */
 @RestController
-@RequestMapping(path="/test")
+@RequestMapping(path="/api/v1/test")
 public class TestController {
 
     @Autowired
