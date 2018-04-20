@@ -23,12 +23,21 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
     private final UserService userService;
     private final UserCredentialsService userCredentialsService;
 
+
     @Autowired
     public CustomerAuthenticationProvider(final UserService userService, final UserCredentialsService userCredentialsService) {
         this.userService = userService;
         this.userCredentialsService = userCredentialsService;
         this.encoder = new BCryptPasswordEncoder();
     }
+
+    //TODO:循环引用问题。在cn.edu.bupt.config.SecurityConfiguration中要注入CustomerAuthenticationProvider，而CustomerAuthenticationProvider要注入BCryptPasswordEncoder,BCryptPasswordEncoder又在cn.edu.bupt.config.SecurityConfiguration中。
+//    @Autowired
+//    public CustomerAuthenticationProvider(final UserService userService, final UserCredentialsService userCredentialsService,final BCryptPasswordEncoder encoder) {
+//        this.userService = userService;
+//        this.userCredentialsService = userCredentialsService;
+//        this.encoder = encoder;
+//    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

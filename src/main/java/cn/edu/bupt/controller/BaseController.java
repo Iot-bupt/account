@@ -8,12 +8,16 @@ import cn.edu.bupt.entity.Authority;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.User;
 import cn.edu.bupt.exception.IOTErrorCode;
+import cn.edu.bupt.exception.IOTErrorResponseHandler;
 import cn.edu.bupt.exception.IOTException;
 import cn.edu.bupt.exception.IncorrectParameterException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 import static cn.edu.bupt.controller.UserController.YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION;
@@ -23,12 +27,19 @@ import static cn.edu.bupt.controller.UserController.YOU_DON_T_HAVE_PERMISSION_TO
  */
 public abstract class BaseController {
 
+    @Autowired
+    private IOTErrorResponseHandler errorResponseHandler;
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private CustomerService customerService;
+
+    @ExceptionHandler(IOTException.class)
+    public void handleIOTException(IOTException ex, HttpServletResponse response) {
+        errorResponseHandler.handle(ex, response);
+    }
 
     IOTException handleException(Exception exception) {
         return handleException(exception, true);
