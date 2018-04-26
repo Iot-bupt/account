@@ -1,7 +1,10 @@
 package cn.edu.bupt.config;
 
 
+import cn.edu.bupt.Security.CustomAuthorizationTokenServices;
+import cn.edu.bupt.Security.CustomTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,12 +18,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+
 
 @Configuration
 public class OAuth2ServerConfig {
-
-    private static final String DEMO_RESOURCE_ID = "test";
 
     @Configuration
     @EnableResourceServer
@@ -28,7 +32,7 @@ public class OAuth2ServerConfig {
 
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) {
-            resources.resourceId(DEMO_RESOURCE_ID).stateless(true);
+            resources.stateless(true);
         }
 
         @Override
@@ -44,9 +48,9 @@ public class OAuth2ServerConfig {
                     .anonymous()
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/test/findTAdmin").authenticated()//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
+                    .antMatchers("/test/findTAdmin").permitAll()//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
                     .antMatchers("/test/**").permitAll();//配置order访问控制，必须认证过后才可以访问
-            // @formatter:on
+
         }
     }
 
@@ -65,13 +69,11 @@ public class OAuth2ServerConfig {
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             //配置两个客户端,一个用于password认证一个用于client认证
             clients.inMemory().withClient("client_1")
-                    .resourceIds(DEMO_RESOURCE_ID)
                     .authorizedGrantTypes("client_credentials", "refresh_token")
                     .scopes("select")
                     .authorities("client")
                     .secret(passwordEncoder.encode("123456"))
                     .and().withClient("client_2")
-                    .resourceIds(DEMO_RESOURCE_ID)
                     .authorizedGrantTypes("password", "refresh_token")
                     .scopes("select")
                     .authorities("client")
@@ -81,15 +83,40 @@ public class OAuth2ServerConfig {
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
-                    .tokenStore(new InMemoryTokenStore())
-                    .authenticationManager(authenticationManager);
+                    .tokenStore(tokenStore())
+                    .authenticationManager(authenticationManager)
+                    .tokenServices(authorizationServerTokenServices())
+                    .accessTokenConverter(accessTokenConverter());
+        }
+
+        @Bean
+        public InMemoryTokenStore tokenStore(){
+            return new InMemoryTokenStore();
         }
 
         @Override
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
             //允许表单认证
-            oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+            oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()");
             oauthServer.allowFormAuthenticationForClients();
+        }
+
+        @Bean
+        public JwtAccessTokenConverter accessTokenConverter() {
+            JwtAccessTokenConverter converter = new CustomTokenEnhancer();
+            //TODO:写入properties文件中
+            converter.setSigningKey("secret");
+            return converter;
+        }
+
+        @Bean
+        public AuthorizationServerTokenServices authorizationServerTokenServices() {
+            CustomAuthorizationTokenServices customTokenServices = new CustomAuthorizationTokenServices();
+            customTokenServices.setTokenStore(tokenStore());
+            customTokenServices.setSupportRefreshToken(true);
+            customTokenServices.setReuseRefreshToken(true);
+            customTokenServices.setTokenEnhancer(accessTokenConverter());
+            return customTokenServices;
         }
 
     }

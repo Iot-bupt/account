@@ -30,6 +30,7 @@ public class AuthController extends BaseController{
     private UserCredentialsService userCredentialsService;
 
 //    @PreAuthorize("isAuthenticated()")
+//    eg. {"currentPassword":"password","newPassword":"newpassword"}
     @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     public void changePassword (
