@@ -1,6 +1,7 @@
 package cn.edu.bupt.config;
 
 
+import cn.edu.bupt.Security.CustomLogoutHandler;
 import cn.edu.bupt.Security.CustomerAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +21,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomerAuthenticationProvider customerAuthenticationProvider;
+
+    @Bean
+    public CustomLogoutHandler customLogoutHandler() {
+        return new CustomLogoutHandler();
+    }
 
     @Bean
     protected BCryptPasswordEncoder passwordEncoder() {
@@ -44,5 +51,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers("/oauth/**").permitAll();
+
     }
 }

@@ -1,6 +1,7 @@
 package cn.edu.bupt.Security;
 
 import cn.edu.bupt.Security.model.SecurityUser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -20,6 +21,10 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter implements Seri
     private static final String TENANT_ID = "tenant_id";
     private static final String CUSTOMER_ID = "customer_id";
     private static final String AUTHORITY = "authority";
+    private static final String ISSUER = "issuer";
+
+    @Value("${security.jwt.tokenIssuer}")
+    private String tokenIssuer;
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken,
@@ -32,6 +37,7 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter implements Seri
         info.put(CUSTOMER_ID, securityUser.getCustomer().getId());
         info.put(AUTHORITY, securityUser.getAuthority());
         info.put(USER_NAME, securityUser.getName());
+        info.put(ISSUER, tokenIssuer);
 
 
         DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(accessToken);

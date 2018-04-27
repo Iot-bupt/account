@@ -2,8 +2,10 @@ package cn.edu.bupt.config;
 
 
 import cn.edu.bupt.Security.CustomAuthorizationTokenServices;
+import cn.edu.bupt.Security.CustomLogoutHandler;
 import cn.edu.bupt.Security.CustomTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 
 @Configuration
@@ -29,6 +32,9 @@ public class OAuth2ServerConfig {
     @Configuration
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+
+        @Autowired
+        private CustomLogoutHandler customLogoutHandler;
 
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) {
@@ -49,7 +55,12 @@ public class OAuth2ServerConfig {
                     .and()
                     .authorizeRequests()
                     .antMatchers("/test/findTAdmin").permitAll()//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
-                    .antMatchers("/test/**").permitAll();//配置order访问控制，必须认证过后才可以访问
+                    .antMatchers("/test/**").permitAll()
+                    .and().logout()
+                    .logoutUrl("/logout")
+                    .clearAuthentication(true)
+                    .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+                    .addLogoutHandler(customLogoutHandler);
 
         }
     }
@@ -63,6 +74,11 @@ public class OAuth2ServerConfig {
         AuthenticationManager authenticationManager;
         @Autowired
         private BCryptPasswordEncoder passwordEncoder;
+
+        @Value("${security.jwt.tokenSigningKey}")
+        private String signingKey;
+
+
 
 
         @Override
@@ -104,8 +120,7 @@ public class OAuth2ServerConfig {
         @Bean
         public JwtAccessTokenConverter accessTokenConverter() {
             JwtAccessTokenConverter converter = new CustomTokenEnhancer();
-            //TODO:写入properties文件中
-            converter.setSigningKey("secret");
+            converter.setSigningKey(signingKey);
             return converter;
         }
 

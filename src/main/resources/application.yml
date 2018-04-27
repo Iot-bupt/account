@@ -1,0 +1,17 @@
+server:
+  # Server bind address
+  address: "${HTTP_BIND_ADDRESS:0.0.0.0}"
+  # Server bind port
+  port: "${HTTP_BIND_PORT:8081}"
+
+spring:
+  datasource:
+    url: jdbc:mysql://10.112.233.200:3306/BUPT_IOT
+    username: root
+    password: root
+
+security.jwt:
+  tokenExpirationTime: "${JWT_TOKEN_EXPIRATION_TIME:900}" # Number of seconds (15 mins)
+  refreshTokenExpTime: "${JWT_REFRESH_TOKEN_EXPIRATION_TIME:3600}" # Seconds (1 hour)
+  tokenIssuer: "${JWT_TOKEN_ISSUER:bupt.edu.cn}"
+  tokenSigningKey: "${JWT_TOKEN_SIGNING_KEY:SigningKey}"

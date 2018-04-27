@@ -1,5 +1,6 @@
 package cn.edu.bupt.Security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,10 +26,11 @@ import java.util.UUID;
  */
 public class CustomAuthorizationTokenServices implements AuthorizationServerTokenServices, ConsumerTokenServices {
 
-    //TODO:写入properties文件中
-    private int refreshTokenValiditySeconds = 60 * 60 * 24 * 30; // default 30 days.
+    @Value("${security.jwt.refreshTokenExpTime}")
+    private int refreshTokenValiditySeconds;
 
-    private int accessTokenValiditySeconds = 60 * 60 * 12; // default 12 hours.
+    @Value("${security.jwt.tokenExpirationTime}")
+    private int accessTokenValiditySeconds;
 
     private boolean supportRefreshToken = false;
 
