@@ -114,7 +114,7 @@ public class OAuth2ServerConfig {
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
             //允许表单认证
             oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()");
-            oauthServer.allowFormAuthenticationForClients();
+//            oauthServer.allowFormAuthenticationForClients();
         }
 
         @Bean

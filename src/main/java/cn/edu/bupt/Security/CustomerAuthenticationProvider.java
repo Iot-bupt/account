@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.util.Map;
+
 /**
  * Created by CZX on 2018/4/12.
  */
@@ -42,8 +44,10 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Assert.notNull(authentication, "No authentication data provided");
-        String username = (String) authentication.getPrincipal();
+        String username = authentication.getName();
         String password = (String) authentication.getCredentials();
+        Map data = (Map) authentication.getDetails();
+        System.out.println(data);
         return authenticateByUsernameAndPassword(username, password);
     }
 
