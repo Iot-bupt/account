@@ -101,7 +101,7 @@ public class UserController extends BaseController{
                 throw new IOTException(YOU_MUST_SPECIFY_THE_PASSWORD,
                         IOTErrorCode.BAD_REQUEST_PARAMS);
             }
-            user.setTenant(getCurrentUser().getTenant());
+            user.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
             User savedUser = checkNotNull(userService.saveUser(user));
             UserCredentials userCredentials = new UserCredentials(savedUser,passwordEncoder.encode(userString.get("password").getAsString()));
             userCredentialsService.saveUserCredentials(userCredentials);
@@ -131,7 +131,7 @@ public class UserController extends BaseController{
                         IOTErrorCode.PERMISSION_DENIED);
             }
             if (authUser.getAuthority() == Authority.TENANT_ADMIN) {
-                user.setTenant(getCurrentUser().getTenant());
+                user.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
                 user.setCustomer(customerService.findCustomerById(userString.get("customer_id").getAsInt()));
             }
             User savedUser = checkNotNull(userService.saveUser(user));

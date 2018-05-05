@@ -67,7 +67,7 @@ public abstract class BaseController {
 
     protected SecurityUser getCurrentUser() throws IOTException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof SecurityUser) {
+        if (authentication != null) {
             return (SecurityUser) authentication.getPrincipal();
         } else {
             throw new IOTException("You aren't authorized to perform this operation!", IOTErrorCode.AUTHENTICATION);
@@ -95,7 +95,7 @@ public abstract class BaseController {
     void checkTenantId(Integer tenantId) throws IOTException {
         SecurityUser authUser = getCurrentUser();
         if (authUser.getAuthority() != Authority.SYS_ADMIN &&
-                (authUser.getTenant().getId() == null || !authUser.getTenant().getId().equals(tenantId))) {
+                (authUser.getTenantId() == null || !authUser.getTenantId().equals(tenantId))) {
             throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
                     IOTErrorCode.PERMISSION_DENIED);
         }
@@ -106,7 +106,7 @@ public abstract class BaseController {
             SecurityUser authUser = getCurrentUser();
             if (authUser.getAuthority() == Authority.SYS_ADMIN ||
                     (authUser.getAuthority() != Authority.TENANT_ADMIN &&
-                            (authUser.getCustomer().getId() == null || !authUser.getCustomer().getId().equals(customerId)))) {
+                            (authUser.getCustomerId() == null || !authUser.getCustomerId().equals(customerId)))) {
                 throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
                         IOTErrorCode.PERMISSION_DENIED);
             }

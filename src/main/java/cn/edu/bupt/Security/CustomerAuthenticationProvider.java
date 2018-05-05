@@ -46,8 +46,6 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
         Assert.notNull(authentication, "No authentication data provided");
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
-        Map data = (Map) authentication.getDetails();
-        System.out.println(data);
         return authenticateByUsernameAndPassword(username, password);
     }
 
@@ -68,7 +66,7 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
 
         if (user.getAuthority() == null) throw new InsufficientAuthenticationException("User has no authority assigned");
 
-        SecurityUser securityUser = new SecurityUser(user, username);
+        SecurityUser securityUser = new SecurityUser(user.getId(),user.getName(),user.getCustomer().getId(),user.getTenant().getId(),user.getAuthority());
 
         return new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
     }

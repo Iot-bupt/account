@@ -33,10 +33,10 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter implements Seri
 //        authentication.getUserAuthentication().getPrincipal();
         Map<String, Object> info = new HashMap<>();
         info.put(USER_ID, securityUser.getId());
-        info.put(TENANT_ID, securityUser.getTenant().getId());
-        info.put(CUSTOMER_ID, securityUser.getCustomer().getId());
+        info.put(TENANT_ID, securityUser.getTenantId());
+        info.put(CUSTOMER_ID, securityUser.getCustomerId());
         info.put(AUTHORITY, securityUser.getAuthority());
-        info.put(USER_NAME, securityUser.getName());
+        info.put(USER_NAME, securityUser.getUserPrincipal());
         info.put(ISSUER, tokenIssuer);
 
 

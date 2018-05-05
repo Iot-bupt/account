@@ -1,6 +1,7 @@
 package cn.edu.bupt.controller;
 
 import cn.edu.bupt.dao.Customer.CustomerService;
+import cn.edu.bupt.dao.Tenant.TenantService;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.exception.IOTErrorCode;
 import cn.edu.bupt.exception.IOTException;
@@ -21,6 +22,9 @@ public class CustomerController extends BaseController{
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private TenantService tenantService;
 
     public static final String CUSTOMER_ID = "customerId";
     public static final String CUSTOMER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "Customer ID should be specified when updating!";
@@ -45,7 +49,7 @@ public class CustomerController extends BaseController{
         JsonObject customerString = new JsonParser().parse(customerInfo).getAsJsonObject();
         Customer customer = Json2Customer(customerString);
         try {
-            customer.setTenant(getCurrentUser().getTenant());
+            customer.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
             return checkNotNull(customerService.saveCustomer(customer)).toString();
         } catch (Exception e) {
             throw handleException(e);
@@ -69,7 +73,7 @@ public class CustomerController extends BaseController{
         customer.setPhone(customerString.get("phone").getAsString());
         customer.setAddress(customerString.get("address").getAsString());
         try {
-            customer.setTenant(getCurrentUser().getTenant());
+            customer.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
             return checkNotNull(customerService.saveCustomer(customer)).toString();
         } catch (Exception e) {
             throw handleException(e);
@@ -96,7 +100,7 @@ public class CustomerController extends BaseController{
     public String getCustomers(@RequestParam int limit,
                                @RequestParam int page) throws IOTException {
         try {
-            Integer tenantId = getCurrentUser().getTenant().getId();
+            Integer tenantId = getCurrentUser().getTenantId();
             return checkNotNull(customerService.findCustomersByTenantId(page,limit,tenantId)).getContent().toString();
         } catch (Exception e) {
             throw handleException(e);

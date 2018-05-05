@@ -15,3 +15,11 @@ security.jwt:
   refreshTokenExpTime: "${JWT_REFRESH_TOKEN_EXPIRATION_TIME:3600}" # Seconds (1 hour)
   tokenIssuer: "${JWT_TOKEN_ISSUER:bupt.edu.cn}"
   tokenSigningKey: "${JWT_TOKEN_SIGNING_KEY:SigningKey}"
+
+account:
+  host: 127.0.0.1
+  port: 8081
+#  url需修改
+  check_url: http://${account.host}:${account.port}/oauth/check_token
+  client_id: client_2
+  client_secret: 123456

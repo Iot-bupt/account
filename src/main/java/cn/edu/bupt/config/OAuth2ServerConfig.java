@@ -1,9 +1,7 @@
 package cn.edu.bupt.config;
 
 
-import cn.edu.bupt.Security.CustomAuthorizationTokenServices;
-import cn.edu.bupt.Security.CustomLogoutHandler;
-import cn.edu.bupt.Security.CustomTokenEnhancer;
+import cn.edu.bupt.Security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +19,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
@@ -38,7 +37,12 @@ public class OAuth2ServerConfig {
 
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) {
-            resources.stateless(true);
+//            resources.stateless(true);
+            CustomRemoteTokenServices resourceServerTokenServices = new CustomRemoteTokenServices();
+            DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
+            accessTokenConverter.setUserTokenConverter(new UserTokenConverter());
+            resourceServerTokenServices.setAccessTokenConverter(accessTokenConverter);
+            resources.tokenServices(resourceServerTokenServices);
         }
 
         @Override
@@ -54,8 +58,7 @@ public class OAuth2ServerConfig {
                     .anonymous()
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/test/findTAdmin").permitAll()//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
-                    .antMatchers("/test/**").permitAll()
+                    .antMatchers("/api/v1/account/tenant").hasAuthority("TENANT_ADMIN")//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
                     .and().logout()
                     .logoutUrl("/logout")
                     .clearAuthentication(true)
