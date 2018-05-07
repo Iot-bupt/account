@@ -60,7 +60,7 @@ public class OAuth2ServerConfig {
                     .authorizeRequests()
                     .antMatchers("/api/v1/account/tenant").hasAuthority("TENANT_ADMIN")//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
                     .and().logout()
-                    .logoutUrl("/logout")
+                    .logoutUrl("/api/v1/auth/logout")
                     .clearAuthentication(true)
                     .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                     .addLogoutHandler(customLogoutHandler);
