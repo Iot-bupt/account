@@ -102,6 +102,8 @@ public class OAuth2ServerConfig {
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
+                    .pathMapping("/oauth/token","/api/v1/auth/login")
+                    .pathMapping("/oauth/check_token","/api/v1/auth/check_token")
                     .tokenStore(tokenStore())
                     .authenticationManager(authenticationManager)
                     .tokenServices(authorizationServerTokenServices())
