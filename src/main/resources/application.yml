@@ -19,7 +19,6 @@ security.jwt:
 account:
   host: 127.0.0.1
   port: 8081
-#  url需修改
-  check_url: http://${account.host}:${account.port}/oauth/check_token
+  check_url: http://${account.host}:${account.port}/api/v1/auth/check_token
   client_id: client_2
   client_secret: 123456
