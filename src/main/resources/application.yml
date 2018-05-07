@@ -2,7 +2,7 @@ server:
   # Server bind address
   address: "${HTTP_BIND_ADDRESS:0.0.0.0}"
   # Server bind port
-  port: "${HTTP_BIND_PORT:8081}"
+  port: "${HTTP_BIND_PORT:8400}"
 
 spring:
   datasource:
@@ -18,7 +18,7 @@ security.jwt:
 
 account:
   host: 127.0.0.1
-  port: 8081
+  port: ${server.port}
   check_url: http://${account.host}:${account.port}/api/v1/auth/check_token
   client_id: client_2
   client_secret: 123456
