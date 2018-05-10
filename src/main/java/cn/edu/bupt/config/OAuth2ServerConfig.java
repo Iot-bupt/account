@@ -81,29 +81,44 @@ public class OAuth2ServerConfig {
         @Value("${security.jwt.tokenSigningKey}")
         private String signingKey;
 
+        @Value("${oauth2.internal_client_id}")
+        private String internal_client_id;
 
+        @Value("${oauth2.internal_client_secret}")
+        private String internal_client_secret;
 
+        @Value("${oauth2.external_client_id}")
+        private String external_client_id;
+
+        @Value("${oauth2.external_client_secret}")
+        private String external_client_secret;
+
+        @Value("${oauth2.loginUrl}")
+        private String loginUrl;
+
+        @Value("${oauth2.checkUrl}")
+        private String checkUrl;
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             //配置两个客户端,一个用于password认证一个用于client认证
-            clients.inMemory().withClient("client_1")
+            clients.inMemory().withClient(internal_client_id)
                     .authorizedGrantTypes("client_credentials", "refresh_token")
-                    .scopes("select")
+                    .scopes("all")
                     .authorities("client")
-                    .secret(passwordEncoder.encode("123456"))
-                    .and().withClient("client_2")
+                    .secret(passwordEncoder.encode(internal_client_secret))
+                    .and().withClient(external_client_id)
                     .authorizedGrantTypes("password", "refresh_token")
                     .scopes("select")
                     .authorities("client")
-                    .secret(passwordEncoder.encode("123456"));
+                    .secret(passwordEncoder.encode(external_client_secret));
         }
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
-                    .pathMapping("/oauth/token","/api/v1/auth/login")
-                    .pathMapping("/oauth/check_token","/api/v1/auth/check_token")
+                    .pathMapping("/oauth/token",loginUrl)
+                    .pathMapping("/oauth/check_token",checkUrl)
                     .tokenStore(tokenStore())
                     .authenticationManager(authenticationManager)
                     .tokenServices(authorizationServerTokenServices())

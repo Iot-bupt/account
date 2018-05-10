@@ -29,7 +29,7 @@ public class AuthController extends BaseController{
     @Autowired
     private UserCredentialsService userCredentialsService;
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
 //    eg. {"currentPassword":"password","newPassword":"newpassword"}
     @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)

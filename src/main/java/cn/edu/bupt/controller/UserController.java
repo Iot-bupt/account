@@ -47,6 +47,8 @@ public class UserController extends BaseController{
     public static final String YOU_MUST_SPECIFY_THE_PASSWORD = "You must specify the password for new users!";
     public static final String USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "User ID should be specified when updating!";
 
+
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN') ")
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET)
     @ResponseBody
     public String getUserById(@RequestParam Integer userId) throws IOTException{
@@ -65,6 +67,7 @@ public class UserController extends BaseController{
 //    权限：SYS_ADMIN
 //    POST请求Headers中Content-Type为application/json，Body为raw形式的Json。
 //    eg.{"tenant_id":"1","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN') ")
     @RequestMapping(value = "/tenantAdmin", method = RequestMethod.POST)
     @ResponseBody
     public String createTenantAdmin(@RequestBody String userInfo) throws IOTException {
@@ -89,6 +92,7 @@ public class UserController extends BaseController{
 
 //    权限：Tenant_admin
 //    eg.{"customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/customerUser", method = RequestMethod.POST)
     @ResponseBody
     public String createCustomerUser(@RequestBody String userInfo) throws IOTException {
@@ -112,6 +116,7 @@ public class UserController extends BaseController{
     }
 
 //    eg.{"id":"1", "customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com"}
+    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @ResponseBody
     public String updateUser(@RequestBody String userInfo) throws IOTException {
@@ -141,7 +146,7 @@ public class UserController extends BaseController{
         }
     }
 
-    //@PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
     @Transactional
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -155,7 +160,7 @@ public class UserController extends BaseController{
         }
     }
 
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenant/users", params = { "tenantId","limit","page"}, method = RequestMethod.GET)
     @ResponseBody
     public String getTenantAdmins(
@@ -170,7 +175,7 @@ public class UserController extends BaseController{
         }
     }
 
-//    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/customer/users", params = { "customerId","limit","page" }, method = RequestMethod.GET)
     @ResponseBody
     public String getCustomerUsers(

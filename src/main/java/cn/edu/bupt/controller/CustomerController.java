@@ -29,7 +29,7 @@ public class CustomerController extends BaseController{
     public static final String CUSTOMER_ID = "customerId";
     public static final String CUSTOMER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "Customer ID should be specified when updating!";
 
-//    @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
     @RequestMapping(value = "/customer",params = {"customerId"}, method = RequestMethod.GET)
     @ResponseBody
     public String getCustomerById(@RequestParam Integer customerId) throws IOTException {
@@ -41,8 +41,8 @@ public class CustomerController extends BaseController{
         }
     }
 
-//    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
 //    eg. {"email":"1@qq.com","title":"testCustomer","additional_info":"","phone":"1111","address":"address"}
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/customer", method = RequestMethod.POST)
     @ResponseBody
     public String createCustomer(@RequestBody String customerInfo) throws IOTException {
@@ -56,8 +56,8 @@ public class CustomerController extends BaseController{
         }
     }
 
-//    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
 //    eg.{"id":"7","email":"2@qq.com","title":"testCustomer","additional_info":"","phone":"1111","address":"address"}
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/customer", method = RequestMethod.PUT)
     @ResponseBody
     public String updateCustomer(@RequestBody String customerInfo) throws IOTException {
@@ -80,7 +80,7 @@ public class CustomerController extends BaseController{
         }
     }
 
-//    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @Transactional
     @RequestMapping(value = "/customer",params = {"customerId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -94,7 +94,7 @@ public class CustomerController extends BaseController{
         }
     }
 
-//    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/customers", params = {  "limit","page"  }, method = RequestMethod.GET)
     @ResponseBody
     public String getCustomers(@RequestParam int limit,

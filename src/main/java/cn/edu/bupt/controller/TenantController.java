@@ -26,7 +26,7 @@ public class TenantController extends BaseController{
     public static final String TENANT_ID = "tenantId";
     public static final String TENANT_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "Tenant ID should be specified when updating!";
 
-  //  @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
     @RequestMapping(value = "/tenant",params = {"tenantId"}, method = RequestMethod.GET)
     @ResponseBody
     public String getTenantById(@RequestParam Integer  tenantId) throws IOTException {
@@ -38,8 +38,9 @@ public class TenantController extends BaseController{
             throw handleException(e);
         }
     }
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+
 //    eg. {"email":"1@qq.com","title":"testTenant","additional_info":"","phone":"1111","address":"address"}
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenant", method = RequestMethod.POST)
     @ResponseBody
     public String createTenant(@RequestBody String tenantInfo) throws IOTException {
@@ -54,6 +55,7 @@ public class TenantController extends BaseController{
 
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
 //    eg.{"id":"7","email":"2@qq.com","title":"testTenant","additional_info":"","phone":"1111","address":"address"}
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenant", method = RequestMethod.PUT)
     @ResponseBody
     public String updateTenant(@RequestBody String tenantInfo) throws IOTException {
@@ -71,7 +73,7 @@ public class TenantController extends BaseController{
         }
     }
 
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @Transactional
     @RequestMapping(value = "/tenant",params = {"tenantId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -84,7 +86,7 @@ public class TenantController extends BaseController{
         }
     }
 
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenants", params = {  "limit","page"  }, method = RequestMethod.GET)
     @ResponseBody
     public String getTenants(@RequestParam int limit,

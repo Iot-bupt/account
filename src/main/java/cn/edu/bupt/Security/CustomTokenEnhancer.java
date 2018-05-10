@@ -29,20 +29,19 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter implements Seri
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken,
                                      OAuth2Authentication authentication) {
-        SecurityUser securityUser = (SecurityUser) authentication.getUserAuthentication().getPrincipal();
-//        authentication.getUserAuthentication().getPrincipal();
-        Map<String, Object> info = new HashMap<>();
-        info.put(USER_ID, securityUser.getId());
-        info.put(TENANT_ID, securityUser.getTenantId());
-        info.put(CUSTOMER_ID, securityUser.getCustomerId());
-        info.put(AUTHORITY, securityUser.getAuthority());
-        info.put(USER_NAME, securityUser.getUserPrincipal());
-        info.put(ISSUER, tokenIssuer);
-
-
         DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(accessToken);
-        customAccessToken.setAdditionalInformation(info);
-
+        if(!accessToken.getScope().contains("all")){
+            SecurityUser securityUser = (SecurityUser) authentication.getUserAuthentication().getPrincipal();
+    //        authentication.getUserAuthentication().getPrincipal();
+            Map<String, Object> info = new HashMap<>();
+            info.put(USER_ID, securityUser.getId());
+            info.put(TENANT_ID, securityUser.getTenantId());
+            info.put(CUSTOMER_ID, securityUser.getCustomerId());
+            info.put(AUTHORITY, securityUser.getAuthority());
+            info.put(USER_NAME, securityUser.getUserPrincipal());
+            info.put(ISSUER, tokenIssuer);
+            customAccessToken.setAdditionalInformation(info);
+        }
         OAuth2AccessToken enhancedToken = super.enhance(customAccessToken, authentication);
         return enhancedToken;
     }

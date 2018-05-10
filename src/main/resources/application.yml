@@ -2,13 +2,22 @@ server:
   # Server bind address
   address: "${HTTP_BIND_ADDRESS:0.0.0.0}"
   # Server bind port
-  port: "${HTTP_BIND_PORT:8400}"
+  port: "${HTTP_BIND_PORT:8081}"
 
 spring:
   datasource:
     url: jdbc:mysql://10.112.233.200:3306/BUPT_IOT
     username: root
     password: root
+
+oauth2:
+    internal_client_id: client_1
+    internal_client_secret: 123456
+    external_client_id: client_2
+    external_client_secret: 123456
+
+    loginUrl: /api/v1/auth/login
+    checkUrl: /api/v1/auth/check_token
 
 security.jwt:
   tokenExpirationTime: "${JWT_TOKEN_EXPIRATION_TIME:900}" # Number of seconds (15 mins)

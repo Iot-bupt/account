@@ -83,6 +83,7 @@ public class CustomAuthorizationTokenServices implements AuthorizationServerToke
     @Transactional(noRollbackFor = {InvalidTokenException.class, InvalidGrantException.class})
     public OAuth2AccessToken refreshAccessToken(String refreshTokenValue, TokenRequest tokenRequest)
             throws AuthenticationException {
+        //TODO:从第二次刷新开始，之前的accessToken不会失效。
 
         if (!supportRefreshToken) {
             throw new InvalidGrantException("Invalid refresh token: " + refreshTokenValue);
