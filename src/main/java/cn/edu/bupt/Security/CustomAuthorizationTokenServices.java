@@ -67,7 +67,6 @@ public class CustomAuthorizationTokenServices implements AuthorizationServerToke
         }
         //recreate a refreshToken
         refreshToken = createRefreshToken(authentication);
-
         OAuth2AccessToken accessToken = createAccessToken(authentication, refreshToken);
         if (accessToken != null) {
             tokenStore.storeAccessToken(accessToken, authentication);
@@ -83,7 +82,7 @@ public class CustomAuthorizationTokenServices implements AuthorizationServerToke
     @Transactional(noRollbackFor = {InvalidTokenException.class, InvalidGrantException.class})
     public OAuth2AccessToken refreshAccessToken(String refreshTokenValue, TokenRequest tokenRequest)
             throws AuthenticationException {
-        //TODO:从第二次刷新开始，之前的accessToken不会失效。
+        //TODO:reuse为true时，从第二次刷新开始，之前的accessToken不会失效。
 
         if (!supportRefreshToken) {
             throw new InvalidGrantException("Invalid refresh token: " + refreshTokenValue);
@@ -130,6 +129,7 @@ public class CustomAuthorizationTokenServices implements AuthorizationServerToke
         if (!reuseRefreshToken) {
             tokenStore.storeRefreshToken(accessToken.getRefreshToken(), authentication);
         }
+
         return accessToken;
     }
 
