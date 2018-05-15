@@ -7,6 +7,7 @@ import cn.edu.bupt.entity.UserCredentials;
 import cn.edu.bupt.exception.IOTErrorCode;
 import cn.edu.bupt.exception.IOTException;
 import com.fasterxml.jackson.databind.JsonNode;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,7 @@ public class AuthController extends BaseController{
     @Autowired
     private UserCredentialsService userCredentialsService;
 
+    @ApiOperation(value = "修改密码")
     @PreAuthorize("isAuthenticated()")
 //    eg. {"currentPassword":"password","newPassword":"newpassword"}
     @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)

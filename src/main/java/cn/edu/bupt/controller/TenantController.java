@@ -6,6 +6,7 @@ import cn.edu.bupt.exception.IOTErrorCode;
 import cn.edu.bupt.exception.IOTException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,7 @@ public class TenantController extends BaseController{
     public static final String TENANT_ID = "tenantId";
     public static final String TENANT_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "Tenant ID should be specified when updating!";
 
+    @ApiOperation(value = "根据TenantId获取Tenant")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
     @RequestMapping(value = "/tenant",params = {"tenantId"}, method = RequestMethod.GET)
     @ResponseBody
@@ -40,6 +42,7 @@ public class TenantController extends BaseController{
     }
 
 //    eg. {"email":"1@qq.com","title":"testTenant","additional_info":"","phone":"1111","address":"address"}
+    @ApiOperation(value = "创建Tenant")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenant", method = RequestMethod.POST)
     @ResponseBody
@@ -55,6 +58,7 @@ public class TenantController extends BaseController{
 
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
 //    eg.{"id":"7","email":"2@qq.com","title":"testTenant","additional_info":"","phone":"1111","address":"address"}
+    @ApiOperation(value = "更新Tenant信息")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenant", method = RequestMethod.PUT)
     @ResponseBody
@@ -72,7 +76,7 @@ public class TenantController extends BaseController{
             throw handleException(e);
         }
     }
-
+    @ApiOperation(value = "根据TenantId删除Tenant")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @Transactional
     @RequestMapping(value = "/tenant",params = {"tenantId"}, method = RequestMethod.DELETE)
@@ -86,6 +90,7 @@ public class TenantController extends BaseController{
         }
     }
 
+    @ApiOperation(value = "获取所有Tenant信息")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenants", params = {  "limit","page"  }, method = RequestMethod.GET)
     @ResponseBody

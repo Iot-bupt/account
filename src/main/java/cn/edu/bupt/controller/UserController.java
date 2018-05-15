@@ -12,6 +12,7 @@ import cn.edu.bupt.exception.IOTErrorCode;
 import cn.edu.bupt.exception.IOTException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,7 +48,7 @@ public class UserController extends BaseController{
     public static final String YOU_MUST_SPECIFY_THE_PASSWORD = "You must specify the password for new users!";
     public static final String USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "User ID should be specified when updating!";
 
-
+    @ApiOperation(value = "根据UserId获取User")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN') ")
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET)
     @ResponseBody
@@ -67,6 +68,7 @@ public class UserController extends BaseController{
 //    权限：SYS_ADMIN
 //    POST请求Headers中Content-Type为application/json，Body为raw形式的Json。
 //    eg.{"tenant_id":"1","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
+    @ApiOperation(value = "创建租户管理员")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN') ")
     @RequestMapping(value = "/tenantAdmin", method = RequestMethod.POST)
     @ResponseBody
@@ -92,6 +94,7 @@ public class UserController extends BaseController{
 
 //    权限：Tenant_admin
 //    eg.{"customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
+    @ApiOperation(value = "创建普通用户")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/customerUser", method = RequestMethod.POST)
     @ResponseBody
@@ -116,6 +119,7 @@ public class UserController extends BaseController{
     }
 
 //    eg.{"id":"1", "customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com"}
+    @ApiOperation(value = "更新客户信息")
     @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @ResponseBody
@@ -146,6 +150,7 @@ public class UserController extends BaseController{
         }
     }
 
+    @ApiOperation(value = "根据UserId删除User")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
     @Transactional
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.DELETE)
@@ -160,6 +165,7 @@ public class UserController extends BaseController{
         }
     }
 
+    @ApiOperation(value = "获取某个租户下所有租户管理员")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenant/users", params = { "tenantId","limit","page"}, method = RequestMethod.GET)
     @ResponseBody
@@ -175,6 +181,7 @@ public class UserController extends BaseController{
         }
     }
 
+    @ApiOperation(value = "获取某个Customer下所有用户")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/customer/users", params = { "customerId","limit","page" }, method = RequestMethod.GET)
     @ResponseBody
