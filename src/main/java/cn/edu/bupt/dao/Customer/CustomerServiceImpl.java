@@ -6,6 +6,7 @@ import cn.edu.bupt.dao.Tenant.TenantRepository;
 import cn.edu.bupt.dao.User.UserService;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.Tenant;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import java.util.List;
  * Created by CZX on 2018/4/9.
  */
 @Service
+@Slf4j
 public class CustomerServiceImpl implements CustomerService{
 
     @Autowired
@@ -39,6 +41,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Page<Customer> findCustomersByTenantId(Integer page, Integer size,Integer tenant_id){
+        log.trace("Executing findCustomersByTenantId, tenantId [{}], size [{}], page[{}]", tenant_id, size, page);
         Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "id");
         Page<Customer> customerPage = customerRepository.findAll(new Specification<Customer>() {
             @Nullable
@@ -54,17 +57,20 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer findCustomerById(Integer customerId){
+        log.trace("Executing findCustomerById [{}]", customerId);
         return customerRepository.findById(customerId).get();
     }
 
     @Override
     public Customer saveCustomer(Customer customer){
+        log.trace("Executing saveCustomer [{}]", customer);
         customerValidator.validate(customer);
         return customerRepository.save(customer);
     }
 
     @Override
     public void deleteCustomer(Integer customerId){
+        log.trace("Executing deleteCustomer [{}]", customerId);
         userService.deleteCustomerUsers(customerId);
         //TODO:unassignCustomerDevices
         customerRepository.deleteById(customerId);
@@ -72,6 +78,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public void deleteCustomersByTenantId(Integer tenantId){
+        log.trace("Executing deleteCustomersByTenantId, tenantId [{}]", tenantId);
         Tenant tenant = tenantRepository.findById(tenantId).get();
         List<Customer> customerList = customerRepository.findAllByTenant(tenant);
         for(Customer customer : customerList){

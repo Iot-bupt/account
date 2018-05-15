@@ -11,6 +11,7 @@ import cn.edu.bupt.exception.IOTErrorCode;
 import cn.edu.bupt.exception.IOTErrorResponseHandler;
 import cn.edu.bupt.exception.IOTException;
 import cn.edu.bupt.exception.IncorrectParameterException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import static cn.edu.bupt.controller.UserController.YOU_DON_T_HAVE_PERMISSION_TO
 /**
  * Created by CZX on 2018/4/13.
  */
+@Slf4j
 public abstract class BaseController {
 
     @Autowired
@@ -46,9 +48,9 @@ public abstract class BaseController {
     }
 
     private IOTException handleException(Exception exception, boolean logException) {
-//        if (logException) {
-//            log.error("Error [{}]", exception.getMessage());
-//        }
+        if (logException) {
+            log.error("Error [{}]", exception.getMessage());
+        }
 
         String cause = "";
         if (exception.getCause() != null) {

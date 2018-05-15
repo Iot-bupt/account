@@ -9,6 +9,7 @@ import cn.edu.bupt.entity.Authority;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.Tenant;
 import cn.edu.bupt.entity.User;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ import javax.persistence.criteria.Root;
  * Created by CZX on 2018/4/9.
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService{
 
     @Autowired
@@ -44,28 +46,33 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findUserById(Integer userId){
+        log.trace("Executing findUserById [{}]", userId);
         return userRepository.findById(userId).get();
     }
 
     @Override
     public User findUserByEmail(String email){
+        log.trace("Executing findUserByEmail [{}]", email);
         return userRepository.findUserByEmail(email);
     }
 
     @Override
     public User saveUser(User user){
+        log.trace("Executing saveUser [{}]", user);
         userValidator.validate(user);
         return userRepository.save(user);
     }
 
     @Override
     public void deleteUser(Integer userId){
+        log.trace("Executing deleteUser [{}]", userId);
         userCredentialsService.deleteUserCredentialsByUserId(userId);
         userRepository.deleteById(userId);
     }
 
     @Override
     public Page<User> findTenantAdmins(Integer page, Integer size, Integer tenant_id){
+        log.trace("Executing findTenantAdmins, tenantId [{}], size [{}], page [{}]", tenant_id, size, page);
         Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "id");
         Page<User> userPage = userRepository.findAll(new Specification<User>() {
             @Nullable
@@ -82,6 +89,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Page<User> findCustomerUsers(Integer page, Integer size,Integer customer_id){
+        log.trace("Executing findCustomerUsers, customerId [{}], size [{}], page [{}]", customer_id, size, page);
         Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "id");
         Page<User> userPage = userRepository.findAll(new Specification<User>() {
             @Nullable
@@ -97,11 +105,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteCustomerUsers(Integer customerId){
+        log.trace("Executing deleteCustomerUsers, customerId [{}]", customerId);
         userRepository.deleteAllByCustomer(customerRepository.findById(customerId).get());
     }
 
     @Override
     public void deleteTenantAdmins(Integer tenantId){
+        log.trace("Executing deleteTenantAdmins, tenantId [{}]", tenantId);
         userRepository.deleteAllByTenantAndAuthority(tenantRepository.findById(tenantId).get(),Authority.TENANT_ADMIN);
     }
 

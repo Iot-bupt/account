@@ -1,11 +1,13 @@
 package cn.edu.bupt.dao;
 
 import cn.edu.bupt.entity.IdBased;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 
 /**
  * Created by CZX on 2018/4/10.
  */
+@Slf4j
 public abstract class DataValidator<D extends IdBased> {
 
     private static EmailValidator emailValidator = EmailValidator.getInstance();
@@ -22,6 +24,7 @@ public abstract class DataValidator<D extends IdBased> {
                 validateUpdate(data);
             }
         } catch (DataValidationException e) {
+            log.error("Data object is invalid: [{}]", e.getMessage());
             throw e;
         }
     }
