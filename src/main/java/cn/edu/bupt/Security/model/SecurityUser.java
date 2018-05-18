@@ -6,11 +6,12 @@ import cn.edu.bupt.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SecurityUser{
+public class SecurityUser implements Serializable{
 
     private static final long serialVersionUID = -797397440703066079L;
 

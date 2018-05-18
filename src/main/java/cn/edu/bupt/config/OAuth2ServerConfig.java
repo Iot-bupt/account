@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,11 +19,17 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+
+import javax.sql.DataSource;
 
 
 @Configuration
@@ -73,6 +80,10 @@ public class OAuth2ServerConfig {
     @EnableAuthorizationServer
     protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+//        @Autowired
+//        private DataSource dataSource;
+        @Autowired
+        private RedisConnectionFactory connectionFactory;
         @Autowired
         AuthenticationManager authenticationManager;
         @Autowired
@@ -99,6 +110,11 @@ public class OAuth2ServerConfig {
         @Value("${oauth2.checkUrl}")
         private String checkUrl;
 
+//        @Bean
+//        public JdbcClientDetailsService clientDetailsService(DataSource dataSource) {
+//            return new JdbcClientDetailsService(dataSource);
+//        }
+
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             //配置两个客户端,一个用于password认证一个用于client认证
@@ -112,6 +128,7 @@ public class OAuth2ServerConfig {
                     .scopes("select")
                     .authorities("client")
                     .secret(passwordEncoder.encode(external_client_secret));
+//            clients.withClientDetails(clientDetailsService(dataSource));
         }
 
         @Override
@@ -125,9 +142,19 @@ public class OAuth2ServerConfig {
                     .accessTokenConverter(accessTokenConverter());
         }
 
+//        @Bean
+//        public JdbcTokenStore tokenStore(DataSource dataSource) {
+//            return new JdbcTokenStore(dataSource);
+//        }
+
+//        @Bean
+//        public InMemoryTokenStore tokenStore(){
+//            return new InMemoryTokenStore();
+//        }
+
         @Bean
-        public InMemoryTokenStore tokenStore(){
-            return new InMemoryTokenStore();
+        public TokenStore tokenStore() {
+            return new RedisTokenStore(connectionFactory);
         }
 
         @Override

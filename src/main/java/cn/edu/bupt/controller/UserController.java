@@ -49,7 +49,7 @@ public class UserController extends BaseController{
     public static final String USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "User ID should be specified when updating!";
 
     @ApiOperation(value = "根据UserId获取User")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN') ")
+    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET)
     @ResponseBody
     public String getUserById(@RequestParam Integer userId) throws IOTException{

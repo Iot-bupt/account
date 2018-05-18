@@ -9,6 +9,8 @@ spring:
     url: jdbc:mysql://39.104.165.155:3306/BUPT_IOT
     username: root
     password: root
+  redis:
+    url: redis://localhost:6379
 
 oauth2:
     internal_client_id: client_1
