@@ -6,7 +6,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://10.112.233.200:3306/BUPT_IOT
+    url: jdbc:mysql://39.104.165.155:3306/BUPT_IOT
     username: root
     password: root
 
