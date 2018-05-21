@@ -6,11 +6,12 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://39.104.165.155:3306/BUPT_IOT
+    url: jdbc:mysql://39.104.165.155:3306/BUPT_IOT?useSSL=false
     username: root
     password: root
   redis:
-    url: redis://localhost:6379
+    url: redis://39.104.165.155:6379
+#    password: redis
 
 oauth2:
     internal_client_id: client_1

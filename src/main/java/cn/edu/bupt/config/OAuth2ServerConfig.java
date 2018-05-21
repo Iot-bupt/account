@@ -80,8 +80,8 @@ public class OAuth2ServerConfig {
     @EnableAuthorizationServer
     protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-//        @Autowired
-//        private DataSource dataSource;
+        @Autowired
+        private DataSource dataSource;
         @Autowired
         private RedisConnectionFactory connectionFactory;
         @Autowired
@@ -110,25 +110,25 @@ public class OAuth2ServerConfig {
         @Value("${oauth2.checkUrl}")
         private String checkUrl;
 
-//        @Bean
-//        public JdbcClientDetailsService clientDetailsService(DataSource dataSource) {
-//            return new JdbcClientDetailsService(dataSource);
-//        }
+        @Bean
+        public JdbcClientDetailsService clientDetailsService(DataSource dataSource) {
+            return new JdbcClientDetailsService(dataSource);
+        }
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             //配置两个客户端,一个用于password认证一个用于client认证
-            clients.inMemory().withClient(internal_client_id)
-                    .authorizedGrantTypes("client_credentials", "refresh_token")
-                    .scopes("all")
-                    .authorities("client")
-                    .secret(passwordEncoder.encode(internal_client_secret))
-                    .and().withClient(external_client_id)
-                    .authorizedGrantTypes("password", "refresh_token")
-                    .scopes("select")
-                    .authorities("client")
-                    .secret(passwordEncoder.encode(external_client_secret));
-//            clients.withClientDetails(clientDetailsService(dataSource));
+//            clients.inMemory().withClient(internal_client_id)
+//                    .authorizedGrantTypes("client_credentials", "refresh_token")
+//                    .scopes("all")
+//                    .authorities("client")
+//                    .secret(passwordEncoder.encode(internal_client_secret))
+//                    .and().withClient(external_client_id)
+//                    .authorizedGrantTypes("password", "refresh_token")
+//                    .scopes("select")
+//                    .authorities("client")
+//                    .secret(passwordEncoder.encode(external_client_secret));
+            clients.withClientDetails(clientDetailsService(dataSource));
         }
 
         @Override
@@ -178,6 +178,7 @@ public class OAuth2ServerConfig {
             customTokenServices.setSupportRefreshToken(true);
             customTokenServices.setReuseRefreshToken(false);
             customTokenServices.setTokenEnhancer(accessTokenConverter());
+            customTokenServices.setClientDetailsService(clientDetailsService(dataSource));
             return customTokenServices;
         }
 
