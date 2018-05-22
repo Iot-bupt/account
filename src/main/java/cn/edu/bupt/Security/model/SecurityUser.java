@@ -78,4 +78,23 @@ public class SecurityUser implements Serializable{
     public void setAuthority(Authority authority) {
         this.authority = authority;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"authorities\":")
+                .append(authorities);
+        sb.append(",\"Id\":")
+                .append(Id);
+        sb.append(",\"userPrincipal\":\"")
+                .append(userPrincipal).append('\"');
+        sb.append(",\"customerId\":")
+                .append(customerId);
+        sb.append(",\"tenantId\":")
+                .append(tenantId);
+        sb.append(",\"authority\":")
+                .append(authority);
+        sb.append('}');
+        return sb.toString();
+    }
 }

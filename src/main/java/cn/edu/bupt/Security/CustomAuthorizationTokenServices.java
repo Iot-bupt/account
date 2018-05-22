@@ -55,18 +55,20 @@ public class CustomAuthorizationTokenServices implements AuthorizationServerToke
     @Transactional
     public OAuth2AccessToken createAccessToken(OAuth2Authentication authentication) throws AuthenticationException {
 
-        OAuth2AccessToken existingAccessToken = tokenStore.getAccessToken(authentication);
         OAuth2RefreshToken refreshToken;
-
-        if (existingAccessToken != null) {
-            if (existingAccessToken.getRefreshToken() != null) {
-                refreshToken = existingAccessToken.getRefreshToken();
-                tokenStore.removeRefreshToken(refreshToken);
+        if(!isClientCredentials(authentication.getOAuth2Request())) {
+            OAuth2AccessToken existingAccessToken = tokenStore.getAccessToken(authentication);
+            if (existingAccessToken != null) {
+                if (existingAccessToken.getRefreshToken() != null) {
+                    refreshToken = existingAccessToken.getRefreshToken();
+                    tokenStore.removeRefreshToken(refreshToken);
+                }
+                tokenStore.removeAccessToken(existingAccessToken);
             }
-            tokenStore.removeAccessToken(existingAccessToken);
+            //recreate a refreshToken
         }
-        //recreate a refreshToken
-        refreshToken = createRefreshToken(authentication);
+
+       refreshToken = createRefreshToken(authentication);
         OAuth2AccessToken accessToken = createAccessToken(authentication, refreshToken);
         if (accessToken != null) {
             tokenStore.storeAccessToken(accessToken, authentication);
@@ -299,6 +301,14 @@ public class CustomAuthorizationTokenServices implements AuthorizationServerToke
             return client.getAuthorizedGrantTypes().contains("refresh_token");
         }
         return this.supportRefreshToken;
+    }
+
+    protected boolean isClientCredentials(OAuth2Request clientAuth) {
+        if (clientDetailsService != null) {
+            ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());
+            return client.getAuthorizedGrantTypes().contains("client_credentials");
+        }
+        return false;
     }
 
     /**

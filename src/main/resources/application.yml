@@ -32,5 +32,8 @@ account:
   host: 127.0.0.1
   port: ${server.port}
   check_url: http://${account.host}:${account.port}/api/v1/auth/check_token
+  login_url: http://${account.host}:${account.port}/api/v1/auth/login
   client_id: client_2
   client_secret: 123456
+  internal_client_id: client_1
+  internal_client_secret: 123456
