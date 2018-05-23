@@ -1,12 +1,14 @@
 package cn.edu.bupt.Security;
 
+import cn.edu.bupt.Security.model.Token;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
@@ -17,7 +19,11 @@ import java.util.concurrent.TimeUnit;
  * 在启动的时候不能使用
  */
 @Component
+@EnableScheduling
 public class HttpUtil {
+
+//    @Autowired
+    private static Token token = new Token();
 
     @Value("${account.login_url}")
     private void getLogin(String loginUrl) {
@@ -89,36 +95,50 @@ public class HttpUtil {
 
     public static String getAccessToken(){
 
-        Request.Builder builder = new Request.Builder()
-                .url(tokenurl+"?grant_type=client_credentials")
-                .post(RequestBody.create(null, ""));
+        if(token.getAccess_token()==null) {
+            Request.Builder builder = new Request.Builder()
+                    .url(tokenurl + "?grant_type=client_credentials")
+                    .post(RequestBody.create(null, ""));
 
-        byte[] textByte = (Internal_client_id+":"+Internal_client_secret).getBytes();
-        String auth = encoder.encodeToString(textByte);
-        builder.header("Authorization","Basic "+auth);
+            byte[] textByte = (Internal_client_id + ":" + Internal_client_secret).getBytes();
+            String auth = encoder.encodeToString(textByte);
+            builder.header("Authorization", "Basic " + auth);
 
-        Request request = builder.build();
-        try{
-            // 第一次获取token
-            Response response = execute(request);
-            if(response.isSuccessful()){
-                String res = response.body().string();
-                JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
-                return obj.get("access_token").getAsString();
-            } else{
-                throw new Exception("the first fail!") ;
-            }
-        }catch (Exception e){
-            // 第二次获取token
+            Request request = builder.build();
             try {
+                // 第一次获取token
                 Response response = execute(request);
-                String res = response.body().string();
-                JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
-                return obj.get("access_token").getAsString();
-            } catch (Exception e1) {
-                return  "ERROR!";
+                if (response.isSuccessful()) {
+                    String res = response.body().string();
+                    JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
+                    token.setAccess_token(obj.get("access_token").getAsString());
+                    token.setExpires_in(obj.get("expires_in").getAsInt());
+                    return obj.get("access_token").getAsString();
+                } else {
+                    throw new Exception("the first fail!");
+                }
+            } catch (Exception e) {
+                // 第二次获取token
+                try {
+                    Response response = execute(request);
+                    String res = response.body().string();
+                    JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
+                    token.setAccess_token(obj.get("access_token").getAsString());
+                    token.setExpires_in(obj.get("expires_in").getAsInt());
+                    return obj.get("access_token").getAsString();
+                } catch (Exception e1) {
+                    return "ERROR!";
+                }
             }
+        }else{
+            return token.getAccess_token();
         }
+    }
+
+    @Scheduled(cron="0/5 * * * * ?")
+    public void DeleteExpiredToken(){
+        System.out.println(token.getAccess_token());
+        token.setAccess_token(null);
     }
 
     public static String sendPostToThingsboard(String url, Map<String,String> headers, JsonObject requestBody) throws Exception{
