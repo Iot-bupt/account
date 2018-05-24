@@ -6,7 +6,6 @@ import com.google.gson.JsonParser;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -95,7 +94,7 @@ public class HttpUtil {
 
     public static String getAccessToken(){
 
-        if(token.getAccess_token()==null) {
+        if(token.getExpires_at() < System.currentTimeMillis() / 1000) {
             Request.Builder builder = new Request.Builder()
                     .url(tokenurl + "?grant_type=client_credentials")
                     .post(RequestBody.create(null, ""));
@@ -112,7 +111,7 @@ public class HttpUtil {
                     String res = response.body().string();
                     JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
                     token.setAccess_token(obj.get("access_token").getAsString());
-                    token.setExpires_in(obj.get("expires_in").getAsInt());
+                    token.setExpires_at(obj.get("expires_in").getAsLong() + System.currentTimeMillis() / 1000);
                     return obj.get("access_token").getAsString();
                 } else {
                     throw new Exception("the first fail!");
@@ -124,7 +123,7 @@ public class HttpUtil {
                     String res = response.body().string();
                     JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
                     token.setAccess_token(obj.get("access_token").getAsString());
-                    token.setExpires_in(obj.get("expires_in").getAsInt());
+                    token.setExpires_at(obj.get("expires_in").getAsLong() + System.currentTimeMillis() / 1000);
                     return obj.get("access_token").getAsString();
                 } catch (Exception e1) {
                     return "ERROR!";
@@ -135,11 +134,6 @@ public class HttpUtil {
         }
     }
 
-    @Scheduled(cron="0/5 * * * * ?")
-    public void DeleteExpiredToken(){
-        System.out.println(token.getAccess_token());
-        token.setAccess_token(null);
-    }
 
     public static String sendPostToThingsboard(String url, Map<String,String> headers, JsonObject requestBody) throws Exception{
         String str ;

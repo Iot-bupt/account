@@ -7,7 +7,11 @@ public class Token {
 
     private String access_token;
     // 凭证有效时间，单位：秒
-    private int expires_in;
+    private Long expires_at;
+
+    public Token() {
+        expires_at = 0L;
+    }
 
     public String getAccess_token() {
         return access_token;
@@ -17,12 +21,12 @@ public class Token {
         this.access_token = access_token;
     }
 
-    public int getExpires_in() {
-        return expires_in;
+    public Long getExpires_at() {
+        return expires_at;
     }
 
-    public void setExpires_in(int expires_in) {
-        this.expires_in = expires_in;
+    public void setExpires_at(Long expires_at) {
+        this.expires_at = expires_at;
     }
 
 }
