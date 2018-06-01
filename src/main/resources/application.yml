@@ -10,7 +10,8 @@ spring:
     username: root
     password: root
   redis:
-    url: redis://39.104.165.155:6379
+#    url: redis://39.104.165.155:6379
+    url: redis://127.0.0.1:6379
 #    password: redis
 
 oauth2:

@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,6 +53,10 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
 
     private Authentication authenticateByUsernameAndPassword(String username, String password) {
         User user = userService.findUserByEmail(username);
+        List<String> permissions = new ArrayList<>();
+        //TODO
+        permissions.add("DEVICE");
+        permissions.add("USER");
         if (user == null) {
             throw new UsernameNotFoundException("User not found: " + username);
         }
@@ -66,7 +72,7 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
 
         if (user.getAuthority() == null) throw new InsufficientAuthenticationException("User has no authority assigned");
 
-        SecurityUser securityUser = new SecurityUser(user.getId(),user.getName(),user.getCustomer().getId(),user.getTenant().getId(),user.getAuthority());
+        SecurityUser securityUser = new SecurityUser(user.getId(),user.getName(),user.getCustomer().getId(),user.getTenant().getId(),user.getAuthority(),permissions);
 
         return new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
     }

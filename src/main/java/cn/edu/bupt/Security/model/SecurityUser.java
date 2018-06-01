@@ -16,18 +16,20 @@ public class SecurityUser implements Serializable{
     private static final long serialVersionUID = -797397440703066079L;
 
     private Collection<GrantedAuthority> authorities;
+    private Collection<String> permissions;
     private Integer Id;
     private String userPrincipal;
     private Integer customerId;
     private Integer tenantId;
     private Authority authority;
 
-    public SecurityUser(Integer id, String userPrincipal, Integer customerId, Integer tenantId, Authority authority) {
+    public SecurityUser(Integer id, String userPrincipal, Integer customerId, Integer tenantId, Authority authority, Collection<String> permissions) {
         this.Id = id;
         this.userPrincipal = userPrincipal;
         this.customerId = customerId;
         this.tenantId = tenantId;
         this.authority = authority;
+        this.permissions = permissions;
     }
 
     public Collection<GrantedAuthority> getAuthorities() {
@@ -79,11 +81,21 @@ public class SecurityUser implements Serializable{
         this.authority = authority;
     }
 
+    public Collection<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Collection<String> permissions) {
+        this.permissions = permissions;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("\"authorities\":")
                 .append(authorities);
+        sb.append(",\"permissions\":")
+                .append(permissions);
         sb.append(",\"Id\":")
                 .append(Id);
         sb.append(",\"userPrincipal\":\"")

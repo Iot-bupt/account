@@ -147,15 +147,15 @@ public class OAuth2ServerConfig {
 //            return new JdbcTokenStore(dataSource);
 //        }
 
-//        @Bean
-//        public InMemoryTokenStore tokenStore(){
-//            return new InMemoryTokenStore();
-//        }
-
         @Bean
-        public TokenStore tokenStore() {
-            return new RedisTokenStore(connectionFactory);
+        public InMemoryTokenStore tokenStore(){
+            return new InMemoryTokenStore();
         }
+//
+//        @Bean
+//        public TokenStore tokenStore() {
+//            return new RedisTokenStore(connectionFactory);
+//        }
 
         @Override
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {

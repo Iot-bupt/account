@@ -1,5 +1,6 @@
 package cn.edu.bupt.controller;
 
+import cn.edu.bupt.Security.HttpUtil;
 import cn.edu.bupt.Security.model.SecurityUser;
 import cn.edu.bupt.dao.Customer.CustomerService;
 import cn.edu.bupt.dao.Tenant.TenantService;
@@ -50,6 +51,7 @@ public class UserController extends BaseController{
 
     @ApiOperation(value = "根据UserId获取User")
     @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
+//    @PreAuthorize("hasPermission('USER')")
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET)
     @ResponseBody
     public String getUserById(@RequestParam Integer userId) throws IOTException{
@@ -59,7 +61,9 @@ public class UserController extends BaseController{
                 throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
                         IOTErrorCode.PERMISSION_DENIED);
             }
-            return checkUserId(userId).toString();
+            //TODO:TEST
+            String a = HttpUtil.sendGetToThingsboard("http://127.0.0.1:8081/api/v1/account/user?userId=1",null);
+            return checkUserId(userId).toString()+a;
         } catch (Exception e) {
             throw handleException(e);
         }

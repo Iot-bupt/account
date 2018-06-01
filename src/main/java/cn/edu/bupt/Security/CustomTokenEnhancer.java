@@ -22,6 +22,7 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter implements Seri
     private static final String CUSTOMER_ID = "customer_id";
     private static final String AUTHORITY = "authority";
     private static final String ISSUER = "issuer";
+    private static final String PERMISSIONS = "permissions";
 
     @Value("${security.jwt.tokenIssuer}")
     private String tokenIssuer;
@@ -40,6 +41,7 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter implements Seri
             info.put(AUTHORITY, securityUser.getAuthority());
             info.put(USER_NAME, securityUser.getUserPrincipal());
             info.put(ISSUER, tokenIssuer);
+            info.put(PERMISSIONS, securityUser.getPermissions());
             customAccessToken.setAdditionalInformation(info);
         }
         OAuth2AccessToken enhancedToken = super.enhance(customAccessToken, authentication);
