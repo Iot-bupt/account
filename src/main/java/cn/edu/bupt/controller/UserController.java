@@ -62,8 +62,8 @@ public class UserController extends BaseController{
                         IOTErrorCode.PERMISSION_DENIED);
             }
             //TODO:TEST
-            String a = HttpUtil.sendGetToThingsboard("http://127.0.0.1:8081/api/v1/account/user?userId=1",null);
-            return checkUserId(userId).toString()+a;
+//            String a = HttpUtil.sendGetToThingsboard("http://127.0.0.1:8081/api/v1/account/user?userId=1",null);
+            return checkUserId(userId).toString();
         } catch (Exception e) {
             throw handleException(e);
         }
