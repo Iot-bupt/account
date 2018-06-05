@@ -19,7 +19,7 @@
     <logger name="cn.edu.bupt" level="TRACE" />
 
     <!-- 配置swagger的的log -->
-    <logger name="org.thymeleaf" level="WARN" />
+    <!--<logger name="org.thymeleaf" level="WARN" />-->
 
     <!-- 根log配置, 默认配置为这个 -->
     <root level="INFO">
