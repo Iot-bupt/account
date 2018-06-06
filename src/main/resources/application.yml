@@ -5,6 +5,8 @@ server:
   port: "${HTTP_BIND_PORT:8400}"
 
 spring:
+  aop:
+    proxy-target-class: true
   datasource:
     url: jdbc:mysql://39.104.165.155:3306/BUPT_IOT?useSSL=false
     username: root
