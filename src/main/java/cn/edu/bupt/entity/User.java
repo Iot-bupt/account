@@ -106,7 +106,7 @@ public class User extends IdBased{
         sb.append(",\"customer_id\":")
                 .append(customer.getId());
         sb.append(",\"authority\":")
-                .append(authority);
+                .append(authority.name());
         sb.append(",\"name\":\"")
                 .append(name).append('\"');
         sb.append(",\"additional_info\":\"")

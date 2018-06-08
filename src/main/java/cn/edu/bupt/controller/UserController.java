@@ -99,7 +99,7 @@ public class UserController extends BaseController{
 //    权限：Tenant_admin
 //    eg.{"customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
     @ApiOperation(value = "创建普通用户")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/customerUser", method = RequestMethod.POST)
     @ResponseBody
     public String createCustomerUser(@RequestBody String userInfo) throws IOTException {

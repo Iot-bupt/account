@@ -130,11 +130,11 @@
 			<version>1.2.3</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.baidu.disconf/disconf-client -->
-		<dependency>
-			<groupId>com.baidu.disconf</groupId>
-			<artifactId>disconf-client</artifactId>
-			<version>2.6.35</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.baidu.disconf</groupId>-->
+			<!--<artifactId>disconf-client</artifactId>-->
+			<!--<version>2.6.35</version>-->
+		<!--</dependency>-->
 
 	</dependencies>
 
