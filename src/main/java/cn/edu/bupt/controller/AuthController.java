@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by CZX on 2018/4/16.
  */
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/account")
 public class AuthController extends BaseController{
 
     @Autowired

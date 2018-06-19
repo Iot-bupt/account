@@ -22,8 +22,8 @@ oauth2:
     external_client_id: client_2
     external_client_secret: 123456
 
-    loginUrl: /api/v1/auth/login
-    checkUrl: /api/v1/auth/check_token
+    loginUrl: /api/v1/account/login
+    checkUrl: /api/v1/account/check_token
 
 security.jwt:
   tokenExpirationTime: "${JWT_TOKEN_EXPIRATION_TIME:900}" # Number of seconds (15 mins)
@@ -34,8 +34,8 @@ security.jwt:
 account:
   host: 127.0.0.1
   port: ${server.port}
-  check_url: http://${account.host}:${account.port}/api/v1/auth/check_token
-  login_url: http://${account.host}:${account.port}/api/v1/auth/login
+  check_url: http://${account.host}:${account.port}/api/v1/account/check_token
+  login_url: http://${account.host}:${account.port}/api/v1/account/login
   client_id: client_2
   client_secret: 123456
   internal_client_id: client_1
