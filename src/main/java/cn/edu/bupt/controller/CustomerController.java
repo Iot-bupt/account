@@ -113,6 +113,19 @@ public class CustomerController extends BaseController{
         }
     }
 
+    @ApiOperation(value = "获取某个Tenant下所有Customer的页数")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @RequestMapping(value = "/customersPages", params = {  "limit"  }, method = RequestMethod.GET)
+    @ResponseBody
+    public Integer getCustomersTotalPages(@RequestParam int limit) throws IOTException {
+        try {
+            Integer tenantId = getCurrentUser().getTenantId();
+            return checkNotNull(customerService.findCustomersByTenantId(0,limit,tenantId)).getTotalPages();
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+    }
+
     private Customer Json2Customer(JsonObject customerString){
         Customer customer = new Customer();
         customer.setEmail(customerString.get("email").getAsString());
