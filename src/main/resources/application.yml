@@ -32,7 +32,7 @@ security.jwt:
   tokenSigningKey: "${JWT_TOKEN_SIGNING_KEY:SigningKey}"
 
 account:
-  host: account
+  host: 127.0.0.1
   port: 8400
   check_url: http://${account.host}:${account.port}/api/v1/account/check_token
   login_url: http://${account.host}:${account.port}/api/v1/account/login
