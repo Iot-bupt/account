@@ -201,6 +201,23 @@ public class UserController extends BaseController{
             throw handleException(e);
         }
     }
+
+    @ApiOperation(value = "获取某个Customer下所有用户的页数")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @RequestMapping(value = "/customer/usersPages", params = { "customerId","limit" }, method = RequestMethod.GET)
+    @ResponseBody
+    public Integer getCustomerUsersPages(
+            @RequestParam Integer customerId,
+            @RequestParam int limit) throws IOTException {
+        checkParameter("customerId", customerId);
+        try {
+            checkCustomerId(customerId);
+            return checkNotNull(userService.findCustomerUsers(0,limit,customerId).getTotalPages());
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+    }
+
     private User Json2User(JsonObject userString){
         User user = new User();
         user.setEmail(userString.get("email").getAsString());
