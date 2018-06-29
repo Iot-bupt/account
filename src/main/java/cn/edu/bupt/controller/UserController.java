@@ -61,8 +61,6 @@ public class UserController extends BaseController{
                 throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
                         IOTErrorCode.PERMISSION_DENIED);
             }
-            //TODO:TEST
-//            String a = HttpUtil.sendGetToThingsboard("http://127.0.0.1:8081/api/v1/account/user?userId=1",null);
             return checkUserId(userId).toString();
         } catch (Exception e) {
             throw handleException(e);
@@ -180,6 +178,22 @@ public class UserController extends BaseController{
         checkParameter("tenantId", tenantId);
         try {
             return checkNotNull(userService.findTenantAdmins(page,limit,tenantId).getContent().toString());
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+    }
+
+
+    @ApiOperation(value = "获取某个租户下所有租户管理员的总页数")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+    @RequestMapping(value = "/tenant/usersPages", params = { "tenantId","limit"}, method = RequestMethod.GET)
+    @ResponseBody
+    public Integer getTenantAdminsPages(
+            @RequestParam Integer tenantId,
+            @RequestParam int limit) throws IOTException {
+        checkParameter("tenantId", tenantId);
+        try {
+            return checkNotNull(userService.findTenantAdmins(0,limit,tenantId).getTotalPages());
         } catch (Exception e) {
             throw handleException(e);
         }
