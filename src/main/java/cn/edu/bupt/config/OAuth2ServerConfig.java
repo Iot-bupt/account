@@ -65,7 +65,7 @@ public class OAuth2ServerConfig {
                     .anonymous()
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/api/v1/account/tenant").hasAuthority("TENANT_ADMIN")//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
+                    .antMatchers("/api/v1test/account/tenant").authenticated()//access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
                     .and().logout()
                     .logoutUrl("/api/v1/account/logout")
                     .clearAuthentication(true)
