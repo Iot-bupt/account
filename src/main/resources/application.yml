@@ -34,8 +34,8 @@ security.jwt:
 account:
   host: 0.0.0.0
   port: 8400
-  check_url: http://${account.host}:${account.port}/api/v1/account/check_token
-  login_url: http://${account.host}:${account.port}/api/v1/account/login
+  check_url: http://0.0.0.0:8400/api/v1/account/check_token
+  login_url: http://0.0.0.0:8400/api/v1/account/login
   client_id: client_2
   client_secret: 123456
   internal_client_id: client_1

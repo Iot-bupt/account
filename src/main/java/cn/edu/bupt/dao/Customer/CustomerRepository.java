@@ -4,6 +4,7 @@ import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.Tenant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +19,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>,Jpa
     Optional<Customer> findCustomerByTenantAndTitle(Tenant tenant, String title);
 
     List<Customer> findAllByTenant(Tenant tenant);
+
+    @Query("select title from Customer where tenant_id=?1 and id=?2")
+    String findNameByTenantAndCustomer(Integer tenantId,Integer customerId);
 }

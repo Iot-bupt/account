@@ -126,6 +126,18 @@ public class CustomerController extends BaseController{
         }
     }
 
+    @ApiOperation(value = "根据CustomerId获取Customer的名字")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
+    @RequestMapping(value = "/customerName",params = {"customerId"}, method = RequestMethod.GET)
+    public String findCustomerName(@RequestParam Integer customerId) throws IOTException {
+        checkParameter(CUSTOMER_ID, customerId);
+        try {
+            return customerService.findCustomerName(getCurrentUser().getTenantId(),customerId);
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+    }
+
     private Customer Json2Customer(JsonObject customerString){
         Customer customer = new Customer();
         customer.setEmail(customerString.get("email").getAsString());

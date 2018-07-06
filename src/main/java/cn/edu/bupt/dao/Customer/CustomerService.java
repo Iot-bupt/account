@@ -17,4 +17,6 @@ public interface CustomerService {
     void deleteCustomer(Integer customerId);
 
     void deleteCustomersByTenantId(Integer tenantId);
+
+    String findCustomerName(Integer tenantId,Integer customerId);
 }

@@ -86,6 +86,12 @@ public class CustomerServiceImpl implements CustomerService{
         }
     }
 
+    @Override
+    public String findCustomerName(Integer tenantId,Integer customerId){
+        log.trace("Executing findCustomerName tenantId [{}],customerId [{}]", tenantId,customerId);
+        return customerRepository.findNameByTenantAndCustomer(tenantId,customerId);
+    }
+
     private DataValidator<Customer> customerValidator =
             new DataValidator<Customer>() {
 
