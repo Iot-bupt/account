@@ -143,7 +143,9 @@ public class UserController extends BaseController{
             }
             if (authUser.getAuthority() == Authority.TENANT_ADMIN) {
                 user.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
-                user.setCustomer(customerService.findCustomerById(userString.get("customer_id").getAsInt()));
+                if(user.getAuthority() == Authority.CUSTOMER_USER) {
+                    user.setCustomer(customerService.findCustomerById(userString.get("customer_id").getAsInt()));
+                }
             }
             User savedUser = checkNotNull(userService.saveUser(user));
             return savedUser.toString();
