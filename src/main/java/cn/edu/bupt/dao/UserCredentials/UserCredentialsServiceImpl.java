@@ -25,22 +25,29 @@ public class UserCredentialsServiceImpl implements UserCredentialsService{
     UserRepository userRepository;
 
     @Override
-    public Optional<UserCredentials> findUserCredentialsByUserId(Integer userId){
+    public UserCredentials findUserCredentialsByUserId(Integer userId){
         log.trace("Executing findUserCredentialsByUserId [{}]", userId);
-        return userCredentialsRepository.findUserCredentialsByUser(userRepository.findById(userId).get());
+        return userCredentialsRepository.findUserCredentialsByUserId(userId);
     }
 
     @Override
-    public UserCredentials saveUserCredentials(UserCredentials userCredentials){
+    public void saveUserCredentials(UserCredentials userCredentials){
         log.trace("Executing saveUserCredentials [{}]", userCredentials);
         userCredentialsValidator.validate(userCredentials);
-        return userCredentialsRepository.save(userCredentials);
+        userCredentialsRepository.save(userCredentials);
+    }
+
+    @Override
+    public void updateUserCredentials(UserCredentials userCredentials){
+        log.trace("Executing updateUserCredentials [{}]", userCredentials);
+        userCredentialsValidator.validate(userCredentials);
+        userCredentialsRepository.update(userCredentials);
     }
 
     @Override
     public void deleteUserCredentialsByUserId(Integer userId){
         log.trace("Executing deleteUserCredentialsByUserId [{}]", userId);
-        userCredentialsRepository.deleteUserCredentialsByUser(userRepository.findById(userId).get());
+        userCredentialsRepository.deleteUserCredentialsByUserId(userId);
     }
 
     private DataValidator<UserCredentials> userCredentialsValidator =
@@ -48,7 +55,7 @@ public class UserCredentialsServiceImpl implements UserCredentialsService{
 
                 @Override
                 protected void validateDataImpl(UserCredentials userCredentials) {
-                    if (userCredentials.getUser() == null) {
+                    if (userCredentials.getUserId() == null) {
                         throw new DataValidationException("User credentials should be assigned to user!");
                     }
                 }

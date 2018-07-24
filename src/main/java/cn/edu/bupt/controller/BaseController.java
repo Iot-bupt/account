@@ -88,9 +88,9 @@ public abstract class BaseController {
 
     private void checkUser(User user) throws IOTException {
         checkNotNull(user);
-        checkTenantId(user.getTenant().getId());
+        checkTenantId(user.getTenantId());
         if (user.getAuthority() == Authority.CUSTOMER_USER) {
-            checkCustomerId(user.getCustomer().getId());
+            checkCustomerId(user.getCustomerId());
         }
     }
 
@@ -122,7 +122,7 @@ public abstract class BaseController {
 
     private void checkCustomer(Customer customer) throws IOTException {
         checkNotNull(customer);
-        checkTenantId(customer.getTenant().getId());
+        checkTenantId(customer.getTenantId());
     }
 
     <T> T checkNotNull(T reference) throws IOTException {

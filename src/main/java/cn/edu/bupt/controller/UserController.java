@@ -50,18 +50,19 @@ public class UserController extends BaseController{
     public static final String USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "User ID should be specified when updating!";
 
     @ApiOperation(value = "根据UserId获取User")
-    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
+//    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
 //    @PreAuthorize("hasPermission('USER')")
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET)
     @ResponseBody
     public String getUserById(@RequestParam Integer userId) throws IOTException{
         try {
-            SecurityUser authUser = getCurrentUser();
-            if (authUser.getAuthority() == Authority.CUSTOMER_USER && !authUser.getId().equals(userId)) {
-                throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
-                        IOTErrorCode.PERMISSION_DENIED);
-            }
-            return checkUserId(userId).toString();
+//            SecurityUser authUser = getCurrentUser();
+//            if (authUser.getAuthority() == Authority.CUSTOMER_USER && !authUser.getId().equals(userId)) {
+//                throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
+//                        IOTErrorCode.PERMISSION_DENIED);
+//            }
+//            return checkUserId(userId).toString();
+            return userService.findUserById(userId).toString();
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -77,18 +78,18 @@ public class UserController extends BaseController{
     public String createTenantAdmin(@RequestBody String userInfo) throws IOTException {
         JsonObject userString = new JsonParser().parse(userInfo).getAsJsonObject();
         User user = Json2User(userString);
-        user.setTenant(tenantService.findTenantById(userString.get("tenant_id").getAsInt()));
+        user.setTenantId(userString.get("tenant_id").getAsInt());
         user.setAuthority(Authority.TENANT_ADMIN);
-        user.setCustomer(customerService.findCustomerById(1));
+        user.setCustomerId(1);
         try {
             if (userString.get("password").getAsString() == null) {
                 throw new IOTException(YOU_MUST_SPECIFY_THE_PASSWORD,
                         IOTErrorCode.BAD_REQUEST_PARAMS);
             }
-            User savedUser = checkNotNull(userService.saveUser(user));
-            UserCredentials userCredentials = new UserCredentials(savedUser,passwordEncoder.encode(userString.get("password").getAsString()));
+            checkNotNull(userService.saveUser(user));
+            UserCredentials userCredentials = new UserCredentials(user.getId(),passwordEncoder.encode(userString.get("password").getAsString()));
             userCredentialsService.saveUserCredentials(userCredentials);
-            return savedUser.toString();
+            return user.toString();
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -103,18 +104,18 @@ public class UserController extends BaseController{
     public String createCustomerUser(@RequestBody String userInfo) throws IOTException {
         JsonObject userString = new JsonParser().parse(userInfo).getAsJsonObject();
         User user = Json2User(userString);
-        user.setCustomer(customerService.findCustomerById(userString.get("customer_id").getAsInt()));
+        user.setCustomerId(userString.get("customer_id").getAsInt());
         user.setAuthority(Authority.CUSTOMER_USER);
         try {
             if (userString.get("password").getAsString() == null) {
                 throw new IOTException(YOU_MUST_SPECIFY_THE_PASSWORD,
                         IOTErrorCode.BAD_REQUEST_PARAMS);
             }
-            user.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
-            User savedUser = checkNotNull(userService.saveUser(user));
-            UserCredentials userCredentials = new UserCredentials(savedUser,passwordEncoder.encode(userString.get("password").getAsString()));
+            user.setTenantId(getCurrentUser().getTenantId());
+            checkNotNull(userService.saveUser(user));
+            UserCredentials userCredentials = new UserCredentials(user.getId(),passwordEncoder.encode(userString.get("password").getAsString()));
             userCredentialsService.saveUserCredentials(userCredentials);
-            return savedUser.toString();
+            return user.toString();
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -125,7 +126,7 @@ public class UserController extends BaseController{
     @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @ResponseBody
-    public String updateUser(@RequestBody String userInfo) throws IOTException {
+    public void updateUser(@RequestBody String userInfo) throws IOTException {
         JsonObject userString = new JsonParser().parse(userInfo).getAsJsonObject();
         if(userString.get("id").getAsString().equals("")) {
             throw new IOTException(USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING,
@@ -142,13 +143,12 @@ public class UserController extends BaseController{
                         IOTErrorCode.PERMISSION_DENIED);
             }
             if (authUser.getAuthority() == Authority.TENANT_ADMIN) {
-                user.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
+                user.setTenantId(getCurrentUser().getTenantId());
                 if(user.getAuthority() == Authority.CUSTOMER_USER) {
-                    user.setCustomer(customerService.findCustomerById(userString.get("customer_id").getAsInt()));
+                    user.setCustomerId(userString.get("customer_id").getAsInt());
                 }
             }
-            User savedUser = checkNotNull(userService.saveUser(user));
-            return savedUser.toString();
+            userService.updateUser(user);
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -179,7 +179,7 @@ public class UserController extends BaseController{
             @RequestParam int page) throws IOTException {
         checkParameter("tenantId", tenantId);
         try {
-            return checkNotNull(userService.findTenantAdmins(page,limit,tenantId).getContent().toString());
+            return checkNotNull(userService.findTenantAdmins(page,limit,tenantId).toString());
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -195,7 +195,8 @@ public class UserController extends BaseController{
             @RequestParam int limit) throws IOTException {
         checkParameter("tenantId", tenantId);
         try {
-            return checkNotNull(userService.findTenantAdmins(0,limit,tenantId).getTotalPages());
+//            return checkNotNull(userService.findTenantAdmins(0,limit,tenantId).getTotalPages());
+            return userService.findTenantAdminsPageNum(limit,tenantId);
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -212,7 +213,8 @@ public class UserController extends BaseController{
         checkParameter("customerId", customerId);
         try {
             checkCustomerId(customerId);
-            return checkNotNull(userService.findCustomerUsers(page,limit,customerId).getContent().toString());
+            Integer tenantId = getCurrentUser().getTenantId();
+            return checkNotNull(userService.findCustomerUsers(page,limit,tenantId,customerId).toString());
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -228,7 +230,9 @@ public class UserController extends BaseController{
         checkParameter("customerId", customerId);
         try {
             checkCustomerId(customerId);
-            return checkNotNull(userService.findCustomerUsers(0,limit,customerId).getTotalPages());
+            Integer tenantId = getCurrentUser().getTenantId();
+//            return checkNotNull(userService.findCustomerUsers(0,limit,customerId).getTotalPages());
+            return userService.findCustomerUsersPageNum(limit,tenantId,customerId);
         } catch (Exception e) {
             throw handleException(e);
         }

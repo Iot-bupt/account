@@ -5,6 +5,7 @@ import cn.edu.bupt.dao.User.UserService;
 import cn.edu.bupt.dao.UserCredentials.UserCredentialsService;
 import cn.edu.bupt.entity.User;
 import cn.edu.bupt.entity.UserCredentials;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import java.util.Map;
  * Created by CZX on 2018/4/12.
  */
 @Component
+@Slf4j
 public class CustomerAuthenticationProvider implements AuthenticationProvider {
     private final BCryptPasswordEncoder encoder;
     private final UserService userService;
@@ -46,6 +48,7 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Assert.notNull(authentication, "No authentication data provided");
+        log.trace("Executing authenticate");
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
         return authenticateByUsernameAndPassword(username, password);
@@ -61,7 +64,7 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
             throw new UsernameNotFoundException("User not found: " + username);
         }
 
-        UserCredentials userCredentials = userCredentialsService.findUserCredentialsByUserId(user.getId()).get();
+        UserCredentials userCredentials = userCredentialsService.findUserCredentialsByUserId(user.getId());
         if (userCredentials == null) {
             throw new UsernameNotFoundException("User credentials not found");
         }
@@ -72,7 +75,7 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
 
         if (user.getAuthority() == null) throw new InsufficientAuthenticationException("User has no authority assigned");
 
-        SecurityUser securityUser = new SecurityUser(user.getId(),user.getName(),user.getCustomer().getId(),user.getTenant().getId(),user.getAuthority(),permissions);
+        SecurityUser securityUser = new SecurityUser(user.getId(),user.getName(),user.getCustomerId(),user.getTenantId(),user.getAuthority(),permissions);
 
         return new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
     }

@@ -1,27 +1,23 @@
 package cn.edu.bupt.entity;
 
-import javax.persistence.*;
 
 /**
  * Created by CZX on 2018/4/8.
  */
-@Entity
-@Table(name = "user_credentials")
+//@Entity
+//@Table(name = "user_credentials")
 public class UserCredentials extends IdBased{
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
-
-    @OneToOne
-    @JoinColumn(name="user_id",referencedColumnName = "id")
-    private User user;
+    private Integer userId;
     private String password;
 
     public UserCredentials() {
     }
 
-    public UserCredentials(User user, String password) {
-        this.user = user;
+    public UserCredentials(Integer userId, String password) {
+        this.userId = userId;
         this.password = password;
     }
 
@@ -33,12 +29,12 @@ public class UserCredentials extends IdBased{
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -55,7 +51,7 @@ public class UserCredentials extends IdBased{
         sb.append("\"id\":")
                 .append(id);
         sb.append(",\"user\":")
-                .append(user);
+                .append(userId);
         sb.append(",\"password\":\"")
                 .append(password).append('\"');
         sb.append('}');

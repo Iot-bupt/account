@@ -1,26 +1,25 @@
 package cn.edu.bupt.entity;
 
-import javax.persistence.*;
 
 /**
  * Created by CZX on 2018/4/8.
  */
-@Entity
+//@Entity
 public class User extends IdBased{
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name="tenant_id",referencedColumnName = "id")
-    private Tenant tenant;
+//    @ManyToOne
+//    @JoinColumn(name="tenant_id",referencedColumnName = "id")
+    private Integer tenantId;
 
-    @ManyToOne
-    @JoinColumn(name="customer_id",referencedColumnName = "id")
-    private Customer customer;
+//    @ManyToOne
+//    @JoinColumn(name="customer_id",referencedColumnName = "id")
+    private Integer customerId;
 
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     private Authority authority;
 
     private String name;
@@ -32,8 +31,8 @@ public class User extends IdBased{
 
     public User(User user) {
         this.id = user.getId();
-        this.tenant = user.getTenant();
-        this.customer = user.getCustomer();
+        this.tenantId = user.getTenantId();
+        this.customerId = user.getCustomerId();
         this.authority = user.getAuthority();
         this.name = user.getName();
         this.additional_info = user.getAdditional_info();
@@ -48,20 +47,20 @@ public class User extends IdBased{
         this.id = id;
     }
 
-    public Tenant getTenant() {
-        return tenant;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
-    public void setTenant(Tenant tenant) {
-        this.tenant = tenant;
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Integer getTenantId() {
+        return tenantId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setTenantId(Integer tenantId) {
+        this.tenantId = tenantId;
     }
 
     public Authority getAuthority() {
@@ -96,15 +95,37 @@ public class User extends IdBased{
         this.email = email;
     }
 
+//    @Override
+//    public String toString() {
+//        final StringBuilder sb = new StringBuilder("{");
+//        sb.append("\"id\":")
+//                .append(id);
+//        sb.append(",\"tenant_id\":")
+//                .append(tenantId);
+//        sb.append(",\"customer_id\":")
+//                .append(customerId);
+//        sb.append(",\"authority\":")
+//                .append(authority);
+//        sb.append(",\"name\":\"")
+//                .append(name).append('\"');
+//        sb.append(",\"additional_info\":\"")
+//                .append(additional_info).append('\"');
+//        sb.append(",\"email\":\"")
+//                .append(email).append('\"');
+//        sb.append('}');
+//        return sb.toString();
+//    }
+
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("\"id\":")
                 .append(id);
         sb.append(",\"tenant_id\":")
-                .append(tenant.getId());
+                .append(tenantId);
         sb.append(",\"customer_id\":")
-                .append(customer.getId());
+                .append(customerId);
         sb.append(",\"authority\":")
                 .append("\""+authority.name()+"\"");
         sb.append(",\"name\":\"")

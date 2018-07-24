@@ -50,7 +50,8 @@ public class TenantController extends BaseController{
         JsonObject tenantString = new JsonParser().parse(tenantInfo).getAsJsonObject();
         Tenant tenant = Json2Tenant(tenantString);
         try {
-            return checkNotNull(tenantService.saveTenant(tenant)).toString();
+            tenantService.saveTenant(tenant);
+            return tenant.toString();
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -71,7 +72,8 @@ public class TenantController extends BaseController{
         Tenant tenant = Json2Tenant(tenantString);
         tenant.setId(tenantString.get("id").getAsInt());
         try {
-            return checkNotNull(tenantService.saveTenant(tenant)).toString();
+            tenantService.updateTenant(tenant);
+            return tenant.toString();
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -91,14 +93,27 @@ public class TenantController extends BaseController{
     }
 
     @ApiOperation(value = "获取所有Tenant信息")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+//    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenants", params = {  "limit","page"  }, method = RequestMethod.GET)
     @ResponseBody
     public String getTenants(@RequestParam int limit,
                              @RequestParam int page) throws IOTException {
         try {
            // Integer tenantId = getCurrentUser().getTenant().getId();
-            return checkNotNull(tenantService.findTenants(page,limit)).getContent().toString();
+            return checkNotNull(tenantService.findTenants(page,limit)).toString();
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+    }
+
+    @ApiOperation(value = "获取所有Tenant信息")
+//    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+    @RequestMapping(value = "/tenantsPages", params = {  "limit","page"  }, method = RequestMethod.GET)
+    @ResponseBody
+    public Integer getTenantsPages(@RequestParam int limit) throws IOTException {
+        try {
+            // Integer tenantId = getCurrentUser().getTenant().getId();
+            return tenantService.findTenantsPageNum(limit);
         } catch (Exception e) {
             throw handleException(e);
         }

@@ -41,12 +41,12 @@ public class AuthController extends BaseController{
             String currentPassword = changePasswordRequest.get("currentPassword").asText();
             String newPassword = changePasswordRequest.get("newPassword").asText();
             SecurityUser securityUser = getCurrentUser();
-            UserCredentials userCredentials = userCredentialsService.findUserCredentialsByUserId(securityUser.getId()).get();
+            UserCredentials userCredentials = userCredentialsService.findUserCredentialsByUserId(securityUser.getId());
             if (!passwordEncoder.matches(currentPassword, userCredentials.getPassword())) {
                 throw new IOTException("Current password doesn't match!", IOTErrorCode.BAD_REQUEST_PARAMS);
             }
             userCredentials.setPassword(passwordEncoder.encode(newPassword));
-            userCredentialsService.saveUserCredentials(userCredentials);
+            userCredentialsService.updateUserCredentials(userCredentials);
         } catch (Exception e) {
             throw handleException(e);
         }

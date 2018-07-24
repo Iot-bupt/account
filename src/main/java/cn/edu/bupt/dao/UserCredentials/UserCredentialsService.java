@@ -9,9 +9,11 @@ import java.util.Optional;
  */
 public interface UserCredentialsService {
 
-    Optional<UserCredentials> findUserCredentialsByUserId(Integer userId);
+    UserCredentials findUserCredentialsByUserId(Integer userId);
 
-    UserCredentials saveUserCredentials(UserCredentials userCredentials);
+    void saveUserCredentials(UserCredentials userCredentials);
+
+    void updateUserCredentials(UserCredentials userCredentials);
 
     void deleteUserCredentialsByUserId(Integer userId);
 }

@@ -16,14 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  * Created by CZX on 2018/4/9.
@@ -47,7 +43,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findUserById(Integer userId){
         log.trace("Executing findUserById [{}]", userId);
-        return userRepository.findById(userId).get();
+        return userRepository.findById(userId);
     }
 
     @Override
@@ -57,10 +53,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User saveUser(User user){
+    public Integer saveUser(User user){
         log.trace("Executing saveUser [{}]", user);
         userValidator.validate(user);
         return userRepository.save(user);
+    }
+
+    @Override
+    public void updateUser(User user){
+        log.trace("Executing updateUser [{}]", user);
+        userValidator.validate(user);
+        userRepository.update(user);
     }
 
     @Override
@@ -71,48 +74,44 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Page<User> findTenantAdmins(Integer page, Integer size, Integer tenant_id){
+    public List<User> findTenantAdmins(Integer page, Integer size, Integer tenant_id){
         log.trace("Executing findTenantAdmins, tenantId [{}], size [{}], page [{}]", tenant_id, size, page);
-        Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "id");
-        Page<User> userPage = userRepository.findAll(new Specification<User>() {
-            @Nullable
-            @Override
-            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                Predicate predicate1 = criteriaBuilder.equal(root.get("tenant").as(Tenant.class),tenant_id);
-                Predicate predicate2 = criteriaBuilder.equal(root.get("authority").as(Authority.class), Authority.TENANT_ADMIN);
-                criteriaQuery.where(criteriaBuilder.and(predicate1,predicate2));
-                return criteriaQuery.getRestriction();
-            }
-        },pageable);
+//        Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "id");
+        List<User> userPage = userRepository.findTenantAdmins(page*size,size,tenant_id);
         return userPage;
     }
 
     @Override
-    public Page<User> findCustomerUsers(Integer page, Integer size,Integer customer_id){
+    public Integer findTenantAdminsPageNum(Integer size, Integer tenant_id){
+        Integer num = (userRepository.findTenantAdminsCount(tenant_id)+size-1)/size;
+        return num;
+    }
+
+    @Override
+    public List<User> findCustomerUsers(Integer page, Integer size,Integer tenant_id,Integer customer_id){
         log.trace("Executing findCustomerUsers, customerId [{}], size [{}], page [{}]", customer_id, size, page);
-        Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "id");
-        Page<User> userPage = userRepository.findAll(new Specification<User>() {
-            @Nullable
-            @Override
-            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                Predicate predicate = criteriaBuilder.equal(root.get("customer").as(Customer.class),customer_id);
-                criteriaQuery.where(criteriaBuilder.and(predicate));
-                return criteriaQuery.getRestriction();
-            }
-        },pageable);
+//        Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "id");
+        List<User> userPage = userRepository.findCustomerUsers(page*size,size,tenant_id,customer_id);
         return userPage;
+    }
+
+    @Override
+    public Integer findCustomerUsersPageNum(Integer size,Integer tenant_id,Integer customer_id){
+        log.trace("Executing findCustomerUsersPageNum, customerId [{}], size [{}]", customer_id, size);
+        Integer num = (userRepository.findCustomerUsersCount(tenant_id,customer_id)+size-1)/size;
+        return num;
     }
 
     @Override
     public void deleteCustomerUsers(Integer customerId){
         log.trace("Executing deleteCustomerUsers, customerId [{}]", customerId);
-        userRepository.deleteAllByCustomer(customerRepository.findById(customerId).get());
+        userRepository.deleteAllByCustomerId(customerId);
     }
 
     @Override
     public void deleteTenantAdmins(Integer tenantId){
         log.trace("Executing deleteTenantAdmins, tenantId [{}]", tenantId);
-        userRepository.deleteAllByTenantAndAuthority(tenantRepository.findById(tenantId).get(),Authority.TENANT_ADMIN);
+        userRepository.deleteAllByTenantIdAndAuthority(tenantId,Authority.TENANT_ADMIN);
     }
 
     private DataValidator<User> userValidator =
@@ -129,8 +128,8 @@ public class UserServiceImpl implements UserService{
                     }
 
                     //用户的部门验证
-                    Integer tenantId = user.getTenant().getId();
-                    Integer customerId = user.getCustomer().getId();
+                    Integer tenantId = user.getTenantId();
+                    Integer customerId = user.getCustomerId();
                     switch (authority) {
                         case SYS_ADMIN:
                             if (!(tenantId==1) || !(customerId==1)){
@@ -159,8 +158,8 @@ public class UserServiceImpl implements UserService{
                                 + " already present in database!");
                     }
                     if (!(customerId==1)) {
-                        Customer customer = customerRepository.findById(user.getCustomer().getId()).get();
-                        if (!(customer.getTenant().getId()==tenantId)) {
+                        Customer customer = customerRepository.findById(user.getCustomerId());
+                        if (!(customer.getTenantId()==tenantId)) {
                             throw new DataValidationException("User can't be assigned to customer from different tenant!");
                         }
                     }

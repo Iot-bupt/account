@@ -3,6 +3,8 @@ package cn.edu.bupt.dao.Tenant;
 import cn.edu.bupt.entity.Tenant;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 /**
  * Created by CZX on 2018/4/9.
  */
@@ -10,10 +12,14 @@ public interface TenantService {
 
     Tenant findTenantById(Integer tenantId);
 
-    Tenant saveTenant(Tenant tenant);
+    void updateTenant(Tenant tenant);
+
+    void saveTenant(Tenant tenant);
 
     void deleteTenant(Integer tenantId);
 
-    Page<Tenant> findTenants(Integer page, Integer size);
+    List<Tenant> findTenants(Integer page, Integer size);
+
+    Integer findTenantsPageNum(Integer size);
 
 }

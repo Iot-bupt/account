@@ -1,18 +1,14 @@
 package cn.edu.bupt.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  * Created by CZX on 2018/4/8.
  */
-@Entity
+//@Entity
 public class Tenant extends IdBased{
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     private String address;
     private String phone;

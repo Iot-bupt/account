@@ -1,19 +1,15 @@
 package cn.edu.bupt.entity;
 
-import javax.persistence.*;
 /**
  * Created by CZX on 2018/4/8.
  */
-@Entity
+//@Entity
 public class Customer extends IdBased{
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name="tenant_id",referencedColumnName = "id")
-    private Tenant tenant;
+    private Integer tenantId;
     private String address;
     private String phone;
     private String title;
@@ -28,12 +24,12 @@ public class Customer extends IdBased{
         this.id = id;
     }
 
-    public Tenant getTenant() {
-        return tenant;
+    public Integer getTenantId() {
+        return tenantId;
     }
 
-    public void setTenant(Tenant tenant) {
-        this.tenant = tenant;
+    public void setTenantId(Integer tenantId) {
+        this.tenantId = tenantId;
     }
 
     public String getAddress() {
@@ -82,7 +78,7 @@ public class Customer extends IdBased{
         sb.append("\"id\":")
                 .append(id);
         sb.append(",\"tenant_id\":")
-                .append(tenant.getId());
+                .append(tenantId);
         sb.append(",\"address\":\"")
                 .append(address).append('\"');
         sb.append(",\"phone\":\"")

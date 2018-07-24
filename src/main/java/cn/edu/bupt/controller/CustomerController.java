@@ -52,8 +52,9 @@ public class CustomerController extends BaseController{
         JsonObject customerString = new JsonParser().parse(customerInfo).getAsJsonObject();
         Customer customer = Json2Customer(customerString);
         try {
-            customer.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
-            return checkNotNull(customerService.saveCustomer(customer)).toString();
+            customer.setTenantId(getCurrentUser().getTenantId());
+            customerService.saveCustomer(customer);
+            return  customer.toString();
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -77,8 +78,9 @@ public class CustomerController extends BaseController{
         customer.setPhone(customerString.get("phone").getAsString());
         customer.setAddress(customerString.get("address").getAsString());
         try {
-            customer.setTenant(tenantService.findTenantById(getCurrentUser().getTenantId()));
-            return checkNotNull(customerService.saveCustomer(customer)).toString();
+            customer.setTenantId(getCurrentUser().getTenantId());
+            customerService.updateCustomer(customer);
+            return  customer.toString();
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -99,7 +101,7 @@ public class CustomerController extends BaseController{
         }
     }
 
-    @ApiOperation(value = "获取某个Tenant下所有CUstomer")
+    @ApiOperation(value = "获取某个Tenant下所有Customer")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/customers", params = {  "limit","page"  }, method = RequestMethod.GET)
     @ResponseBody
@@ -107,7 +109,7 @@ public class CustomerController extends BaseController{
                                @RequestParam int page) throws IOTException {
         try {
             Integer tenantId = getCurrentUser().getTenantId();
-            return checkNotNull(customerService.findCustomersByTenantId(page,limit,tenantId)).getContent().toString();
+            return checkNotNull(customerService.findCustomersByTenantId(page,limit,tenantId)).toString();
         } catch (Exception e) {
             throw handleException(e);
         }
@@ -120,7 +122,8 @@ public class CustomerController extends BaseController{
     public Integer getCustomersTotalPages(@RequestParam int limit) throws IOTException {
         try {
             Integer tenantId = getCurrentUser().getTenantId();
-            return checkNotNull(customerService.findCustomersByTenantId(0,limit,tenantId)).getTotalPages();
+//            return checkNotNull(customerService.findCustomersByTenantId(0,limit,tenantId)).getTotalPages();
+            return customerService.findCustomersByTenantIdPageNum(limit,tenantId);
         } catch (Exception e) {
             throw handleException(e);
         }
