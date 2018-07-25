@@ -96,6 +96,8 @@ public abstract class BaseController {
 
     void checkTenantId(Integer tenantId) throws IOTException {
         SecurityUser authUser = getCurrentUser();
+        //当权限为系统管理员时，可以查看租户信息
+        //当权限并非系统管理员时，只能查看自身租户的信息
         if (authUser.getAuthority() != Authority.SYS_ADMIN &&
                 (authUser.getTenantId() == null || !authUser.getTenantId().equals(tenantId))) {
             throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
@@ -106,6 +108,9 @@ public abstract class BaseController {
     Customer checkCustomerId(Integer customerId) throws IOTException {
         try {
             SecurityUser authUser = getCurrentUser();
+            //当权限为系统管理员时，无权查看customer信息
+            //当权限为租户管理员时，可以查看customer信息
+            //当权限为客户用户时，只能查看自身customer的信息
             if (authUser.getAuthority() == Authority.SYS_ADMIN ||
                     (authUser.getAuthority() != Authority.TENANT_ADMIN &&
                             (authUser.getCustomerId() == null || !authUser.getCustomerId().equals(customerId)))) {
