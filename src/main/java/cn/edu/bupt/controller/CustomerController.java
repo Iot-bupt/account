@@ -71,7 +71,8 @@ public class CustomerController extends BaseController{
             throw new IOTException(CUSTOMER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING,
                     IOTErrorCode.BAD_REQUEST_PARAMS);
         }
-        Customer customer = customerService.findCustomerById(customerString.get("id").getAsInt());
+        Customer customer = new Customer();
+        customer.setId(customerString.get("id").getAsInt());
         customer.setEmail(customerString.get("email").getAsString());
         customer.setTitle(customerString.get("title").getAsString());
         customer.setAdditional_info(customerString.get("additional_info").getAsString());

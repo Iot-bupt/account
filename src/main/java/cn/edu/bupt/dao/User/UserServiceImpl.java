@@ -151,12 +151,6 @@ public class UserServiceImpl implements UserService{
                         default:
                             break;
                     }
-
-                    User existentUserWithEmail = findUserByEmail(user.getEmail());
-                    if (existentUserWithEmail != null && !isSameData(existentUserWithEmail, user)) {
-                        throw new DataValidationException("User with email '" + user.getEmail() + "' "
-                                + " already present in database!");
-                    }
                     if (!(customerId==1)) {
                         Customer customer = customerRepository.findById(user.getCustomerId());
                         if (!(customer.getTenantId()==tenantId)) {

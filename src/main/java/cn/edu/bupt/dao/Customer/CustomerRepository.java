@@ -14,8 +14,6 @@ import java.util.Optional;
 public interface CustomerRepository{
 
 //    void deleteAllByTenant(Tenant tenant);
-    @Select("select id as id,tenant_id as tenantId,additional_info as additional_info,address as address, email as email,phone as phone,title as title from customer where tenant_id = #{tenantId} and title = #{title}")
-    Optional<Customer> findCustomerByTenantIdAndTitle(Integer tenantId, String title);
 
     @Select("select id as id,tenant_id as tenantId,additional_info as additional_info,address as address, email as email,phone as phone,title as title from customer where tenant_id = #{tenantId}")
     List<Customer> findAllByTenantId(@Param("tenantId")Integer tenantId);
@@ -33,7 +31,7 @@ public interface CustomerRepository{
     @Options(useGeneratedKeys = true,keyProperty="id")
     void save(Customer customer);
 
-    @Update("update tenant set address = #{address},phone = #{phone},title = #{title},email = #{email},additional_info = #{additional_info} where id=#{id}")
+    @Update("update customer set address = #{address},phone = #{phone},title = #{title},email = #{email},additional_info = #{additional_info} where id=#{id}")
     void update(Customer customer);
 
     @Delete("delete from customer where id=#{id}")

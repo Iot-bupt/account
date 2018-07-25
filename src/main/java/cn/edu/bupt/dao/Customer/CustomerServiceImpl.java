@@ -107,26 +107,6 @@ public class CustomerServiceImpl implements CustomerService{
             new DataValidator<Customer>() {
 
                 @Override
-                protected void validateCreate(Customer customer) {
-                    customerRepository.findCustomerByTenantIdAndTitle(customer.getTenantId(), customer.getTitle()).ifPresent(
-                            c -> {
-                                throw new DataValidationException("Customer with such title already exists!");
-                            }
-                    );
-                }
-
-                @Override
-                protected void validateUpdate(Customer customer) {
-                    customerRepository.findCustomerByTenantIdAndTitle(customer.getTenantId(), customer.getTitle()).ifPresent(
-                            c -> {
-                                if (!c.getId().equals(customer.getId())) {
-                                    throw new DataValidationException("Customer with such title already exists!");
-                                }
-                            }
-                    );
-                }
-
-                @Override
                 protected void validateDataImpl(Customer customer) {
                     if (StringUtils.isEmpty(customer.getTitle())) {
                         throw new DataValidationException("Customer title should be specified!");
