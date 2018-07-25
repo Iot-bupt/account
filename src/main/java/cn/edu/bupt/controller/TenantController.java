@@ -93,7 +93,7 @@ public class TenantController extends BaseController{
     }
 
     @ApiOperation(value = "获取所有Tenant信息")
-//    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/tenants", params = {  "limit","page"  }, method = RequestMethod.GET)
     @ResponseBody
     public String getTenants(@RequestParam int limit,

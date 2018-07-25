@@ -50,19 +50,18 @@ public class UserController extends BaseController{
     public static final String USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "User ID should be specified when updating!";
 
     @ApiOperation(value = "根据UserId获取User")
-//    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
+    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
 //    @PreAuthorize("hasPermission('USER')")
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET)
     @ResponseBody
     public String getUserById(@RequestParam Integer userId) throws IOTException{
         try {
-//            SecurityUser authUser = getCurrentUser();
-//            if (authUser.getAuthority() == Authority.CUSTOMER_USER && !authUser.getId().equals(userId)) {
-//                throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
-//                        IOTErrorCode.PERMISSION_DENIED);
-//            }
-//            return checkUserId(userId).toString();
-            return userService.findUserById(userId).toString();
+            SecurityUser authUser = getCurrentUser();
+            if (authUser.getAuthority() == Authority.CUSTOMER_USER && !authUser.getId().equals(userId)) {
+                throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
+                        IOTErrorCode.PERMISSION_DENIED);
+            }
+            return checkUserId(userId).toString();
         } catch (Exception e) {
             throw handleException(e);
         }

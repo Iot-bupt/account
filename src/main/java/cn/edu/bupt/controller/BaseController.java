@@ -97,7 +97,7 @@ public abstract class BaseController {
     void checkTenantId(Integer tenantId) throws IOTException {
         SecurityUser authUser = getCurrentUser();
         //当权限为系统管理员时，可以查看租户信息
-        //当权限并非系统管理员时，只能查看自身租户的信息
+        //当权限并非系统管理员时，只能查看自身租户的相关信息
         if (authUser.getAuthority() != Authority.SYS_ADMIN &&
                 (authUser.getTenantId() == null || !authUser.getTenantId().equals(tenantId))) {
             throw new IOTException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,

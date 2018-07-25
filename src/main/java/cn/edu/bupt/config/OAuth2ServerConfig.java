@@ -19,9 +19,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
@@ -42,6 +44,12 @@ public class OAuth2ServerConfig {
         @Autowired
         private CustomLogoutHandler customLogoutHandler;
 
+        @Autowired
+        private InMemoryTokenStore tokenStore;
+
+        @Autowired
+        private ClientDetailsService clientDetailsService;
+
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) {
 //            resources.stateless(true);
@@ -49,6 +57,8 @@ public class OAuth2ServerConfig {
             DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
             accessTokenConverter.setUserTokenConverter(new UserTokenConverter());
             resourceServerTokenServices.setAccessTokenConverter(accessTokenConverter);
+            resourceServerTokenServices.setTokenStore(tokenStore);
+            resourceServerTokenServices.setClientDetailsService(clientDetailsService);
             resources.tokenServices(resourceServerTokenServices);
         }
 
@@ -171,15 +181,26 @@ public class OAuth2ServerConfig {
             return converter;
         }
 
+//        @Bean
+//        public AuthorizationServerTokenServices authorizationServerTokenServices() {
+//            CustomAuthorizationTokenServices customTokenServices = new CustomAuthorizationTokenServices();
+//            customTokenServices.setTokenStore(tokenStore());
+//            customTokenServices.setSupportRefreshToken(true);
+//            customTokenServices.setReuseRefreshToken(false);
+//            customTokenServices.setTokenEnhancer(accessTokenConverter());
+//            customTokenServices.setClientDetailsService(clientDetailsService(dataSource));
+//            return customTokenServices;
+//        }
+
         @Bean
-        public AuthorizationServerTokenServices authorizationServerTokenServices() {
-            CustomAuthorizationTokenServices customTokenServices = new CustomAuthorizationTokenServices();
-            customTokenServices.setTokenStore(tokenStore());
-            customTokenServices.setSupportRefreshToken(true);
-            customTokenServices.setReuseRefreshToken(false);
-            customTokenServices.setTokenEnhancer(accessTokenConverter());
-            customTokenServices.setClientDetailsService(clientDetailsService(dataSource));
-            return customTokenServices;
+        public AuthorizationServerTokenServices authorizationServerTokenServices(){
+            DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+            defaultTokenServices.setTokenStore(tokenStore());
+            defaultTokenServices.setSupportRefreshToken(true);
+            defaultTokenServices.setReuseRefreshToken(false);
+            defaultTokenServices.setTokenEnhancer(accessTokenConverter());
+            defaultTokenServices.setClientDetailsService(clientDetailsService(dataSource));
+            return defaultTokenServices;
         }
 
     }
