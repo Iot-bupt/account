@@ -59,6 +59,7 @@ public class CustomRemoteTokenServices implements ResourceServerTokenServices {
             }
         }
         Map<String, Object> response = (Map<String, Object>)accessTokenConverter.convertAccessToken(accessToken, result);
+        response.put("active", true);
         Object o = JSONObject.toJSON(response);
         String content = o.toString();
         System.out.println(content);
