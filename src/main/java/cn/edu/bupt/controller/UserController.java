@@ -244,11 +244,9 @@ public class UserController extends BaseController{
         user.setEmail(userString.get("email").getAsString());
         user.setName(userString.get("name").getAsString());
         user.setAdditional_info(userString.get("additional_info").getAsString());
-        user.setPhone(userString.get("phone").getAsString());
-        user.setWe_chat(userString.get("we_chat").getAsString());
-//        user.setCustomer(customerService.findCustomerById(userString.get("customer_id").getAsInt()));
-//        user.setTenant(tenantService.findTenantById(userString.get("tenant_id").getAsInt()));
-//        user.setAuthority(Authority.parse(userString.get("authority").getAsString()));
+//        user.setPhone(userString.get("phone").getAsString());
+//        user.setWe_chat(userString.get("we_chat").getAsString());
+
         return user;
     }
 

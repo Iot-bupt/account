@@ -137,32 +137,6 @@ public class User extends IdBased{
 //    }
 
 
-//    @Override
-//    public String toString() {
-//        final StringBuilder sb = new StringBuilder("{");
-//        sb.append("\"id\":")
-//                .append(id);
-//        sb.append(",\"tenant_id\":")
-//                .append(tenantId);
-//        sb.append(",\"customer_id\":")
-//                .append(customerId);
-//        sb.append(",\"authority\":")
-//                .append("\""+authority.name()+"\"");
-//        sb.append(",\"name\":\"")
-//                .append(name).append('\"');
-//        sb.append(",\"additional_info\":\"")
-//                .append(additional_info).append('\"');
-//        sb.append(",\"email\":\"")
-//                .append(email).append('\"');
-//        sb.append(",\"phone\":\"")
-//                .append(phone).append('\"');
-//        sb.append(",\"we_chat\":\"")
-//                .append(we_chat).append('\"');
-//        sb.append('}');
-//        return sb.toString();
-//    }
-
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
@@ -173,7 +147,7 @@ public class User extends IdBased{
         sb.append(",\"customer_id\":")
                 .append(customerId);
         sb.append(",\"authority\":")
-                .append(authority);
+                .append("\""+authority.name()+"\"");
         sb.append(",\"name\":\"")
                 .append(name).append('\"');
         sb.append(",\"additional_info\":\"")
@@ -187,4 +161,30 @@ public class User extends IdBased{
         sb.append('}');
         return sb.toString();
     }
+
+
+//    @Override
+//    public String toString() {
+//        final StringBuilder sb = new StringBuilder("{");
+//        sb.append("\"id\":")
+//                .append(id);
+//        sb.append(",\"tenant_id\":")
+//                .append(tenantId);
+//        sb.append(",\"customer_id\":")
+//                .append(customerId);
+//        sb.append(",\"authority\":")
+//                .append(authority);
+//        sb.append(",\"name\":\"")
+//                .append(name).append('\"');
+//        sb.append(",\"additional_info\":\"")
+//                .append(additional_info).append('\"');
+//        sb.append(",\"email\":\"")
+//                .append(email).append('\"');
+//        sb.append(",\"phone\":\"")
+//                .append(phone).append('\"');
+//        sb.append(",\"we_chat\":\"")
+//                .append(we_chat).append('\"');
+//        sb.append('}');
+//        return sb.toString();
+//    }
 }

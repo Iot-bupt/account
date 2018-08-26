@@ -103,15 +103,28 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteCustomerUsers(Integer customerId){
+    public void deleteCustomerUsers(Integer tenantId, Integer customerId){
         log.trace("Executing deleteCustomerUsers, customerId [{}]", customerId);
-        userRepository.deleteAllByCustomerId(customerId);
+        List<User> users = userRepository.findCustomerUsers(0,100,tenantId,customerId);
+        while(!users.isEmpty()) {
+            for (User entity : users) {
+                deleteUser(entity.getId());
+            }
+            users = userRepository.findCustomerUsers(0,100,tenantId,customerId);
+        }
+//        userRepository.deleteAllByCustomerId(customerId);
     }
 
     @Override
     public void deleteTenantAdmins(Integer tenantId){
         log.trace("Executing deleteTenantAdmins, tenantId [{}]", tenantId);
-        userRepository.deleteAllByTenantIdAndAuthority(tenantId,Authority.TENANT_ADMIN);
+        List<User> users = userRepository.findTenantAdmins(0,100,tenantId);
+        while(!users.isEmpty()) {
+            for (User entity : users) {
+                deleteUser(entity.getId());
+            }
+            users = userRepository.findTenantAdmins(0,100,tenantId);
+        }
     }
 
     private DataValidator<User> userValidator =

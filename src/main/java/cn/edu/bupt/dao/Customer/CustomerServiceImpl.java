@@ -80,9 +80,9 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public void deleteCustomer(Integer customerId){
+    public void deleteCustomer(Integer tenantId, Integer customerId){
         log.trace("Executing deleteCustomer [{}]", customerId);
-        userService.deleteCustomerUsers(customerId);
+        userService.deleteCustomerUsers(tenantId, customerId);
         //TODO:unassignCustomerDevices
         customerRepository.deleteById(customerId);
     }
@@ -93,7 +93,7 @@ public class CustomerServiceImpl implements CustomerService{
 //        Tenant tenant = tenantRepository.findById(tenantId);
         List<Customer> customerList = customerRepository.findAllByTenantId(tenantId);
         for(Customer customer : customerList){
-            deleteCustomer(customer.getId());
+            deleteCustomer(tenantId,customer.getId());
         }
     }
 

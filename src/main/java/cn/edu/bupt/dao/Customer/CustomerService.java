@@ -18,7 +18,7 @@ public interface CustomerService {
 
     void updateCustomer(Customer customer);
 
-    void deleteCustomer(Integer customerId);
+    void deleteCustomer(Integer tenantId,Integer customerId);
 
     void deleteCustomersByTenantId(Integer tenantId);
 

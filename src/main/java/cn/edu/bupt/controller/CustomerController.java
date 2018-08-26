@@ -90,13 +90,13 @@ public class CustomerController extends BaseController{
     @ApiOperation(value = "根据CustomerId删除Customer")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
     @Transactional
-    @RequestMapping(value = "/customer",params = {"customerId"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = "/customer",params = {"customerId","tenantId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteCustomer(@RequestParam Integer customerId) throws IOTException {
+    public void deleteCustomer(@RequestParam Integer customerId,@RequestParam Integer tenantId) throws IOTException {
         checkParameter(CUSTOMER_ID, customerId);
         try {
             checkCustomerId(customerId);
-            customerService.deleteCustomer(customerId);
+            customerService.deleteCustomer(tenantId,customerId);
         } catch (Exception e) {
             throw handleException(e);
         }

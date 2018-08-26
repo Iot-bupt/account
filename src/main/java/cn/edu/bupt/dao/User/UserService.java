@@ -26,7 +26,7 @@ public interface UserService {
 
     List<User> findCustomerUsers(Integer page, Integer size,Integer tenant_id,Integer customer_id);
 
-    void deleteCustomerUsers(Integer customerId);
+    void deleteCustomerUsers(Integer tenantId,Integer customerId);
 
     Integer findTenantAdminsPageNum(Integer size, Integer tenant_id);
 

@@ -1,5 +1,6 @@
 package cn.edu.bupt.dao.Tenant;
 
+import cn.edu.bupt.Security.HttpUtil;
 import cn.edu.bupt.dao.Customer.CustomerService;
 import cn.edu.bupt.dao.DataValidationException;
 import cn.edu.bupt.dao.DataValidator;
@@ -8,6 +9,7 @@ import cn.edu.bupt.entity.Tenant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,15 @@ public class TenantServiceImpl implements TenantService{
 
     @Autowired
     private CustomerService customerService;
+
+    private static String delete_device_url;
+
+    @Value("${device-access.delete_device_url}")
+    private void getDeviceAccessHost(String delete_device_url) {
+        this.delete_device_url = delete_device_url ;
+    }
+
+
 
     @Override
     public Tenant findTenantById(Integer tenantId){
@@ -57,7 +68,12 @@ public class TenantServiceImpl implements TenantService{
         log.trace("Executing deleteTenant [{}]", tenantId);
         customerService.deleteCustomersByTenantId(tenantId);
         userService.deleteTenantAdmins(tenantId);
-        //TODO:deleteDevicesByTenantId, deleteRulesByTenantId, deletePluginsByTenantId
+        try {
+            HttpUtil.sendDeletToThingsboard(delete_device_url + tenantId);
+        }catch (Exception e){
+            System.out.println("删除设备失败");
+        }
+        //TODO:deleteRulesByTenantId, deletePluginsByTenantId
         tenantRepository.deleteById(tenantId);
     }
 
