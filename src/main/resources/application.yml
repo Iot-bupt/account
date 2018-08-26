@@ -40,3 +40,8 @@ account:
   client_secret: 123456
   internal_client_id: client_1
   internal_client_secret: 123456
+
+device-access:
+# host: deviceaccess
+# port: 8100
+ delete_device_url: http://deviceaccess:8100/api/v1/deviceaccess/devices/
