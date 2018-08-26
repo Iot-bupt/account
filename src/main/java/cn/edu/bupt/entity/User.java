@@ -25,6 +25,8 @@ public class User extends IdBased{
     private String name;
     private String additional_info;
     private String email;
+    private String phone;
+    private String we_chat;
 
     public User() {
     }
@@ -37,6 +39,8 @@ public class User extends IdBased{
         this.name = user.getName();
         this.additional_info = user.getAdditional_info();
         this.email = user.getEmail();
+        this.phone = user.getPhone();
+        this.we_chat = user.getWe_chat();
     }
 
     public Integer getId() {
@@ -95,7 +99,23 @@ public class User extends IdBased{
         this.email = email;
     }
 
-//    @Override
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWe_chat() {
+        return we_chat;
+    }
+
+    public void setWe_chat(String we_chat) {
+        this.we_chat = we_chat;
+    }
+
+    //    @Override
 //    public String toString() {
 //        final StringBuilder sb = new StringBuilder("{");
 //        sb.append("\"id\":")
@@ -117,6 +137,32 @@ public class User extends IdBased{
 //    }
 
 
+//    @Override
+//    public String toString() {
+//        final StringBuilder sb = new StringBuilder("{");
+//        sb.append("\"id\":")
+//                .append(id);
+//        sb.append(",\"tenant_id\":")
+//                .append(tenantId);
+//        sb.append(",\"customer_id\":")
+//                .append(customerId);
+//        sb.append(",\"authority\":")
+//                .append("\""+authority.name()+"\"");
+//        sb.append(",\"name\":\"")
+//                .append(name).append('\"');
+//        sb.append(",\"additional_info\":\"")
+//                .append(additional_info).append('\"');
+//        sb.append(",\"email\":\"")
+//                .append(email).append('\"');
+//        sb.append(",\"phone\":\"")
+//                .append(phone).append('\"');
+//        sb.append(",\"we_chat\":\"")
+//                .append(we_chat).append('\"');
+//        sb.append('}');
+//        return sb.toString();
+//    }
+
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
@@ -127,13 +173,17 @@ public class User extends IdBased{
         sb.append(",\"customer_id\":")
                 .append(customerId);
         sb.append(",\"authority\":")
-                .append("\""+authority.name()+"\"");
+                .append(authority);
         sb.append(",\"name\":\"")
                 .append(name).append('\"');
         sb.append(",\"additional_info\":\"")
                 .append(additional_info).append('\"');
         sb.append(",\"email\":\"")
                 .append(email).append('\"');
+        sb.append(",\"phone\":\"")
+                .append(phone).append('\"');
+        sb.append(",\"we_chat\":\"")
+                .append(we_chat).append('\"');
         sb.append('}');
         return sb.toString();
     }
