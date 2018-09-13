@@ -15,7 +15,12 @@ public class MyPermissionEvaluator implements PermissionEvaluator{
 
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object requiredPermission) {
-        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        SecurityUser securityUser = null;
+        try {
+            securityUser = (SecurityUser) authentication.getPrincipal();
+        }catch(Exception e){
+            return false;
+        }
         Collection<String> permissions = securityUser.getPermissions();
         for (String permission : permissions) {
             if (permission.equals(requiredPermission)) {

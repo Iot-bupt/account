@@ -89,7 +89,8 @@ public class TenantServiceImpl implements TenantService{
     @Override
     public Integer findTenantsPageNum(Integer size){
         log.trace("Executing findTenantsPageNum size [{}]", size);
-        Integer num = (tenantRepository.findAllCount()+size-1)/size;
+        // 第二个-1代表默认的保留租户，该租户id为1，且不显示出来。
+        Integer num = ((tenantRepository.findAllCount()+size-1)-1)/size;
         return num;
     }
 

@@ -1,32 +1,25 @@
 package cn.edu.bupt.entity;
 
 
+import java.util.List;
+
 /**
  * Created by CZX on 2018/4/8.
  */
 //@Entity
 public class User extends IdBased{
 
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
-
-//    @ManyToOne
-//    @JoinColumn(name="tenant_id",referencedColumnName = "id")
     private Integer tenantId;
-
-//    @ManyToOne
-//    @JoinColumn(name="customer_id",referencedColumnName = "id")
     private Integer customerId;
-
-//    @Enumerated(EnumType.STRING)
     private Authority authority;
-
     private String name;
     private String additional_info;
     private String email;
     private String phone;
     private String we_chat;
+    private List<Role> roles;
+    private Integer roleId;
 
     public User() {
     }
@@ -41,6 +34,9 @@ public class User extends IdBased{
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.we_chat = user.getWe_chat();
+        this.roles = user.getRoles();
+        this.roleId = user.getRoleId();
+
     }
 
     public Integer getId() {
@@ -73,6 +69,7 @@ public class User extends IdBased{
 
     public void setAuthority(Authority authority) {
         this.authority = authority;
+        setRoleId(authority.ordinal()+1);
     }
 
     public String getName() {
@@ -113,6 +110,29 @@ public class User extends IdBased{
 
     public void setWe_chat(String we_chat) {
         this.we_chat = we_chat;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        for(Role role:roles){
+            if(role.getId()<4){
+                this.authority = Authority.parse(role.getName());
+                roles.remove(role);
+                break;
+            }
+        }
+        this.roles = roles;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     //    @Override

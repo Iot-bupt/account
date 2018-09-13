@@ -40,6 +40,6 @@ public interface CustomerRepository{
     @Select("select id as id,tenant_id as tenantId,additional_info as additional_info,address as address, email as email,phone as phone,title as title from customer where id = #{id}")
     Customer findById(Integer id);
 
-    @Select("select id as id,tenant_id as tenantId,additional_info as additional_info,address as address, email as email,phone as phone,title as title from customer")
+    @Select("select id as id,tenant_id as tenantId,additional_info as additional_info,address as address, email as email,phone as phone,title as title from customer where id > 1")
     List<Customer> findAll();
 }

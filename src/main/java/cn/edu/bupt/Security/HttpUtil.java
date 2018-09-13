@@ -95,38 +95,44 @@ public class HttpUtil {
     public static String getAccessToken(){
 
         if(token.getExpires_at() < System.currentTimeMillis() / 1000) {
-            Request.Builder builder = new Request.Builder()
-                    .url(tokenurl + "?grant_type=client_credentials")
-                    .post(RequestBody.create(null, ""));
+            synchronized (HttpUtil.class) {
+                if(token.getExpires_at() < System.currentTimeMillis() / 1000) {
+                    Request.Builder builder = new Request.Builder()
+                            .url(tokenurl + "?grant_type=client_credentials")
+                            .post(RequestBody.create(null, ""));
 
-            byte[] textByte = (Internal_client_id + ":" + Internal_client_secret).getBytes();
-            String auth = encoder.encodeToString(textByte);
-            builder.header("Authorization", "Basic " + auth);
+                    byte[] textByte = (Internal_client_id + ":" + Internal_client_secret).getBytes();
+                    String auth = encoder.encodeToString(textByte);
+                    builder.header("Authorization", "Basic " + auth);
 
-            Request request = builder.build();
-            try {
-                // 第一次获取token
-                Response response = execute(request);
-                if (response.isSuccessful()) {
-                    String res = response.body().string();
-                    JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
-                    token.setAccess_token(obj.get("access_token").getAsString());
-                    token.setExpires_at(obj.get("expires_in").getAsLong() + System.currentTimeMillis() / 1000);
-                    return obj.get("access_token").getAsString();
-                } else {
-                    throw new Exception("the first fail!");
-                }
-            } catch (Exception e) {
-                // 第二次获取token
-                try {
-                    Response response = execute(request);
-                    String res = response.body().string();
-                    JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
-                    token.setAccess_token(obj.get("access_token").getAsString());
-                    token.setExpires_at(obj.get("expires_in").getAsLong() + System.currentTimeMillis() / 1000);
-                    return obj.get("access_token").getAsString();
-                } catch (Exception e1) {
-                    return "ERROR!";
+                    Request request = builder.build();
+                    try {
+                        // 第一次获取token
+                        Response response = execute(request);
+                        if (response.isSuccessful()) {
+                            String res = response.body().string();
+                            JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
+                            token.setAccess_token(obj.get("access_token").getAsString());
+                            token.setExpires_at(obj.get("expires_in").getAsLong() + System.currentTimeMillis() / 1000);
+                            return obj.get("access_token").getAsString();
+                        } else {
+                            throw new Exception("the first fail!");
+                        }
+                    } catch (Exception e) {
+                        // 第二次获取token
+                        try {
+                            Response response = execute(request);
+                            String res = response.body().string();
+                            JsonObject obj = new JsonParser().parse(res).getAsJsonObject();
+                            token.setAccess_token(obj.get("access_token").getAsString());
+                            token.setExpires_at(obj.get("expires_in").getAsLong() + System.currentTimeMillis() / 1000);
+                            return obj.get("access_token").getAsString();
+                        } catch (Exception e1) {
+                            return "ERROR!";
+                        }
+                    }
+                }else {
+                    return token.getAccess_token();
                 }
             }
         }else{

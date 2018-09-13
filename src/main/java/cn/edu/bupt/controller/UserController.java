@@ -135,8 +135,17 @@ public class UserController extends BaseController{
         user.setEmail(userString.get("email").getAsString());
         user.setName(userString.get("name").getAsString());
         user.setAdditional_info(userString.get("additional_info").getAsString());
-        user.setPhone(userString.get("phone").getAsString());
-        user.setWe_chat(userString.get("we_chat").getAsString());
+        // TODO
+        if(userString.has("phone")){
+            user.setPhone(userString.get("phone").getAsString());
+        }else{
+            user.setPhone("1234568910");
+        }
+        if(userString.has("we_chat")) {
+            user.setWe_chat(userString.get("we_chat").getAsString());
+        }else {
+            user.setWe_chat("test_wechat");
+        }
         try {
             SecurityUser authUser = getCurrentUser();
             if (authUser.getAuthority() == Authority.CUSTOMER_USER && !authUser.getId().equals(user.getId())) {

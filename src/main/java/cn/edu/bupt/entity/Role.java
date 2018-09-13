@@ -1,0 +1,40 @@
+package cn.edu.bupt.entity;
+
+/**
+ * Created by CZX on 2018/9/4.
+ */
+public class Role {
+
+    private Integer id;
+
+    private String name;
+
+    private String description;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Role(Integer id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public Role(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+}
