@@ -1,3 +1,14 @@
+spring.thymeleaf.prefix: classpath:/
+spring.thymeleaf.suffix: .html
+spring.thymeleaf.mode: LEGACYHTML5
+spring.thymeleaf.cache: true
+
+spring:
+  http:
+    multipart:
+      max-file-size: 100Mb
+      max-request-size: 100Mb
+
 server:
   # Server bind address
   address: "${HTTP_BIND_ADDRESS:0.0.0.0}"
@@ -45,4 +56,9 @@ account:
 device-access:
 # host: deviceaccess
 # port: 8100
+# delete_device_url: http://127.0.0.1:8100/api/v1/deviceaccess/devices/
+# activate_device_url: http://127.0.0.1:8100/api/v1/deviceaccess/devices/activate/
+# suspend_device_url: http://127.0.0.1:8100/api/v1/deviceaccess/devices/suspend/
  delete_device_url: http://deviceaccess:8100/api/v1/deviceaccess/devices/
+ activate_device_url: http://deviceaccess:8100/api/v1/deviceaccess/devices/activate/
+ suspend_device_url: http://deviceaccess:8100/api/v1/deviceaccess/devices/suspend/

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by CZX on 2018/4/13.
  */
 @RestController
-@RequestMapping("/api/v1/account")
+@RequestMapping(value = "/api/v1/account")
 public class UserController extends BaseController{
 
     @Autowired
@@ -52,7 +52,7 @@ public class UserController extends BaseController{
     @ApiOperation(value = "根据UserId获取User")
     @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
 //    @PreAuthorize("hasPermission('USER')")
-    @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getUserById(@RequestParam Integer userId) throws IOTException{
         try {
@@ -72,7 +72,7 @@ public class UserController extends BaseController{
 //    eg.{"tenant_id":"1","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
     @ApiOperation(value = "创建租户管理员")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN') ")
-    @RequestMapping(value = "/tenantAdmin", method = RequestMethod.POST)
+    @RequestMapping(value = "/tenantAdmin", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String createTenantAdmin(@RequestBody String userInfo) throws IOTException {
         JsonObject userString = new JsonParser().parse(userInfo).getAsJsonObject();
@@ -98,7 +98,7 @@ public class UserController extends BaseController{
 //    eg.{"customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
     @ApiOperation(value = "创建普通用户")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customerUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/customerUser", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String createCustomerUser(@RequestBody String userInfo) throws IOTException {
         JsonObject userString = new JsonParser().parse(userInfo).getAsJsonObject();
@@ -123,7 +123,7 @@ public class UserController extends BaseController{
 //    eg.{"id":"1", "customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com"}
     @ApiOperation(value = "更新客户信息")
     @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public void updateUser(@RequestBody String userInfo) throws IOTException {
         JsonObject userString = new JsonParser().parse(userInfo).getAsJsonObject();
@@ -181,7 +181,7 @@ public class UserController extends BaseController{
 
     @ApiOperation(value = "获取某个租户下所有租户管理员")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenant/users", params = { "tenantId","limit","page"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/tenant/users", params = { "tenantId","limit","page"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getTenantAdmins(
             @RequestParam Integer tenantId,
@@ -214,7 +214,7 @@ public class UserController extends BaseController{
 
     @ApiOperation(value = "获取某个Customer下所有用户")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/users", params = { "customerId","limit","page" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/users", params = { "customerId","limit","page" }, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getCustomerUsers(
             @RequestParam Integer customerId,

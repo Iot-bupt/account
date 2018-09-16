@@ -21,7 +21,7 @@ public interface TenantRepository{
     @Delete("delete from tenant where id=#{id}")
     void deleteById(int id);
 
-    @Select("select  id  as id,additional_info as  additional_info,address as address, email as email,phone as phone,title as title,suspended as suspended from tenant where id > 1 limit #{index},#{pageSize} ")
+    @Select("select  id  as id,additional_info as  additional_info,address as address, email as email,phone as phone,title as title from tenant where id > 1 limit #{index},#{pageSize} ")
     List<Tenant> findAll(@Param("index")Integer index,@Param("pageSize")Integer pageSize);
 
     @Select("select  count(*) from tenant")

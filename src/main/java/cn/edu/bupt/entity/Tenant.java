@@ -88,6 +88,8 @@ public class Tenant extends IdBased{
                 .append(additional_info).append('\"');
         sb.append(",\"email\":\"")
                 .append(email).append('\"');
+        sb.append(",\"suspendedStatus\":\"")
+                .append(suspended).append('\"');
         sb.append('}');
         return sb.toString();
     }

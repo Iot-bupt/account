@@ -1,5 +1,6 @@
 package cn.edu.bupt.controller;
 
+import cn.edu.bupt.Security.HttpUtil;
 import cn.edu.bupt.dao.Tenant.TenantService;
 import cn.edu.bupt.entity.Tenant;
 import cn.edu.bupt.exception.IOTErrorCode;
@@ -29,7 +30,7 @@ public class TenantController extends BaseController{
 
     @ApiOperation(value = "根据TenantId获取Tenant")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
-    @RequestMapping(value = "/tenant",params = {"tenantId"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/tenant",params = {"tenantId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getTenantById(@RequestParam Integer  tenantId) throws IOTException {
         checkParameter("tenantId", tenantId);
@@ -44,7 +45,7 @@ public class TenantController extends BaseController{
 //    eg. {"email":"1@qq.com","title":"testTenant","additional_info":"","phone":"1111","address":"address"}
     @ApiOperation(value = "创建Tenant")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenant", method = RequestMethod.POST)
+    @RequestMapping(value = "/tenant", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String createTenant(@RequestBody String tenantInfo) throws IOTException {
         JsonObject tenantString = new JsonParser().parse(tenantInfo).getAsJsonObject();
@@ -61,7 +62,7 @@ public class TenantController extends BaseController{
 //    eg.{"id":"7","email":"2@qq.com","title":"testTenant","additional_info":"","phone":"1111","address":"address"}
     @ApiOperation(value = "更新Tenant信息")
     @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenant", method = RequestMethod.PUT)
+    @RequestMapping(value = "/tenant", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String updateTenant(@RequestBody String tenantInfo) throws IOTException {
         JsonObject tenantString = new JsonParser().parse(tenantInfo).getAsJsonObject();
@@ -93,8 +94,8 @@ public class TenantController extends BaseController{
     }
 
     @ApiOperation(value = "获取所有Tenant信息")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenants", params = {  "limit","page"  }, method = RequestMethod.GET)
+//    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+    @RequestMapping(value = "/tenants", params = {  "limit","page"  }, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getTenants(@RequestParam int limit,
                              @RequestParam int page) throws IOTException {

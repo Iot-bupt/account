@@ -20,7 +20,7 @@ import java.util.Set;
  * Created by CZX on 2018/9/3.
  */
 @RestController
-@RequestMapping(path= "/api/v1/account")
+@RequestMapping("/api/v1/account")
 public class PermissionController extends BaseController{
 
     @Autowired
@@ -52,14 +52,14 @@ public class PermissionController extends BaseController{
 
     @ApiOperation(value = "根据ID获取role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/role",params = {  "role_id"  }, method = RequestMethod.GET)
+    @RequestMapping(value = "/role",params = {  "role_id"  }, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     public Role getRole(@RequestParam int role_id) throws IOTException {
         return roleService.findRoleById(role_id);
     }
 
     @ApiOperation(value = "获取所有role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/roles", method = RequestMethod.GET)
+    @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     public List<Role> getRoles() throws IOTException {
         return roleService.findAllRoles();
     }
@@ -93,7 +93,7 @@ public class PermissionController extends BaseController{
 
     @ApiOperation(value = "获取所有permission")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/permission",method = RequestMethod.GET)
+    @RequestMapping(value = "/permission",method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public List<Permission> getAllPermissions() throws IOTException {
         return permissionService.findAllPermissions();
@@ -101,7 +101,7 @@ public class PermissionController extends BaseController{
 
     @ApiOperation(value = "获取一个role下分配的permission")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/rolePermission", params = {  "role_id"  },method = RequestMethod.GET)
+    @RequestMapping(value = "/rolePermission", params = {  "role_id"  },method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public List<Permission> getPermissionsByRoleId(@RequestParam int role_id) throws IOTException {
         return permissionService.findAllPermissionsByRoleId(role_id);
@@ -117,7 +117,7 @@ public class PermissionController extends BaseController{
 
     @ApiOperation(value = "获取一个用户下的所有extra role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/roles", params = { "user_id"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/roles", params = { "user_id"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     public List<Role> getUserExtraRoles(@RequestParam Integer user_id) throws IOTException {
         return roleService.findExtraRolesByUserId(user_id);
     }

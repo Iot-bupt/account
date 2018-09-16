@@ -36,9 +36,23 @@ public class TenantServiceImpl implements TenantService{
 
     private static String delete_device_url;
 
+    private static String activate_device_url;
+
+    private static String suspend_device_url;
+
     @Value("${device-access.delete_device_url}")
     private void getDeviceAccessHost(String delete_device_url) {
         this.delete_device_url = delete_device_url ;
+    }
+
+    @Value("${device-access.activate_device_url}")
+    private void getDeviceActivateHost(String activate_device_url) {
+        this.activate_device_url = activate_device_url ;
+    }
+
+    @Value("${device-access.suspend_device_url}")
+    private void getDeviceSuspendHost(String suspend_device_url) {
+        this.suspend_device_url = suspend_device_url ;
     }
 
 
@@ -103,6 +117,17 @@ public class TenantServiceImpl implements TenantService{
     @Override
     public void updateSuspendedStatusById(Boolean suspended, Integer id) {
         log.trace("Executing updateSuspendedStatusById,suspended [{}],id [{}]", suspended,id);
+        try {
+            if (suspended.equals(Boolean.FALSE)) {
+                HttpUtil.sendPutToThingsboard(activate_device_url+id, null, null);
+            }else if(suspended.equals(Boolean.TRUE)){
+                HttpUtil.sendPutToThingsboard(suspend_device_url+id, null, null);
+            }else{
+                log.error("updating device suspending status failed!");
+            }
+        }catch (Exception e){
+            log.error("updating device suspending status failed!");
+        }
         tenantRepository.updateSuspendedStatus(suspended,id);
     }
 
