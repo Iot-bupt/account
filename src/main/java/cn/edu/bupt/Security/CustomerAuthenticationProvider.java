@@ -2,6 +2,7 @@ package cn.edu.bupt.Security;
 
 import cn.edu.bupt.Security.model.SecurityUser;
 import cn.edu.bupt.dao.Role.RoleService;
+import cn.edu.bupt.dao.Tenant.TenantService;
 import cn.edu.bupt.dao.User.UserService;
 import cn.edu.bupt.dao.UserCredentials.UserCredentialsService;
 import cn.edu.bupt.dao.permission.PermissionService;
@@ -29,15 +30,17 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
     private final UserCredentialsService userCredentialsService;
     private final PermissionService permissionService;
     private final RoleService roleService;
+    private final TenantService tenantService;
 
 
     @Autowired
-    public CustomerAuthenticationProvider(final UserService userService, final UserCredentialsService userCredentialsService,final PermissionService permissionService,RoleService roleService) {
+    public CustomerAuthenticationProvider(final UserService userService, final UserCredentialsService userCredentialsService,final PermissionService permissionService,RoleService roleService,TenantService tenantService) {
         this.userService = userService;
         this.userCredentialsService = userCredentialsService;
         this.permissionService = permissionService;
         this.encoder = new BCryptPasswordEncoder();
         this.roleService = roleService;
+        this.tenantService = tenantService;
     }
 
     //TODO:循环引用问题。在cn.edu.bupt.config.SecurityConfiguration中要注入CustomerAuthenticationProvider，而CustomerAuthenticationProvider要注入BCryptPasswordEncoder,BCryptPasswordEncoder又在cn.edu.bupt.config.SecurityConfiguration中。
@@ -73,6 +76,10 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
         }
 
         if (user.getAuthority() == null) throw new InsufficientAuthenticationException("User has no authority assigned");
+
+        if(tenantService.findSuspendedStatusById(user.getTenantId())){
+            throw new BadCredentialsException("This tenant has been suspended!");
+        }
 
         Set<Permission> permissions = permissionService.findAllByUserId(user.getId());
         Set<String> permissionNames = new HashSet<>();

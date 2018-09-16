@@ -15,6 +15,7 @@ public class Tenant extends IdBased{
     private String title;
     private String additional_info;
     private String email;
+    private Boolean suspended = Boolean.FALSE;
 
     public Integer getId() {
         return id;
@@ -62,6 +63,14 @@ public class Tenant extends IdBased{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getSuspended() {
+        return suspended;
+    }
+
+    public void setSuspended(Boolean suspended) {
+        this.suspended = suspended;
     }
 
     @Override

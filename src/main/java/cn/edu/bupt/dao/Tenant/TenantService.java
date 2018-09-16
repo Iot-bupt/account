@@ -22,4 +22,8 @@ public interface TenantService {
 
     Integer findTenantsPageNum(Integer size);
 
+    Boolean findSuspendedStatusById(Integer id);
+
+    void updateSuspendedStatusById(Boolean suspended,Integer id);
+
 }

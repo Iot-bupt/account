@@ -119,6 +119,19 @@ public class TenantController extends BaseController{
         }
     }
 
+    @ApiOperation(value = "修改某一个Tenant的suspended信息")
+//    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+    @RequestMapping(value = "/updateSuspendedStatus", params = {  "suspended","id"  }, method = RequestMethod.PUT)
+    @ResponseBody
+    public void updateSuspended(@RequestParam Boolean suspended,Integer id) throws IOTException {
+        try {
+            // Integer tenantId = getCurrentUser().getTenant().getId();
+            tenantService.updateSuspendedStatusById(suspended,id);
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+    }
+
 
     private Tenant Json2Tenant(JsonObject tenantString){
         Tenant tenant = new Tenant();

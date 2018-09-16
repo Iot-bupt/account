@@ -94,6 +94,18 @@ public class TenantServiceImpl implements TenantService{
         return num;
     }
 
+    @Override
+    public Boolean findSuspendedStatusById(Integer id) {
+        log.trace("Executing findSuspendedStatusById [{}]", id);
+        return tenantRepository.findSuspendedStatusById(id);
+    }
+
+    @Override
+    public void updateSuspendedStatusById(Boolean suspended, Integer id) {
+        log.trace("Executing updateSuspendedStatusById,suspended [{}],id [{}]", suspended,id);
+        tenantRepository.updateSuspendedStatus(suspended,id);
+    }
+
     private DataValidator<Tenant> tenantValidator =
             new DataValidator<Tenant>() {
                 @Override
