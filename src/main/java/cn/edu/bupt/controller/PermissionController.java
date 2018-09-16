@@ -52,16 +52,16 @@ public class PermissionController extends BaseController{
 
     @ApiOperation(value = "根据ID获取role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/role",params = {  "role_id"  }, method = RequestMethod.GET)
-    public Role getRole(@RequestParam int role_id) throws IOTException {
-        return roleService.findRoleById(role_id);
+    @RequestMapping(value = "/role",params = {  "role_id"  }, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public String getRole(@RequestParam int role_id) throws IOTException {
+        return roleService.findRoleById(role_id).toString();
     }
 
     @ApiOperation(value = "获取所有role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/roles", method = RequestMethod.GET)
-    public List<Role> getRoles() throws IOTException {
-        return roleService.findAllRoles();
+    @RequestMapping(value = "/roles", method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public String getRoles() throws IOTException {
+        return roleService.findAllRoles().toString();
     }
 
     @ApiOperation(value = "创建一个role")
@@ -93,18 +93,18 @@ public class PermissionController extends BaseController{
 
     @ApiOperation(value = "获取所有permission")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/permissions",method = RequestMethod.GET)
+    @RequestMapping(value = "/permissions",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public List<Permission> getAllPermissions() throws IOTException {
-        return permissionService.findAllPermissions();
+    public String getAllPermissions() throws IOTException {
+        return permissionService.findAllPermissions().toString();
     }
 
     @ApiOperation(value = "获取一个role下分配的permission")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/rolePermission", params = {  "role_id"  },method = RequestMethod.GET)
+    @RequestMapping(value = "/rolePermission", params = {  "role_id"  },method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public List<Permission> getPermissionsByRoleId(@RequestParam int role_id) throws IOTException {
-        return permissionService.findAllPermissionsByRoleId(role_id);
+    public String getPermissionsByRoleId(@RequestParam int role_id) throws IOTException {
+        return permissionService.findAllPermissionsByRoleId(role_id).toString();
     }
 
     @ApiOperation(value = "为一个user分配role")
@@ -117,8 +117,8 @@ public class PermissionController extends BaseController{
 
     @ApiOperation(value = "获取一个用户下的所有extra role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/roles", params = { "user_id"}, method = RequestMethod.GET)
-    public List<Role> getUserExtraRoles(@RequestParam Integer user_id) throws IOTException {
-        return roleService.findExtraRolesByUserId(user_id);
+    @RequestMapping(value = "/roles", params = { "user_id"}, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public String getUserExtraRoles(@RequestParam Integer user_id) throws IOTException {
+        return roleService.findExtraRolesByUserId(user_id).toString();
     }
 }

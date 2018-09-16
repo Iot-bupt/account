@@ -19,6 +19,7 @@ spring:
   aop:
     proxy-target-class: true
   datasource:
+#  172.24.32.169
     url: jdbc:mysql://39.104.165.155:3306/BUPT_IOT?useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: root

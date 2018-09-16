@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Slf4j
+@RequestMapping("/api/v1/account")
 public class NavigationController {
 
     @RequestMapping("/home")
