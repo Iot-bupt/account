@@ -109,10 +109,13 @@ public class CustomerServiceImpl implements CustomerService{
                 @Override
                 protected void validateDataImpl(Customer customer) {
                     if (StringUtils.isEmpty(customer.getTitle())) {
-                        throw new DataValidationException("Customer title should be specified!");
+                        throw new DataValidationException("请指定客户组名称！");
                     }
                     if (!StringUtils.isEmpty(customer.getEmail())) {
                         validateEmail(customer.getEmail());
+                    }
+                    if (!StringUtils.isEmpty(customer.getPhone())) {
+                        validatePhone(customer.getPhone());
                     }
                     if (customer.getTenantId() == null) {
                         throw new DataValidationException("Customer should be assigned to tenant!");

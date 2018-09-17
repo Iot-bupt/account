@@ -45,8 +45,8 @@ public class UserController extends BaseController{
     private UserCredentialsService userCredentialsService;
 
     public static final String USER_ID = "userId";
-    public static final String YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION = "You don't have permission to perform this operation!";
-    public static final String YOU_MUST_SPECIFY_THE_PASSWORD = "You must specify the password for new users!";
+    public static final String YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION = "没有权限执行该操作！";
+    public static final String YOU_MUST_SPECIFY_THE_PASSWORD = "请指定新用户的密码！";
     public static final String USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "User ID should be specified when updating!";
 
     @ApiOperation(value = "根据UserId获取User")
@@ -81,7 +81,7 @@ public class UserController extends BaseController{
         user.setAuthority(Authority.TENANT_ADMIN);
         user.setCustomerId(1);
         try {
-            if (userString.get("password").getAsString() == null) {
+            if (userString.get("password").getAsString().isEmpty()) {
                 throw new IOTException(YOU_MUST_SPECIFY_THE_PASSWORD,
                         IOTErrorCode.BAD_REQUEST_PARAMS);
             }
@@ -139,7 +139,7 @@ public class UserController extends BaseController{
         if(userString.has("phone")){
             user.setPhone(userString.get("phone").getAsString());
         }else{
-            user.setPhone("1234568910");
+            user.setPhone("13245689101");
         }
         if(userString.has("we_chat")) {
             user.setWe_chat(userString.get("we_chat").getAsString());

@@ -43,7 +43,7 @@ public class AuthController extends BaseController{
             SecurityUser securityUser = getCurrentUser();
             UserCredentials userCredentials = userCredentialsService.findUserCredentialsByUserId(securityUser.getId());
             if (!passwordEncoder.matches(currentPassword, userCredentials.getPassword())) {
-                throw new IOTException("Current password doesn't match!", IOTErrorCode.BAD_REQUEST_PARAMS);
+                throw new IOTException("密码不匹配！", IOTErrorCode.BAD_REQUEST_PARAMS);
             }
             userCredentials.setPassword(passwordEncoder.encode(newPassword));
             userCredentialsService.updateUserCredentials(userCredentials);

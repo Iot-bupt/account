@@ -132,9 +132,12 @@ public class UserServiceImpl implements UserService{
                 @Override
                 protected void validateDataImpl(User user) {
                     if (StringUtils.isEmpty(user.getEmail())) {
-                        throw new DataValidationException("User email should be specified!");
+                        throw new DataValidationException("请指定用户邮箱！");
                     }
                     validateEmail(user.getEmail());
+                    if (!StringUtils.isEmpty(user.getPhone())) {
+                        validatePhone(user.getPhone());
+                    }
                     Authority authority = user.getAuthority();
                     if (authority == null) {
                         throw new DataValidationException("User authority isn't defined!");

@@ -6,6 +6,8 @@ import cn.edu.bupt.dao.DataValidationException;
 import cn.edu.bupt.dao.DataValidator;
 import cn.edu.bupt.dao.User.UserService;
 import cn.edu.bupt.entity.Tenant;
+import cn.edu.bupt.exception.IOTErrorCode;
+import cn.edu.bupt.exception.IOTException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,16 +80,16 @@ public class TenantServiceImpl implements TenantService{
     }
 
     @Override
-    public void deleteTenant(Integer tenantId){
+    public void deleteTenant(Integer tenantId) throws IOTException{
         log.trace("Executing deleteTenant [{}]", tenantId);
-        customerService.deleteCustomersByTenantId(tenantId);
-        userService.deleteTenantAdmins(tenantId);
         try {
             HttpUtil.sendDeletToThingsboard(delete_device_url + tenantId);
         }catch (Exception e){
-            System.out.println("删除设备失败");
+            throw new IOTException("删除租户下设备失败",IOTErrorCode.GENERAL);
         }
         //TODO:deleteRulesByTenantId, deletePluginsByTenantId
+        customerService.deleteCustomersByTenantId(tenantId);
+        userService.deleteTenantAdmins(tenantId);
         tenantRepository.deleteById(tenantId);
     }
 
@@ -115,7 +117,7 @@ public class TenantServiceImpl implements TenantService{
     }
 
     @Override
-    public void updateSuspendedStatusById(Boolean suspended, Integer id) {
+    public void updateSuspendedStatusById(Boolean suspended, Integer id) throws IOTException{
         log.trace("Executing updateSuspendedStatusById,suspended [{}],id [{}]", suspended,id);
         try {
             if (suspended.equals(Boolean.FALSE)) {
@@ -124,9 +126,11 @@ public class TenantServiceImpl implements TenantService{
                 HttpUtil.sendPutToThingsboard(suspend_device_url+id, null, null);
             }else{
                 log.error("updating device suspending status failed!");
+                throw new IOTException("suspend值有误",IOTErrorCode.BAD_REQUEST_PARAMS);
             }
         }catch (Exception e){
             log.error("updating device suspending status failed!");
+            throw new IOTException("改变租户下设备启动/挂起状态失败",IOTErrorCode.GENERAL);
         }
         tenantRepository.updateSuspendedStatus(suspended,id);
     }
@@ -136,10 +140,13 @@ public class TenantServiceImpl implements TenantService{
                 @Override
                 protected void validateDataImpl(Tenant tenant) {
                     if (StringUtils.isEmpty(tenant.getTitle())) {
-                        throw new DataValidationException("Tenant title should be specified!");
+                        throw new DataValidationException("请指定租户名称！");
                     }
                     if (!StringUtils.isEmpty(tenant.getEmail())) {
                         validateEmail(tenant.getEmail());
+                    }
+                    if (!StringUtils.isEmpty(tenant.getPhone())) {
+                        validatePhone(tenant.getPhone());
                     }
                 }
             };

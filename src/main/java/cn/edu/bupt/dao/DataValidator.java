@@ -4,6 +4,9 @@ import cn.edu.bupt.entity.IdBased;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by CZX on 2018/4/10.
  */
@@ -44,7 +47,17 @@ public abstract class DataValidator<D extends IdBased> {
 
     protected static void validateEmail(String email) {
         if (!emailValidator.isValid(email)) {
-            throw new DataValidationException("Invalid email address format '" + email + "'!");
+            throw new DataValidationException("无效的邮箱地址 '" + email + "'！");
+        }
+    }
+
+
+    public static void validatePhone(String phone){
+        String regExp = "^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$";
+        Pattern p = Pattern.compile(regExp);
+        Matcher m = p.matcher(phone);
+        if(!m.matches()){
+            throw new DataValidationException("无效的手机号码 '" + phone + "'！");
         }
     }
 }

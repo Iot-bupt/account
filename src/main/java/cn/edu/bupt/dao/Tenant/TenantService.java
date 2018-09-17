@@ -1,6 +1,7 @@
 package cn.edu.bupt.dao.Tenant;
 
 import cn.edu.bupt.entity.Tenant;
+import cn.edu.bupt.exception.IOTException;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface TenantService {
 
     void saveTenant(Tenant tenant);
 
-    void deleteTenant(Integer tenantId);
+    void deleteTenant(Integer tenantId) throws IOTException;
 
     List<Tenant> findTenants(Integer page, Integer size);
 
@@ -24,6 +25,6 @@ public interface TenantService {
 
     Boolean findSuspendedStatusById(Integer id);
 
-    void updateSuspendedStatusById(Boolean suspended,Integer id);
+    void updateSuspendedStatusById(Boolean suspended,Integer id) throws IOTException;
 
 }
