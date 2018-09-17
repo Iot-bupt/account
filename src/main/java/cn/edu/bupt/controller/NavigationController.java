@@ -10,11 +10,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Slf4j
-@RequestMapping("/api/v1/account")
+//@RequestMapping("/api/v1/account")  //方便获取static下资源
 public class NavigationController {
 
     @RequestMapping("/home")
     public String  index() {
         return "home";
+    }
+
+    @RequestMapping("/rolePool")
+    public String  getRolePool() {
+        return "RolePool";
     }
 }

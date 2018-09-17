@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>权限管理-角色池</title>
+		<meta charset="UTF-8"/>
+		<link th:href="@{static/css/style.css}" rel="stylesheet" type="text/css"/>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	</head>
+	<body>
+		<div id="app" style="height: 100%">
+		<header class="header">
+			<div style="font-size: 2.5rem;color: white;line-height: 80px;margin-left: 200px">权限管理</div>
+		</header>
+		<div class="nav">
+				<div class="navbar">用户池</div>
+				<div class="navbar nav_choosen">角色池</div>
+		</div>
+		<main class="main">
+			<div class="main_nav">
+				<div v-for="(item,index) in roleInfo" >
+					<div class="main_navbar" @click="selected(item)" :class="{main_navbar_active:activeItem.name==item.name}">{{item.name}}</div></div>
+			</div>
+			<div class="main_content">
+					<div style="height: 150px;margin-left: 20px;margin-top: 30px">
+						<p style="font-size: 30px;font-weight: bold">{{activeItem.name}}</p>
+						<p style="margin-top: 20px;">ID：{{activeItem.ID}}</p>
+						<p style="margin-top: 10px;">描述：具有最高权限</p>
+					</div>
+					<table class="main_table">
+						<thead>
+							<th style="width: 10%">#</th>
+							<th>权限</th>
+							<th style="width: 30%">操作</th>
+						</thead>
+						<tbody>
+							<tr></tr>
+						</tbody>
+					</table>
+			</div>
+		</main>
+	</div>
+	</body>
+	<script type="text/javascript" th:src="@{static/js/RolePool.js}"></script>
+</html>
