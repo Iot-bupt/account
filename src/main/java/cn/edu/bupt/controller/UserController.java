@@ -80,6 +80,12 @@ public class UserController extends BaseController{
         user.setTenantId(userString.get("tenant_id").getAsInt());
         user.setAuthority(Authority.TENANT_ADMIN);
         user.setCustomerId(1);
+        if(userString.has("phone")){
+            user.setPhone(userString.get("phone").getAsString());
+        }
+        if(userString.has("we_chat")) {
+            user.setWe_chat(userString.get("we_chat").getAsString());
+        }
         try {
             if (userString.get("password").getAsString().isEmpty()) {
                 throw new IOTException(YOU_MUST_SPECIFY_THE_PASSWORD,
@@ -105,6 +111,12 @@ public class UserController extends BaseController{
         User user = Json2User(userString);
         user.setCustomerId(userString.get("customer_id").getAsInt());
         user.setAuthority(Authority.CUSTOMER_USER);
+        if(userString.has("phone")){
+            user.setPhone(userString.get("phone").getAsString());
+        }
+        if(userString.has("we_chat")) {
+            user.setWe_chat(userString.get("we_chat").getAsString());
+        }
         try {
             if (userString.get("password").getAsString() == null) {
                 throw new IOTException(YOU_MUST_SPECIFY_THE_PASSWORD,

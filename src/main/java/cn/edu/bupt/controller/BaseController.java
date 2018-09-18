@@ -62,8 +62,13 @@ public abstract class BaseController {
         } else if (exception instanceof IllegalArgumentException || exception instanceof IncorrectParameterException
                 || exception instanceof DataValidationException || cause.contains("IncorrectParameterException")) {
             return new IOTException(exception.getMessage(), IOTErrorCode.BAD_REQUEST_PARAMS);
-        }  else {
-            return new IOTException(exception.getMessage(), IOTErrorCode.GENERAL);
+        }  else if(exception.getCause().getMessage().contains("Duplicate entry")){
+            String causeInfo = exception.getCause().getMessage();
+            int index1 = causeInfo.indexOf("'")+1;
+            int index2 = causeInfo.indexOf("'",index1);
+            return new IOTException("该信息已经在数据库中存在 '" + causeInfo.substring(index1,index2)+"'，请修改后重试!", IOTErrorCode.GENERAL);
+        } else{
+            return new IOTException(exception.getMessage(),IOTErrorCode.GENERAL);
         }
     }
 

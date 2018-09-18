@@ -14,8 +14,15 @@ server:
   address: "${HTTP_BIND_ADDRESS:0.0.0.0}"
   # Server bind port
   port: "${HTTP_BIND_PORT:8400}"
+  tomcat:
+      uri-encoding: UTF-8
 
 spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
   aop:
     proxy-target-class: true
   datasource:
