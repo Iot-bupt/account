@@ -150,13 +150,9 @@ public class UserController extends BaseController{
         // TODO
         if(userString.has("phone")){
             user.setPhone(userString.get("phone").getAsString());
-        }else{
-            user.setPhone("13245689101");
         }
         if(userString.has("we_chat")) {
             user.setWe_chat(userString.get("we_chat").getAsString());
-        }else {
-            user.setWe_chat("test_wechat");
         }
         try {
             SecurityUser authUser = getCurrentUser();
