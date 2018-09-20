@@ -15,7 +15,7 @@ public interface RoleService {
 
     List<Role> findExtraRolesByUserId(int user_id);
 
-    void saveRole(Role role);
+    Integer saveRole(Role role);
 
     void deleteRoleById(Integer id);
 

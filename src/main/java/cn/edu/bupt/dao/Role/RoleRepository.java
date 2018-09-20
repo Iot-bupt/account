@@ -25,7 +25,7 @@ public interface RoleRepository {
 
     @Insert("insert into role (name,description) values (#{name},#{description}) ")
     @Options(useGeneratedKeys = true,keyProperty="id")
-    void saveRole(Role role);
+    Integer saveRole(Role role);
 
     @Delete("delete from role where id = #{id}")
     void deleteById(Integer id);

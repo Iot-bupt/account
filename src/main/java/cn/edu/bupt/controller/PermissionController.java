@@ -67,9 +67,10 @@ public class PermissionController extends BaseController{
     @ApiOperation(value = "创建一个role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/role", method = RequestMethod.POST)
-    public void saveRole(@RequestBody String roleInfo) throws IOTException {
+    public Role saveRole(@RequestBody String roleInfo) throws IOTException {
         Role role = JSON.parseObject(roleInfo,Role.class);
         roleService.saveRole(role);
+        return role;
     }
 
     @ApiOperation(value = "删除一个role")
@@ -120,5 +121,12 @@ public class PermissionController extends BaseController{
     @RequestMapping(value = "/roles", params = { "user_id"}, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public String getUserExtraRoles(@RequestParam Integer user_id) throws IOTException {
         return roleService.findExtraRolesByUserId(user_id).toString();
+    }
+
+    @ApiOperation(value = "获取一个用户下的所有role")
+//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @RequestMapping(value = "/UserRoles", params = { "user_id"}, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public String getUserRoles(@RequestParam Integer user_id) throws IOTException {
+        return roleService.findAllRolesByUserId(user_id).toString();
     }
 }
