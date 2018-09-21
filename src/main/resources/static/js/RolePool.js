@@ -37,6 +37,7 @@ var app = new Vue({
             axios.get("/api/v1/account/roles").then(function (response) {
                 vm.roleInfo = response.data
                 vm.activeItem = vm.roleInfo[0]
+                vm.getPermissionByRole()
             }).catch(function (error) {
                 console.log(error);
             })

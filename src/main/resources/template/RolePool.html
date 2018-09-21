@@ -54,9 +54,6 @@
         <div class="main_content">
             <div style="height: 150px;margin-left: 20px;margin-top: 30px">
                 <div><span style="font-size: 30px;font-weight: bold">{{activeItem.name}}</span>
-                    <el-button type="primary" size="small" style="margin-left: 20px"
-                               @click="showDialog_AP">+新增权限
-                    </el-button>
                     <div style="float: right">
                         <i class="el-icon-edit btn" @click="editRole" style="font-size: 25px;margin-right: 10px"></i>
                         <i class="el-icon-delete btn" @click="deleteRole"
@@ -102,7 +99,10 @@
                 </el-table-column>
             </el-table>
             <el-button type="danger" size="small" style="margin-top: 20px"
-                       @click="deleteMultipleTag()">批量删除
+                       @click="deleteMultipleTag">批量删除
+            </el-button>
+            <el-button type="primary" size="small" style="margin-left: 20px"
+                       @click="showDialog_AP">新增权限
             </el-button>
         </div>
     </main>
