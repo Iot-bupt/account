@@ -34,12 +34,15 @@ public interface RoleRepository {
     void update(Role role);
 
     @Delete("delete from role_user_relation where role_id = #{role_id}")
-    void deleteRoleUserRelation(Integer role_id);
+    void deleteRoleUserRelationByRoleId(Integer role_id);
 
     @Delete("delete from role_permission_relation where role_id = #{role_id}")
     void deleteRolePermissionRelation(Integer role_id);
 
     @Insert("insert into role_user_relation (role_id,user_id) values (#{role_id},#{user_id}) ")
     void saveRoleUserRelation(@Param("role_id")Integer role_id,@Param("user_id")Integer user_id);
+
+    @Delete("delete from role_user_relation where role_id = #{role_id} and user_id = #{user_id}")
+    void deleteRoleUserRelation(@Param("role_id")Integer role_id,@Param("user_id")Integer user_id);
 
 }

@@ -47,6 +47,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<User> findUserByTenantId(Integer TenantId) {
+        log.trace("Executing findUserByTenantId [{}]", TenantId);
+        return userRepository.findByTenantId(TenantId);
+    }
+
+    @Override
     public User findUserByEmail(String email){
         log.trace("Executing findUserByEmail [{}]", email);
         return userRepository.findUserByEmail(email);

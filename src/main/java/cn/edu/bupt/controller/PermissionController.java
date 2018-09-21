@@ -118,10 +118,18 @@ public class PermissionController extends BaseController{
 
     @ApiOperation(value = "为一个user分配role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/permission", params = { "role_id","user_id"},method = RequestMethod.POST)
+    @RequestMapping(value = "/user/role", params = { "role_id","user_id"},method = RequestMethod.POST)
     public void saveRoleUserRelation(@RequestParam Integer role_id,
                                      @RequestParam Integer user_id) throws IOTException {
         roleService.saveRoleUserRelation(role_id,user_id);
+    }
+
+    @ApiOperation(value = "为一个user删除role")
+//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @RequestMapping(value = "/user/role", params = { "role_id","user_id"},method = RequestMethod.DELETE)
+    public void deleteRoleUserRelation(@RequestParam Integer role_id,
+                                     @RequestParam Integer user_id) throws IOTException {
+        roleService.deleteRoleUserRelation(role_id,user_id);
     }
 
     @ApiOperation(value = "获取一个用户下的所有extra role")

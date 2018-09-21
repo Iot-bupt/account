@@ -67,6 +67,14 @@ public class UserController extends BaseController{
         }
     }
 
+    @ApiOperation(value = "根据TenantId获取User")
+//    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
+    @RequestMapping(value = "/tenant/user",params = {"tenantId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getUserByTenantId(@RequestParam Integer tenantId) throws IOTException{
+        return userService.findUserByTenantId(tenantId).toString();
+    }
+
 //    权限：SYS_ADMIN
 //    POST请求Headers中Content-Type为application/json，Body为raw形式的Json。
 //    eg.{"tenant_id":"1","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}

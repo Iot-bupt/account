@@ -44,7 +44,7 @@ public class RoleServiceImpl implements RoleService{
     public void deleteRoleById(Integer id) {
         if(id != null && id > DEFAULT_ROLES_NUM) {
             roleRepository.deleteRolePermissionRelation(id);
-            roleRepository.deleteRoleUserRelation(id);
+            roleRepository.deleteRoleUserRelationByRoleId(id);
             roleRepository.deleteById(id);
         }else{
             throw new DataValidationException("Role Id should be specified and default roles can't be deleted!");
@@ -70,6 +70,15 @@ public class RoleServiceImpl implements RoleService{
             roleRepository.saveRoleUserRelation(role_id,user_id);
         }else {
             throw new DataValidationException("You can't assign a default role to user!");
+        }
+    }
+
+    @Override
+    public void deleteRoleUserRelation(Integer role_id, Integer user_id) {
+        if(role_id != null && role_id > DEFAULT_ROLES_NUM) {
+            roleRepository.deleteRoleUserRelation(role_id,user_id);
+        }else {
+            throw new DataValidationException("You can't delete a default role from user!");
         }
     }
 }

@@ -12,6 +12,8 @@ public interface UserService {
 
     User findUserById(Integer userId);
 
+    List<User> findUserByTenantId(Integer TenantId);
+
     User findUserByEmail(String email);
 
     Integer saveUser(User user);
