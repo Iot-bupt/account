@@ -50,17 +50,23 @@ html,body{
 	background-color: #c2c5c5;
 }
 .main_navbar_active{
-	background-color: #abafb0;
+	background-color: #eee;
+}
+.main_navhead{
+	height:40px;
+	line-height: 40px;
+	text-align: center;
+	font-size: 1.3rem;
+	background-color: #ababab;
+	border-bottom:1px solid #f9f9f9;
 }
 .main_content{
 	margin-left:21%;
 	margin-right: 1%;
 }
-.main_table{
-	width: 100%;
-	background-color: white;
-	line-height: 2rem;
+.btn{
+	cursor: pointer;
 }
-.main_table thead th{
-	
+.btn:hover{
+	color: #3baeff
 }

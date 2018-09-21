@@ -1,44 +1,113 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title>权限管理-角色池</title>
-		<meta charset="UTF-8"/>
-		<link th:href="@{static/css/style.css}" rel="stylesheet" type="text/css"/>
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	</head>
-	<body>
-		<div id="app" style="height: 100%">
-		<header class="header">
-			<div style="font-size: 2.5rem;color: white;line-height: 80px;margin-left: 200px">权限管理</div>
-		</header>
-		<div class="nav">
-				<div class="navbar">用户池</div>
-				<div class="navbar nav_choosen">角色池</div>
-		</div>
-		<main class="main">
-			<div class="main_nav">
-				<div v-for="(item,index) in roleInfo" >
-					<div class="main_navbar" @click="selected(item)" :class="{main_navbar_active:activeItem.name==item.name}">{{item.name}}</div></div>
-			</div>
-			<div class="main_content">
-					<div style="height: 150px;margin-left: 20px;margin-top: 30px">
-						<p style="font-size: 30px;font-weight: bold">{{activeItem.name}}</p>
-						<p style="margin-top: 20px;">ID：{{activeItem.ID}}</p>
-						<p style="margin-top: 10px;">描述：具有最高权限</p>
-					</div>
-					<table class="main_table">
-						<thead>
-							<th style="width: 10%">#</th>
-							<th>权限</th>
-							<th style="width: 30%">操作</th>
-						</thead>
-						<tbody>
-							<tr></tr>
-						</tbody>
-					</table>
-			</div>
-		</main>
-	</div>
-	</body>
-	<script type="text/javascript" th:src="@{static/js/RolePool.js}"></script>
+<head>
+    <title>权限管理-角色池</title>
+    <meta charset="UTF-8"/>
+    <link th:href="@{static/css/style.css}" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.bootcss.com/element-ui/2.4.0/theme-chalk/index.css" rel="stylesheet">
+
+    <!--js依赖-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" type="text/javascript"></script>
+    <script src="https://cdn.bootcss.com/element-ui/2.4.0/index.js"></script>
+</head>
+<body>
+<div id="app" style="height: 100%">
+    <header class="header">
+        <div style="font-size: 2.5rem;color: white;line-height: 80px;margin-left: 200px">权限管理</div>
+    </header>
+    <div class="nav">
+        <div class="navbar">用户池</div>
+        <div class="navbar nav_choosen">角色池</div>
+    </div>
+    <main class="main">
+        <div class="main_nav">
+            <div class="main_navhead"><span style="font-size:18px ">角色列表</span>
+                <div style="float: right;margin-right: 20px;">
+                    <i class="el-icon-circle-plus-outline btn" @click="dialogVisible_AR=true" style="font-size: 20px"></i>
+                </div>
+            </div>
+            <div v-for="(item,index) in roleInfo">
+                <div class="main_navbar" @click="selected(item)"
+                     :class="{main_navbar_active:activeItem.name==item.name}">{{item.name}}
+                </div>
+            </div>
+            <!--ElementUI dialog-添加角色-->
+            <el-dialog
+                    title="新增角色"
+                    :visible.sync="dialogVisible_AR"
+                    :close-on-click-modal="false">
+                <el-form ref="form" :model="addRoleInfo" label-position="left" label-width="100px"
+                         style="margin-left:30px ">
+                    <el-form-item label="角色名称：" prop="name">
+                        <el-input placeholder="请输入角色名称" v-model="addRoleInfo.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色描述：" prop="description">
+                        <el-input placeholder="请输入角色描述" v-model="addRoleInfo.description"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click.native="dialogVisible_AR = false">取消</el-button>
+                    <el-button type="primary" @click="addRole">确定</el-button>
+                </div>
+            </el-dialog>
+        </div>
+        <div class="main_content">
+            <div style="height: 150px;margin-left: 20px;margin-top: 30px">
+                <div><span style="font-size: 30px;font-weight: bold">{{activeItem.name}}</span>
+                    <el-button type="primary" size="small" style="margin-left: 20px"
+                               @click="showDialog_AP">+新增权限
+                    </el-button>
+                    <div style="float: right">
+                        <i class="el-icon-edit btn" @click="editRole" style="font-size: 25px;margin-right: 10px"></i>
+                        <i class="el-icon-delete btn" @click="deleteRole"
+                           style="font-size: 25px;margin-right: 25px"></i>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">ID：{{activeItem.id}}</div>
+                <div style="margin-top: 10px;">描述：{{activeItem.description}}</div>
+            </div>
+            <!--ElementUI dialog-添加权限-->
+            <el-dialog
+                    title="新增权限"
+                    :visible.sync="dialogVisible_AP"
+                    :close-on-click-modal="false">
+                <div>请选择下列权限添加：</div>
+                <br/>
+                <el-table ref="multipleTable" :data="tableData_AP" border style="width:100%"
+                          @selection-change="handleSelectionChange_AP">
+                    <el-table-column type="selection" align="center"></el-table-column>
+                    <el-table-column v-for="column in columns" :prop="column.prop" :label="column.label"
+                                     :width="column.width"></el-table-column>
+                </el-table>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click.native="dialogVisible_AP = false">取消</el-button>
+                    <el-button type="primary" @click="addMultiplePermissionTag">批量添加</el-button>
+                </div>
+            </el-dialog>
+            <!--ElementUI table-->
+            <el-table ref="multipleTable" :data="tableData" border style="width:100%"
+                      @selection-change="handleSelectionChange">
+                <el-table-column type="selection" align="center" width="55"></el-table-column>
+                <el-table-column v-for="column in columns" :prop="column.prop" :label="column.label"
+                                 :width="column.width"></el-table-column>
+                <el-table-column label="操作" width="200">
+                    <template scope="scope">
+                        <!--<el-button type="primary" size="small"-->
+                        <!--@click="editTag()">编辑-->
+                        <!--</el-button>-->
+                        <el-button type="danger" size="small"
+                                   @click="deleteTag(scope.row.id)">删除
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-button type="danger" size="small" style="margin-top: 20px"
+                       @click="deleteMultipleTag()">批量删除
+            </el-button>
+        </div>
+    </main>
+</div>
+</body>
+<script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" th:src="@{static/js/RolePool.js}"></script>
 </html>
