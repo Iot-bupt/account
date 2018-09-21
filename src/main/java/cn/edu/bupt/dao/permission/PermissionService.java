@@ -15,6 +15,8 @@ public interface PermissionService {
 
     List<Permission> findAllPermissionsByRoleId(int role_id);
 
+    List<Permission> findAllNotOwnedPermissionsByRoleId(int role_id);
+
     List<Integer> findPermissionIdsByRoleId(int role_id);
 
     Set<String> findPermissionNamesByRoleId(int role_id);

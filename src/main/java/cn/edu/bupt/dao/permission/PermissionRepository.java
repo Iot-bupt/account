@@ -25,6 +25,9 @@ public interface PermissionRepository {
     @Select("select id  as id,name as name,description as description from permission where id in (select permission_id from role_permission_relation where role_id = #{role_id})")
     List<Permission> findAllByRoleId(int role_id);
 
+    @Select("select id  as id,name as name,description as description from permission where id not in (select permission_id from role_permission_relation where role_id = #{role_id})")
+    List<Permission> findAllNotOwnedByRoleId(int role_id);
+
     @Select("select  id  as id,name as name,description as description from permission where id = #{id}")
     Permission findById(int id);
 

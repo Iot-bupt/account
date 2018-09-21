@@ -108,6 +108,14 @@ public class PermissionController extends BaseController{
         return permissionService.findAllPermissionsByRoleId(role_id).toString();
     }
 
+    @ApiOperation(value = "获取一个role下还未分配的permission")
+//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @RequestMapping(value = "/roleNotOwnedPermission", params = {  "role_id"  },method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getNotOwnedPermissionsByRoleId(@RequestParam int role_id) throws IOTException {
+        return permissionService.findAllNotOwnedPermissionsByRoleId(role_id).toString();
+    }
+
     @ApiOperation(value = "为一个user分配role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/permission", params = { "role_id","user_id"},method = RequestMethod.POST)

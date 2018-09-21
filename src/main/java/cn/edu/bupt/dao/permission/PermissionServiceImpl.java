@@ -32,6 +32,11 @@ public class PermissionServiceImpl implements PermissionService{
     }
 
     @Override
+    public List<Permission> findAllNotOwnedPermissionsByRoleId(int role_id) {
+        return permissionRepository.findAllNotOwnedByRoleId(role_id);
+    }
+
+    @Override
     public List<Integer> findPermissionIdsByRoleId(int role_id) {
         return permissionRepository.findAllIDsByRoleId(role_id);
     }
