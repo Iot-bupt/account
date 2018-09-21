@@ -22,4 +22,9 @@ public class NavigationController {
     public String  getRolePool() {
         return "RolePool";
     }
+
+    @RequestMapping("/userPool")
+    public String  getUserPool() {
+        return "UserPool";
+    }
 }

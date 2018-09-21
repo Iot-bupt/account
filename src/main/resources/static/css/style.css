@@ -29,8 +29,12 @@ html,body{
 	height: 50px;
 	line-height: 50px;
 	text-align: center;
-	font-size: 1.2rem;
-	cursor: pointer;
+}
+.navbar a{
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-decoration:none;
+    color: black;
 }
 .nav_choosen{
 	background-color: #d0d4d5;
