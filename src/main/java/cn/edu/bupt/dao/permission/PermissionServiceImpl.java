@@ -66,4 +66,9 @@ public class PermissionServiceImpl implements PermissionService{
     public Set<Permission> findAllByUserId(int user_id) {
         return permissionRepository.findAllByUserId(user_id);
     }
+
+    @Override
+    public Set<Permission> findBaseByAuthority(String authority) {
+        return permissionRepository.findBaseByUserAuthority(authority);
+    }
 }

@@ -88,10 +88,10 @@ public class UserController extends BaseController{
         user.setTenantId(userString.get("tenant_id").getAsInt());
         user.setAuthority(Authority.TENANT_ADMIN);
         user.setCustomerId(1);
-        if(userString.has("phone")){
+        if(userString.has("phone")&&!userString.get("phone").getAsString().equals("")){
             user.setPhone(userString.get("phone").getAsString());
         }
-        if(userString.has("we_chat")) {
+        if(userString.has("we_chat")&&!userString.get("we_chat").getAsString().equals("")) {
             user.setWe_chat(userString.get("we_chat").getAsString());
         }
         try {

@@ -26,4 +26,6 @@ public interface PermissionService {
     void deleteARelation(int role_id,int permission_id);
 
     Set<Permission> findAllByUserId(int user_id);
+
+    Set<Permission> findBaseByAuthority(String authority);
 }

@@ -1,8 +1,10 @@
 package cn.edu.bupt.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -26,5 +28,13 @@ public class NavigationController {
     @RequestMapping("/userPool")
     public String  getUserPool() {
         return "UserPool";
+    }
+
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @PreAuthorize("hasPermission(null ,'PERMISSION_TEST')")
+    @ResponseBody
+    public String testPermission(){
+        return "Permission Test!";
     }
 }

@@ -82,6 +82,8 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
         }
 
         Set<Permission> permissions = permissionService.findAllByUserId(user.getId());
+        Set<Permission> basePermissions = permissionService.findBaseByAuthority(user.getAuthority().name());
+        permissions.addAll(basePermissions);
         Set<String> permissionNames = new HashSet<>();
         for(Permission permission:permissions){
             permissionNames.add(permission.getName());
