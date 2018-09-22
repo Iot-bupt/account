@@ -139,6 +139,13 @@ public class PermissionController extends BaseController{
         return roleService.findExtraRolesByUserId(user_id).toString();
     }
 
+    @ApiOperation(value = "获取一个用户下的所有未拥有的extra role")
+//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @RequestMapping(value = "/notOwnedRoles", params = { "user_id"}, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public String getUserNotOwnedExtraRoles(@RequestParam Integer user_id) throws IOTException {
+        return roleService.findNotOwnedExtraRolesByUserId(user_id).toString();
+    }
+
     @ApiOperation(value = "获取一个用户下的所有role")
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/UserRoles", params = { "user_id"}, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")

@@ -36,6 +36,11 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
+    public List<Role> findNotOwnedExtraRolesByUserId(int user_id) {
+        return roleRepository.findNotOwnedExtraByUserId(user_id);
+    }
+
+    @Override
     public Integer saveRole(Role role) {
         return roleRepository.saveRole(role);
     }
