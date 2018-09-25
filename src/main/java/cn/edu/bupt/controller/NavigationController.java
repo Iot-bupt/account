@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @Slf4j
-//@RequestMapping("/api/v1/account")  //方便获取static下资源
+@RequestMapping("/api/v1/account")  //方便获取static下资源
 public class NavigationController {
 
     @RequestMapping("/home")
     public String  index() {
-        return "home";
+        return "template/home";
     }
 
     @RequestMapping("/rolePool")
     public String  getRolePool() {
-        return "RolePool";
+        return "template/RolePool";
     }
 
     @RequestMapping("/userPool")
     public String  getUserPool() {
-        return "UserPool";
+        return "template/UserPool";
     }
 
 

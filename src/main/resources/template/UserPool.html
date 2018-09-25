@@ -3,7 +3,7 @@
 <head>
     <title>权限管理-用户池</title>
     <meta charset="UTF-8"/>
-    <link th:href="@{static/css/style.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/static/css/style.css}" rel="stylesheet" type="text/css"/>
     <link href="https://cdn.bootcss.com/element-ui/2.4.0/theme-chalk/index.css" rel="stylesheet">
 
     <!--js依赖-->
@@ -16,8 +16,8 @@
         <div style="font-size: 2.5rem;color: white;line-height: 80px;margin-left: 200px">权限管理</div>
     </header>
     <div class="nav">
-        <div class="navbar nav_choosen"><a href="/userPool">用户池</a></div>
-        <div class="navbar"><a href="/rolePool">角色池</a></div>
+        <div class="navbar nav_choosen"><a href="/api/v1/account/userPool">用户池</a></div>
+        <div class="navbar"><a href="/api/v1/account/rolePool">角色池</a></div>
     </div>
     <main class="main">
         <div class="main_nav">
@@ -48,5 +48,5 @@
 </div>
 </body>
 <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script type="text/javascript" th:src="@{static/js/UserPool.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/UserPool.js}"></script>
 </html>
