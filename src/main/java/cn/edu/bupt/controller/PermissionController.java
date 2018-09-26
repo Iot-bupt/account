@@ -8,6 +8,8 @@ import cn.edu.bupt.entity.Role;
 import cn.edu.bupt.entity.User;
 import cn.edu.bupt.exception.IOTException;
 import com.alibaba.fastjson.JSON;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,10 +35,13 @@ public class PermissionController extends BaseController{
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/permission", params = { "role_id"},method = RequestMethod.POST)
     public void saveRolePermissionRelation(@RequestParam int role_id,
-                                           @RequestBody List<Integer> permission_ids) throws IOTException {
+                                           @RequestBody String permission_ids) throws IOTException {
 
-        for (Integer permission_id:permission_ids){
-            permissionService.saveRolePermissionRelation(role_id,permission_id);
+        JsonObject PermissionJson = (JsonObject) new JsonParser().parse(permission_ids);
+        String[] permissionIds = PermissionJson.get("id").getAsString().split(",");
+        for (String permission_id:permissionIds){
+            Integer id = Integer.parseInt(permission_id);
+            permissionService.saveRolePermissionRelation(role_id,id);
         }
     }
 
@@ -44,9 +49,12 @@ public class PermissionController extends BaseController{
 //    @PreAuthorize("hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/permission",params = {  "role_id"  }, method = RequestMethod.DELETE)
     public void deleteRolePermissionRelation(@RequestParam int role_id,
-                               @RequestBody List<Integer> permission_ids) throws IOTException {
-        for (Integer permission_id:permission_ids){
-            permissionService.deleteARelation(role_id,permission_id);
+                               @RequestBody String permission_ids) throws IOTException {
+        JsonObject PermissionJson = (JsonObject) new JsonParser().parse(permission_ids);
+        String[] permissionIds = PermissionJson.get("id").getAsString().split(",");
+        for (String permission_id:permissionIds){
+            Integer id = Integer.parseInt(permission_id);
+            permissionService.deleteARelation(role_id,id);
         }
     }
 
