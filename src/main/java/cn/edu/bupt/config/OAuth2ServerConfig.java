@@ -45,7 +45,7 @@ public class OAuth2ServerConfig {
         private CustomLogoutHandler customLogoutHandler;
 
         @Autowired
-        private InMemoryTokenStore tokenStore;
+        private TokenStore tokenStore;
 
         @Autowired
         private ClientDetailsService clientDetailsService;
@@ -153,19 +153,19 @@ public class OAuth2ServerConfig {
         }
 
 //        @Bean
-//        public JdbcTokenStore tokenStore(DataSource dataSource) {
+//        public JdbcTokenStore tokenStore(DataSoInMemoryTokenStoreurce dataSource) {
 //            return new JdbcTokenStore(dataSource);
 //        }
 
-        @Bean
-        public InMemoryTokenStore tokenStore(){
-            return new InMemoryTokenStore();
-        }
-//
 //        @Bean
-//        public TokenStore tokenStore() {
-//            return new RedisTokenStore(connectionFactory);
+//        public InMemoryTokenStore tokenStore(){
+//            return new InMemoryTokenStore();
 //        }
+//
+        @Bean
+        public TokenStore tokenStore() {
+            return new RedisTokenStore(connectionFactory);
+        }
 
         @Override
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
