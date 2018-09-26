@@ -32,7 +32,9 @@ spring:
     password: root
     cachePrepStmts: true  # 开启二级缓存
   redis:
-    url: redis://39.104.165.155:6379
+#  @前的redis代表密码
+    url: redis://redis@39.104.165.155:6379
+
 #    url: redis://127.0.0.1:6379
 #    password: redis
 
