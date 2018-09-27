@@ -161,7 +161,7 @@ public class OAuth2ServerConfig {
 //        public InMemoryTokenStore tokenStore(){
 //            return new InMemoryTokenStore();
 //        }
-//
+
         @Bean
         public TokenStore tokenStore() {
             return new RedisTokenStore(connectionFactory);

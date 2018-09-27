@@ -50,7 +50,7 @@ public class UserController extends BaseController{
     public static final String USER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "User ID should be specified when updating!";
 
     @ApiOperation(value = "根据UserId获取User")
-    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getUserById')")
 //    @PreAuthorize("hasPermission('USER')")
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
@@ -67,8 +67,8 @@ public class UserController extends BaseController{
         }
     }
 
-    @ApiOperation(value = "根据TenantId获取User")
-//    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
+    @ApiOperation(value = "根据TenantId获取所有User")
+//    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getUserByTenantId')")
     @RequestMapping(value = "/tenant/user",params = {"tenantId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getUserByTenantId(@RequestParam Integer tenantId) throws IOTException{
@@ -79,7 +79,7 @@ public class UserController extends BaseController{
 //    POST请求Headers中Content-Type为application/json，Body为raw形式的Json。
 //    eg.{"tenant_id":"1","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
     @ApiOperation(value = "创建租户管理员")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN') ")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'createTenantAdmin') ")
     @RequestMapping(value = "/tenantAdmin", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String createTenantAdmin(@RequestBody String userInfo) throws IOTException {
@@ -111,7 +111,7 @@ public class UserController extends BaseController{
 //    权限：Tenant_admin
 //    eg.{"customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com","password":"123456"}
     @ApiOperation(value = "创建普通用户")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'createCustomerUser')")
     @RequestMapping(value = "/customerUser", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String createCustomerUser(@RequestBody String userInfo) throws IOTException {
@@ -141,8 +141,8 @@ public class UserController extends BaseController{
     }
 
 //    eg.{"id":"1", "customer_id":"2","name":"User1 Name", "additional_info":"", "email":"12test@qq.com"}
-    @ApiOperation(value = "更新客户信息")
-    @PreAuthorize("#oauth2.hasScope('all') OR isAuthenticated()")
+    @ApiOperation(value = "更新用户信息")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'updateUser')")
     @RequestMapping(value = "/update", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public void updateUser(@RequestBody String userInfo) throws IOTException {
@@ -181,7 +181,7 @@ public class UserController extends BaseController{
     }
 
     @ApiOperation(value = "根据UserId删除User")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'deleteUser')")
     @Transactional
     @RequestMapping(value = "/user",params = {"userId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -196,7 +196,7 @@ public class UserController extends BaseController{
     }
 
     @ApiOperation(value = "获取某个租户下所有租户管理员")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getTenantAdmins')")
     @RequestMapping(value = "/tenant/users", params = { "tenantId","limit","page"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getTenantAdmins(
@@ -213,7 +213,7 @@ public class UserController extends BaseController{
 
 
     @ApiOperation(value = "获取某个租户下所有租户管理员的总页数")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getTenantAdmins')")
     @RequestMapping(value = "/tenant/usersPages", params = { "tenantId","limit"}, method = RequestMethod.GET)
     @ResponseBody
     public Integer getTenantAdminsPages(
@@ -229,7 +229,7 @@ public class UserController extends BaseController{
     }
 
     @ApiOperation(value = "获取某个Customer下所有用户")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getCustomerUsers')")
     @RequestMapping(value = "/customer/users", params = { "customerId","limit","page" }, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getCustomerUsers(
@@ -247,7 +247,7 @@ public class UserController extends BaseController{
     }
 
     @ApiOperation(value = "获取某个Customer下所有用户的页数")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getCustomerUsers')")
     @RequestMapping(value = "/customer/usersPages", params = { "customerId","limit" }, method = RequestMethod.GET)
     @ResponseBody
     public Integer getCustomerUsersPages(

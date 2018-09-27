@@ -31,7 +31,7 @@ public class CustomerController extends BaseController{
     public static final String CUSTOMER_ID_SHOULD_BE_SPECIFIED_WHEN_UPDATING = "Customer ID should be specified when updating!";
 
     @ApiOperation(value = "根据CustomerId获取Customer")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getCustomerById')")
     @RequestMapping(value = "/customer",params = {"customerId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getCustomerById(@RequestParam Integer customerId) throws IOTException {
@@ -45,7 +45,7 @@ public class CustomerController extends BaseController{
 
     @ApiOperation(value = "创建Customer")
 //    eg. {"email":"1@qq.com","title":"testCustomer","additional_info":"","phone":"1111","address":"address"}
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'createCustomer')")
     @RequestMapping(value = "/customer", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String createCustomer(@RequestBody String customerInfo) throws IOTException {
@@ -62,7 +62,7 @@ public class CustomerController extends BaseController{
 
     @ApiOperation(value = "更新Customer信息")
 //    eg.{"id":"7","email":"2@qq.com","title":"testCustomer","additional_info":"","phone":"1111","address":"address"}
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'updateCustomer')")
     @RequestMapping(value = "/customer", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String updateCustomer(@RequestBody String customerInfo) throws IOTException {
@@ -88,7 +88,7 @@ public class CustomerController extends BaseController{
     }
 
     @ApiOperation(value = "根据CustomerId删除Customer")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'deleteCustomer')")
     @Transactional
     @RequestMapping(value = "/customer",params = {"customerId","tenantId"}, method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -103,7 +103,7 @@ public class CustomerController extends BaseController{
     }
 
     @ApiOperation(value = "获取某个Tenant下所有Customer")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getCustomers')")
     @RequestMapping(value = "/customers", params = {  "limit","page"  }, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getCustomers(@RequestParam int limit,
@@ -117,7 +117,7 @@ public class CustomerController extends BaseController{
     }
 
     @ApiOperation(value = "获取某个Tenant下所有Customer的页数")
-//    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('TENANT_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getCustomers')")
     @RequestMapping(value = "/customersPages", params = {  "limit"  }, method = RequestMethod.GET)
     @ResponseBody
     public Integer getCustomersTotalPages(@RequestParam int limit) throws IOTException {
@@ -131,7 +131,7 @@ public class CustomerController extends BaseController{
     }
 
     @ApiOperation(value = "根据CustomerId获取Customer的名字")
-    @PreAuthorize("#oauth2.hasScope('all') OR hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'findCustomerName')")
     @RequestMapping(value = "/customerName",params = {"customerId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     public String findCustomerName(@RequestParam Integer customerId) throws IOTException {
         checkParameter(CUSTOMER_ID, customerId);
