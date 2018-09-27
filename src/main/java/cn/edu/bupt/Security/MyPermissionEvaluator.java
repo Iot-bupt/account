@@ -22,10 +22,8 @@ public class MyPermissionEvaluator implements PermissionEvaluator{
             return false;
         }
         Collection<String> permissions = securityUser.getPermissions();
-        for (String permission : permissions) {
-            if (permission.equals(requiredPermission)) {
-                return true;
-            }
+        if(permissions.contains(requiredPermission)){
+            return true;
         }
         return false;
     }
