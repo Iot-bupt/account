@@ -1,6 +1,7 @@
 package cn.edu.bupt.dao.Customer;
 
 import cn.edu.bupt.entity.Customer;
+import cn.edu.bupt.exception.IOTException;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -18,9 +19,9 @@ public interface CustomerService {
 
     void updateCustomer(Customer customer);
 
-    void deleteCustomer(Integer tenantId,Integer customerId);
+    void deleteCustomer(Integer tenantId,Integer customerId) throws IOTException;
 
-    void deleteCustomersByTenantId(Integer tenantId);
+    void deleteCustomersByTenantId(Integer tenantId) throws IOTException;
 
     String findCustomerName(Integer tenantId,Integer customerId);
 

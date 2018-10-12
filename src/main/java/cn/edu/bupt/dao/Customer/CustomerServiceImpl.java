@@ -1,13 +1,17 @@
 package cn.edu.bupt.dao.Customer;
 
+import cn.edu.bupt.Security.HttpUtil;
 import cn.edu.bupt.dao.DataValidationException;
 import cn.edu.bupt.dao.DataValidator;
 import cn.edu.bupt.dao.Tenant.TenantRepository;
 import cn.edu.bupt.dao.User.UserService;
 import cn.edu.bupt.entity.Customer;
 import cn.edu.bupt.entity.Tenant;
+import cn.edu.bupt.exception.IOTErrorCode;
+import cn.edu.bupt.exception.IOTException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +37,14 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Autowired
     private UserService userService;
+
+    private static String unassign_customer_device_url;
+
+    @Value("${device-access.unassign_customer_device_url}")
+    private void getUnassignCustomerDeviceUrl(String unassign_customer_device_url) {
+        this.unassign_customer_device_url = unassign_customer_device_url ;
+    }
+
 
     @Override
     public List<Customer> findCustomersByTenantId(Integer page, Integer size,Integer tenant_id){
@@ -80,15 +92,19 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public void deleteCustomer(Integer tenantId, Integer customerId){
+    public void deleteCustomer(Integer tenantId, Integer customerId) throws IOTException{
         log.trace("Executing deleteCustomer [{}]", customerId);
+        try {
+            HttpUtil.sendDeletToThingsboard(unassign_customer_device_url + tenantId+"/"+customerId);
+        }catch (Exception e){
+            throw new IOTException("取消分配客户设备失败", IOTErrorCode.GENERAL);
+        }
         userService.deleteCustomerUsers(tenantId, customerId);
-        //TODO:unassignCustomerDevices
         customerRepository.deleteById(customerId);
     }
 
     @Override
-    public void deleteCustomersByTenantId(Integer tenantId){
+    public void deleteCustomersByTenantId(Integer tenantId) throws IOTException{
         log.trace("Executing deleteCustomersByTenantId, tenantId [{}]", tenantId);
 //        Tenant tenant = tenantRepository.findById(tenantId);
         List<Customer> customerList = customerRepository.findAllByTenantId(tenantId);
