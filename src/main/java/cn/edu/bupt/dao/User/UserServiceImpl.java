@@ -3,6 +3,7 @@ package cn.edu.bupt.dao.User;
 import cn.edu.bupt.dao.Customer.CustomerRepository;
 import cn.edu.bupt.dao.DataValidationException;
 import cn.edu.bupt.dao.DataValidator;
+import cn.edu.bupt.dao.Role.RoleService;
 import cn.edu.bupt.dao.Tenant.TenantRepository;
 import cn.edu.bupt.dao.UserCredentials.UserCredentialsService;
 import cn.edu.bupt.entity.Authority;
@@ -40,6 +41,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserCredentialsService userCredentialsService;
 
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public User findUserById(Integer userId){
         log.trace("Executing findUserById [{}]", userId);
@@ -75,6 +79,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(Integer userId){
         log.trace("Executing deleteUser [{}]", userId);
+        roleService.deleteRoleUserRelationByUserId(userId);
         userCredentialsService.deleteUserCredentialsByUserId(userId);
         userRepository.deleteById(userId);
     }

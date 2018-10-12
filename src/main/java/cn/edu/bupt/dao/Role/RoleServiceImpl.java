@@ -57,6 +57,11 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
+    public void deleteRoleUserRelationByUserId(Integer user_id) {
+        roleRepository.deleteRoleUserRelationByUserId(user_id);
+    }
+
+    @Override
     public void updateRole(Role role) {
         if((Integer)role.getId()==null){
             throw new DataValidationException("Role Id should be specified!");

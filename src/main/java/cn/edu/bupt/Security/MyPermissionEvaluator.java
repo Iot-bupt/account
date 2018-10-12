@@ -34,14 +34,4 @@ public class MyPermissionEvaluator implements PermissionEvaluator{
         return false;
     }
 
-//    public boolean hasPermission(Authentication authentication, Object requiredPermission) {
-//        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-//        Collection<String> permissions = securityUser.getPermissions();
-//        for (String permission : permissions) {
-//            if (permission.equals(requiredPermission)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 }

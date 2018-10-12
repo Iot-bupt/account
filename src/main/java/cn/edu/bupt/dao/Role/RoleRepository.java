@@ -39,6 +39,9 @@ public interface RoleRepository {
     @Delete("delete from role_user_relation where role_id = #{role_id}")
     void deleteRoleUserRelationByRoleId(Integer role_id);
 
+    @Delete("delete from role_user_relation where user_id = #{user_id}")
+    void deleteRoleUserRelationByUserId(Integer user_id);
+
     @Delete("delete from role_permission_relation where role_id = #{role_id}")
     void deleteRolePermissionRelation(Integer role_id);
 

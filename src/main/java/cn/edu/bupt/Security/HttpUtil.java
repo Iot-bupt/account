@@ -15,13 +15,12 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Administrator on 2017/12/23.
- * 在启动的时候不能使用
+ *
  */
 @Component
 @EnableScheduling
 public class HttpUtil {
 
-//    @Autowired
     private static Token token = new Token();
 
     @Value("${account.login_url}")

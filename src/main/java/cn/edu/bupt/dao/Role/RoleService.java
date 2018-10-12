@@ -29,4 +29,6 @@ public interface RoleService {
 
     void deleteRoleUserRelation(Integer role_id,Integer user_id);
 
+    void deleteRoleUserRelationByUserId(Integer user_id);
+
 }

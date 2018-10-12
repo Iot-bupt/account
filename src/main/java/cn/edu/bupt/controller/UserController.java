@@ -68,7 +68,7 @@ public class UserController extends BaseController{
     }
 
     @ApiOperation(value = "根据TenantId获取所有User")
-//    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getUserByTenantId')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getUserByTenantId')")
     @RequestMapping(value = "/tenant/user",params = {"tenantId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getUserByTenantId(@RequestParam Integer tenantId) throws IOTException{

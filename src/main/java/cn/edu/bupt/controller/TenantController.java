@@ -94,7 +94,7 @@ public class TenantController extends BaseController{
     }
 
     @ApiOperation(value = "获取所有Tenant信息")
-//    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getTenants')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasPermission(null ,'getTenants')")
     @RequestMapping(value = "/tenants", params = {  "limit","page"  }, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getTenants(@RequestParam int limit,

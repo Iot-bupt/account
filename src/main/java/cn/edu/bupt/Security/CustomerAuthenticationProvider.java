@@ -43,14 +43,6 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
         this.tenantService = tenantService;
     }
 
-    //TODO:循环引用问题。在cn.edu.bupt.config.SecurityConfiguration中要注入CustomerAuthenticationProvider，而CustomerAuthenticationProvider要注入BCryptPasswordEncoder,BCryptPasswordEncoder又在cn.edu.bupt.config.SecurityConfiguration中。
-//    @Autowired
-//    public CustomerAuthenticationProvider(final UserService userService, final UserCredentialsService userCredentialsService,final BCryptPasswordEncoder encoder) {
-//        this.userService = userService;
-//        this.userCredentialsService = userCredentialsService;
-//        this.encoder = encoder;
-//    }
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Assert.notNull(authentication, "No authentication data provided");
@@ -88,11 +80,6 @@ public class CustomerAuthenticationProvider implements AuthenticationProvider {
         for(Permission permission:permissions){
             permissionNames.add(permission.getName());
         }
-//        List<Role> extra_roles = roleService.findAllRolesByUserId(user.getId());
-//        for(Role role:extra_roles){
-//            Set<String> extra_permissions = permissionService.findPermissionNamesByRoleId(role.getId());
-//            permissions.addAll(extra_permissions);
-//        }
         SecurityUser securityUser = new SecurityUser(user.getId(),user.getName(),user.getCustomerId(),user.getTenantId(),user.getAuthority(),permissionNames);
 
         return new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());

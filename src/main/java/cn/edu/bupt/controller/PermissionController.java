@@ -32,7 +32,7 @@ public class PermissionController extends BaseController{
     private RoleService roleService;
 
     @ApiOperation(value = "为一个role增加permission")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/permission", params = { "role_id"},method = RequestMethod.POST)
     public void saveRolePermissionRelation(@RequestParam int role_id,
                                            @RequestBody String permission_ids) throws IOTException {
@@ -46,7 +46,7 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "删除一个role下的permission")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/permission",params = {  "role_id"  }, method = RequestMethod.DELETE)
     public void deleteRolePermissionRelation(@RequestParam int role_id,
                                @RequestBody String permission_ids) throws IOTException {
@@ -59,21 +59,21 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "根据ID获取role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/role",params = {  "role_id"  }, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public String getRole(@RequestParam int role_id) throws IOTException {
         return roleService.findRoleById(role_id).toString();
     }
 
     @ApiOperation(value = "获取所有role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/roles", method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public String getRoles() throws IOTException {
         return roleService.findAllRoles().toString();
     }
 
     @ApiOperation(value = "创建一个role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/role", method = RequestMethod.POST)
     public Role saveRole(@RequestBody String roleInfo) throws IOTException {
         Role role = JSON.parseObject(roleInfo,Role.class);
@@ -82,14 +82,14 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "删除一个role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/role", method = RequestMethod.DELETE)
     public void deleteRole(@RequestParam Integer roleId) throws IOTException {
         roleService.deleteRoleById(roleId);
     }
 
     @ApiOperation(value = "更新一个role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/role", method = RequestMethod.PUT)
     public void updateRole(@RequestBody String roleInfo) throws IOTException {
         try {
@@ -101,7 +101,7 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "获取所有permission")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/permissions",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getAllPermissions() throws IOTException {
@@ -109,7 +109,7 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "获取一个role下分配的permission")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/rolePermission", params = {  "role_id"  },method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getPermissionsByRoleId(@RequestParam int role_id) throws IOTException {
@@ -117,7 +117,7 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "获取一个role下还未分配的permission")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/roleNotOwnedPermission", params = {  "role_id"  },method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getNotOwnedPermissionsByRoleId(@RequestParam int role_id) throws IOTException {
@@ -125,7 +125,7 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "为一个user分配role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/user/role", params = { "role_id","user_id"},method = RequestMethod.POST)
     public void saveRoleUserRelation(@RequestParam Integer role_id,
                                      @RequestParam Integer user_id) throws IOTException {
@@ -133,7 +133,7 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "为一个user删除role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/user/role", params = { "role_id","user_id"},method = RequestMethod.DELETE)
     public void deleteRoleUserRelation(@RequestParam Integer role_id,
                                      @RequestParam Integer user_id) throws IOTException {
@@ -141,21 +141,21 @@ public class PermissionController extends BaseController{
     }
 
     @ApiOperation(value = "获取一个用户下的所有extra role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/roles", params = { "user_id"}, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public String getUserExtraRoles(@RequestParam Integer user_id) throws IOTException {
         return roleService.findExtraRolesByUserId(user_id).toString();
     }
 
     @ApiOperation(value = "获取一个用户下的所有未拥有的extra role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/notOwnedRoles", params = { "user_id"}, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public String getUserNotOwnedExtraRoles(@RequestParam Integer user_id) throws IOTException {
         return roleService.findNotOwnedExtraRolesByUserId(user_id).toString();
     }
 
     @ApiOperation(value = "获取一个用户下的所有role")
-//    @PreAuthorize("hasAuthority('SYS_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('all') OR hasAuthority('SYS_ADMIN')")
     @RequestMapping(value = "/UserRoles", params = { "user_id"}, method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public String getUserRoles(@RequestParam Integer user_id) throws IOTException {
         return roleService.findAllRolesByUserId(user_id).toString();
