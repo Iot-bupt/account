@@ -1,6 +1,7 @@
 package cn.edu.bupt.dao.User;
 
 import cn.edu.bupt.entity.User;
+import cn.edu.bupt.entity.UserField;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -33,4 +34,15 @@ public interface UserService {
     Integer findTenantAdminsPageNum(Integer size, Integer tenant_id);
 
     Integer findCustomerUsersPageNum(Integer size,Integer tenant_id,Integer customer_id);
+
+    Integer addNewField(Integer tenant_id,String name,String desc);
+
+    void updateAFieldDesc(Integer id,String desc);
+
+    void updateAFieldValue(Integer tenant_id,Integer user_id,String name,String value);
+
+    void deleteAField(Integer id);
+
+    List<UserField> findFields(Integer tenant_id);
+
 }

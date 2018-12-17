@@ -3,13 +3,11 @@ package cn.edu.bupt.dao.User;
 import cn.edu.bupt.dao.Customer.CustomerRepository;
 import cn.edu.bupt.dao.DataValidationException;
 import cn.edu.bupt.dao.DataValidator;
+import cn.edu.bupt.dao.Field.FieldRepository;
 import cn.edu.bupt.dao.Role.RoleService;
 import cn.edu.bupt.dao.Tenant.TenantRepository;
 import cn.edu.bupt.dao.UserCredentials.UserCredentialsService;
-import cn.edu.bupt.entity.Authority;
-import cn.edu.bupt.entity.Customer;
-import cn.edu.bupt.entity.Tenant;
-import cn.edu.bupt.entity.User;
+import cn.edu.bupt.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +42,16 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private FieldRepository fieldRepository;
+
     @Override
     public User findUserById(Integer userId){
         log.trace("Executing findUserById [{}]", userId);
-        return userRepository.findById(userId);
+        User user = userRepository.findById(userId);
+        List<UserField> userFields = fieldRepository.findFieldsByUserId(userId);
+        user.setUserFields(userFields);
+        return user;
     }
 
     @Override
@@ -66,13 +70,24 @@ public class UserServiceImpl implements UserService{
     public Integer saveUser(User user){
         log.trace("Executing saveUser [{}]", user);
         userValidator.validate(user);
-        return userRepository.save(user);
+        List<UserField> userFields= user.getUserFields();
+        userRepository.save(user);
+        for(UserField userField:userFields){
+            Integer id = fieldRepository.findFieldId(user.getTenantId(),userField.getName());
+            fieldRepository.saveRelation(user.getId(),id,userField.getValue());
+        }
+        return user.getId();
     }
 
     @Override
     public void updateUser(User user){
         log.trace("Executing updateUser [{}]", user);
         userValidator.validate(user);
+        List<UserField> userFields= user.getUserFields();
+        for(UserField userField:userFields){
+            Integer id = fieldRepository.findFieldId(user.getTenantId(),userField.getName());
+            fieldRepository.updateValue(userField.getValue(),user.getId(),id);
+        }
         userRepository.update(user);
     }
 
@@ -81,7 +96,9 @@ public class UserServiceImpl implements UserService{
         log.trace("Executing deleteUser [{}]", userId);
         roleService.deleteRoleUserRelationByUserId(userId);
         userCredentialsService.deleteUserCredentialsByUserId(userId);
+        fieldRepository.deleteRelationByUserId(userId);
         userRepository.deleteById(userId);
+
     }
 
     @Override
@@ -136,6 +153,35 @@ public class UserServiceImpl implements UserService{
             }
             users = userRepository.findTenantAdmins(0,100,tenantId);
         }
+    }
+
+    @Override
+    public Integer addNewField(Integer tenant_id, String name, String desc) {
+        UserField userField = new UserField(tenant_id,name,desc);
+        fieldRepository.save(userField);
+        return userField.getId();
+    }
+
+    @Override
+    public void updateAFieldValue(Integer tenant_id, Integer user_id, String name, String value) {
+        Integer field_id = fieldRepository.findFieldId(tenant_id,name);
+        fieldRepository.updateValue(value,user_id,field_id);
+    }
+
+    @Override
+    public void updateAFieldDesc(Integer id, String desc) {
+        fieldRepository.updateField(id,desc);
+    }
+
+    @Override
+    public void deleteAField(Integer id) {
+        fieldRepository.deleteRelationByFieldId(id);
+        fieldRepository.deleteById(id);
+    }
+
+    @Override
+    public List<UserField> findFields(Integer tenant_id) {
+        return fieldRepository.findFieldsByTenantId(tenant_id);
     }
 
     private DataValidator<User> userValidator =

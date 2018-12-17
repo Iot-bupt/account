@@ -20,6 +20,7 @@ public class User extends IdBased{
     private String we_chat;
     private List<Role> roles;
     private Integer roleId;
+    private List<UserField> userFields;
 
     public User() {
     }
@@ -135,6 +136,14 @@ public class User extends IdBased{
         this.roleId = roleId;
     }
 
+    public List<UserField> getUserFields() {
+        return userFields;
+    }
+
+    public void setUserFields(List<UserField> userFields) {
+        this.userFields = userFields;
+    }
+
     //    @Override
 //    public String toString() {
 //        final StringBuilder sb = new StringBuilder("{");
@@ -178,6 +187,10 @@ public class User extends IdBased{
                 .append(phone).append('\"');
         sb.append(",\"we_chat\":\"")
                 .append(we_chat).append('\"');
+        for(UserField userField:this.userFields) {
+            sb.append(",\""+userField.getName()+"\":\"")
+                    .append(userField.getValue()).append('\"');
+        }
         sb.append('}');
         return sb.toString();
     }
