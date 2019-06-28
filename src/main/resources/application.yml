@@ -29,7 +29,7 @@ spring:
 #  172.24.32.169
     url: jdbc:mysql://39.104.165.155:3306/BUPT_IOT?useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: SanHua215
+    password: root
     cachePrepStmts: true  # 开启二级缓存
   redis:
 #  @前的redis代表密码
